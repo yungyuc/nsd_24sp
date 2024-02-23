@@ -15,4 +15,4 @@ else:
             lines = fobj.readlines()
         sys.stdout.write(f'{len(lines)} lines in {fname}\n')
     else:
-        sys.stdout.write('{} not found\n'.format(fname))
+        sys.stdout.write(f'{fname} not found\n')
