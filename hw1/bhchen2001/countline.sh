@@ -11,7 +11,7 @@ countFile=$1
 if [ "$#" -eq "0" ] ; then
   echo "missing file name"
   exit 1
-elif     [ "$#" -gt "1" ] ; then
+elif [ "$#" -gt "1" ] ; then
   echo "only one argument is allowed"
   exit 1
 else
