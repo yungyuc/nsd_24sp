@@ -19,7 +19,7 @@ else:
         sys.stdout.write('{} not found\n'.format(fname))
 "
 
-if [[ "$PYTHON_BIN" = @(python2|python3) ]]; then
+if [ -x "$(command -v $PYTHON_BIN)" ]; then
     $PYTHON_BIN -c "$py" $1
     exit 0
 else
