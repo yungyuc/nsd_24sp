@@ -1,17 +1,22 @@
 #!/bin/bash
+"exec" "$PYTHON_BIN" "$0" "$@"
 
-if [ $# -ne 1 ]; then
-  echo "Usage: $0 filename"
-  exit 1
-fi
+import sys
+import os.path
 
-filename="$1"
+if os.environ['PYTHON_BIN'] != 'python2' and os.environ['PYTHON_BIN'] != 'python3':
+    sys.stdout.write('exec: {}: not found'.format(os.environ['PYTHON_BIN']))
+    sys.exit(1)
 
-if [ ! -f "$filename" ]; then
-  echo "Error: File '$filename' not found."
-  exit 1
-fi
-
-line_count=$(wc -l < "$filename")
-
-echo "$line_count"
+if len(sys.argv) < 2:
+    sys.stdout.write('missing file name\n')
+elif len(sys.argv) > 2:
+    sys.stdout.write('only one argument is allowed\n')
+else:
+    fname = sys.argv[1]
+    if os.path.exists(fname):
+        with open(fname) as fobj:
+            lines = fobj.readlines()
+        sys.stdout.write('{} lines in {}\n'.format(len(lines), fname))
+    else:
+        sys.stdout.write('{} not found\n'.format(fname))
