@@ -1,4 +1,8 @@
-#!/usr/bin/env PYTHON_BIN
+#!/usr/bin/env bash
+
+# According to the envrionment variable PYTHON_BIN to determine the python interpreter to run this scripts
+# Ref: https://unix.stackexchange.com/questions/20880/how-can-i-use-environment-variables-in-my-shebang
+"exec" "$PYTHON_BIN" "$0" "$@"
 
 import sys
 import os.path
