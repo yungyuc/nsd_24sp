@@ -13,7 +13,7 @@ fi
 exec "$PYTHON_BIN" "$0" "$@"
 exit $?
 ' '''
-# The following part is Python code
+
 
 import sys
 import os.path
