@@ -1,6 +1,7 @@
 #include <algorithm>
-
+#include <vector>
 using namespace std;
+
 class Line{
     public:
     Line();
@@ -16,5 +17,5 @@ class Line{
     float const & y(size_t it) const;
     float & y(size_t it);
 private:
-  
+    vector<pair<float, float>> points;
 };
