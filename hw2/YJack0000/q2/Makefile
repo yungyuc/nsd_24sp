@@ -1,9 +1,9 @@
 CXX = g++
 CXXFLAGS = -O3 -Wall -shared -std=c++11 -fPIC -undefined dynamic_lookup $(shell python3 -m pybind11 --includes) $(shell python3-config --cflags) $(shell python3-config --ldflags)
-LIB_TARGET = cvector.so
+LIB_TARGET = _vector.so
 
 all: $(LIB_TARGET)
-$(LIB_TARGET): cvector.cpp
+$(LIB_TARGET): _vector.cpp
 	$(CXX) $(CXXFLAGS) $< -o $@
 
 .PHONY: test clean

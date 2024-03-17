@@ -20,7 +20,7 @@ float calculate_angle(std::pair<float, float> v0, std::pair<float, float> v1) {
     return acos(val);
 }
 
-PYBIND11_MODULE(cvector, m) {
+PYBIND11_MODULE(_vector, m) {
   m.doc() = "Calculate angle(radians) between two vectors";
   m.def("calculate_angle", &calculate_angle,
         "A function calculate angle(radians) between two vectors");
