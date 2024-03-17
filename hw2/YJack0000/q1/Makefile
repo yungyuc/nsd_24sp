@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -std=c++11 -Wall
 EXEC = main
 
-.PHONY: all run clean
+.PHONY: all run check clean
 
 all: $(EXEC)
 
@@ -17,6 +17,9 @@ line.o: line.cpp line.hpp
 
 run: $(EXEC)
 	./$(EXEC)
+
+check: $(EXEC)
+	./$(EXEC) > result.txt
 
 clean:
 	rm -f $(EXEC) main.o line.o
