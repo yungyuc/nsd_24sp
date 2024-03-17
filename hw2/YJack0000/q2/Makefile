@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -O3 -Wall -shared -std=c++11 -fPIC -undefined dynamic_lookup $(shell python3 -m pybind11 --includes) $(shell python3-config --cflags) $(shell python3-config --ldflags)
+CXXFLAGS = -O3 -Wall -shared -std=c++11 -fPIC $(shell python3 -m pybind11 --includes) $(shell python3-config --cflags) $(shell python3-config --ldflags)
 LIB_TARGET = _vector.so
 
 all: $(LIB_TARGET)
