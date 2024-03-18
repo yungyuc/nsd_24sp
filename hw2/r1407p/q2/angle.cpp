@@ -6,12 +6,12 @@
 
 namespace py = pybind11;
 
-float calculate_angle(std::pair<float,float> point1, std::pair<float,float> point2){
-    float x1 = point1.first;
-    float y1 = point1.second;
-    float x2 = point2.first;
-    float y2 = point2.second;
-
+float calculate_angle(std::vector<float>& point1, std::vector<float>& point2){
+    float x1 = point1[0];
+    float y1 = point1[1];
+    float x2 = point2[0];
+    float y2 = point2[1];
+    // std::cout << x1 << " " << y1 << " " << x2 << " " << y2 << std::endl;
     if(x1 ==0 && y1 == 0){
         throw std::invalid_argument("First point cannot be the origin");
     }
@@ -22,7 +22,16 @@ float calculate_angle(std::pair<float,float> point1, std::pair<float,float> poin
     float len1 = std::sqrt(x1*x1 + y1*y1);
     float len2 = std::sqrt(x2*x2 + y2*y2);
     float cos_theta = dot_product/(len1 * len2);
-    return std::acos(cos_theta);
+    if (cos_theta >= 1.0f){
+        cos_theta = 1;
+    }else if (cos_theta <= -1.0f){
+        cos_theta = -1;
+    }
+
+    // std::cout << cos_theta << std::endl;
+    // std::cout << std::acos(cos_theta) << std::endl;
+    float res = std::acos(cos_theta);
+    return res;
 }
 
 PYBIND11_MODULE(angle, m) {

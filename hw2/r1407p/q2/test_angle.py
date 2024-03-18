@@ -24,7 +24,7 @@ def test_zero_angle():
     x, y, ratio = 3.8, 4.5, 0.5
     assert calculate_angle([x, y], [x*ratio, y*ratio]) == 0
     assert calculate_angle([x*ratio, y*ratio], [x, y]) == 0
-    x, y, ratio = -3.8, 4.5, -1.5
+    x, y, ratio = -3.8, 4.5, 1.5
     assert calculate_angle([x, y], [x*ratio, y*ratio]) == 0
     assert calculate_angle([x*ratio, y*ratio], [x, y]) == 0
 
