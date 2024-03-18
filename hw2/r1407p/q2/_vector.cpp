@@ -6,7 +6,7 @@
 
 namespace py = pybind11;
 
-float calculate_angle(std::vector<float>& point1, std::vector<float>& point2){
+float _vector(std::vector<float>& point1, std::vector<float>& point2){
     float x1 = point1[0];
     float y1 = point1[1];
     float x2 = point2[0];
@@ -34,7 +34,7 @@ float calculate_angle(std::vector<float>& point1, std::vector<float>& point2){
     return res;
 }
 
-PYBIND11_MODULE(angle, m) {
+PYBIND11_MODULE(_vector, m) {
     m.doc() = "pybind11 angle plugin"; // optional module docstring
-    m.def("calculate_angle", &calculate_angle, "A function which calculates the angle between two points");
+    m.def("_vector", &_vector, "A function which calculates the angle between two points");
 }

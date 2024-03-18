@@ -1,5 +1,5 @@
-sources = angle.cpp
-executable = angle$(shell python3-config --extension-suffix)
+sources = _vector.cpp
+executable = _vector$(shell python3-config --extension-suffix)
 
 CXX = g++
 CXXFLAGS = -std=c++14 -O3 -Wall -shared -fPIC
@@ -11,4 +11,4 @@ test:
 	python3 -m pytest
 
 clean:
-	rm -rf $(executable) __pycache__ .pytest*
+	rm -rf $(executable) __pycache__ .pytest* *.so
