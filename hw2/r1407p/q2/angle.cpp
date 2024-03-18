@@ -11,7 +11,7 @@ float calculate_angle(std::pair<float,float> point1, std::pair<float,float> poin
     float y1 = point1.second;
     float x2 = point2.first;
     float y2 = point2.second;
-    
+
     if(x1 ==0 && y1 == 0){
         throw std::invalid_argument("First point cannot be the origin");
     }
@@ -19,10 +19,10 @@ float calculate_angle(std::pair<float,float> point1, std::pair<float,float> poin
         throw std::invalid_argument("Second point cannot be the origin");
     }
     float dot_product = x1*x2 + y1*y2;
-    float len1 = sqrt(x1*x1 + y1*y1);
-    float len2 = sqrt(x2*x2 + y2*y2);
+    float len1 = std::sqrt(x1*x1 + y1*y1);
+    float len2 = std::sqrt(x2*x2 + y2*y2);
     float cos_theta = dot_product/(len1 * len2);
-    return acos(cos_theta);
+    return std::acos(cos_theta);
 }
 
 PYBIND11_MODULE(angle, m) {
