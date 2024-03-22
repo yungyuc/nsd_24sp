@@ -10,11 +10,11 @@ public:
     Line(size_t size);
     // Copy constructor
     Line(const Line& other);
-    // Move constructor
+    // Move constructor (Noexcept for clarity and efficiency)
     Line(Line&& other) noexcept;
     // Copy assignment operator
     Line& operator=(const Line& other);
-    // Move assignment operator
+    // Move assignment operator (Noexcept for clarity and efficiency)
     Line& operator=(Line&& other) noexcept;
     // Destructor (Virtual for proper cleanup since std::vector will automatically clean up its resources)
     virtual ~Line();

@@ -16,6 +16,7 @@ Line::~Line() = default;
 
 size_t Line::size() const { return m_x_coords.size(); }
 
+// Getters and setters for x and y coordinatess
 const float& Line::x(size_t it) const { return m_x_coords[it]; }
 float& Line::x(size_t it) { return m_x_coords[it]; }
 
