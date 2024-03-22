@@ -8,30 +8,33 @@
 # make clean: remove all the built and intermediate files
 # =============================================================================
 
+# Compiler and compiler flags
+CXX = g++
+CXXFLAGS = -std=c++11 -O3 -Wall -Wextra -shared -fPIC `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
+
 # Source files
 CC_SRC := vector2D.cpp
-SET_SRC := setup.py
+EXE_SRC = _vector$(shell python3-config --extension-suffix)
 TEST_SRC := test_vector.py
 
-# Default target: build the code
+# Default target: build the code to shared library
 .PHONY: default
-default: clean $(SET_SRC)
-	@python3 $(SET_SRC) build_ext --inplace
+default: clean $(CC_SRC)
+	@$(CXX) $(CXXFLAGS) $(shell python3 -m pybind11 --includes) $(CC_SRC) -o $(EXE_SRC)
 
 # Run the Python-based tests
 .PHONY: test
 test:
-	@pytest
+	@python3 -m pytest
 
 # Remove all the built and intermediate files
 .PHONY: clean
 clean:
-	@-rm -f *.so
-	@-rm -rf __pycache__ .pytest_cache angle.egg-info build
+	@-rm -f *.so $(EXE_SRC)
+	@-rm -rf __pycache__ .pytest*
 
 # When source files change, make should pick them up and rebuild
-.PHONY: $(CC_SRC) $(SET_SRC) $(TEST_SRC)
+.PHONY: $(CC_SRC) $(TEST_SRC)
 $(CC_SRC): 
-$(SET_SRC): 
 $(TEST_SRC): 
 
