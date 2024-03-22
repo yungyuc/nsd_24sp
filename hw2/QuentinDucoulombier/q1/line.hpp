@@ -23,9 +23,11 @@ public:
     size_t size() const;
     // Get the x coordinate of a point
     const float& x(size_t it) const;
+    // Set the x coordinate of a point
     float& x(size_t it);
     // Get the y coordinate of a point
     const float& y(size_t it) const;
+    // Set the y coordinate of a point
     float& y(size_t it);
 
 private:
