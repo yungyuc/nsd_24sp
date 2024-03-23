@@ -1,1 +1,6 @@
 .vscode/
+__pycache__/
+.pytest_cache/
+*.o
+*.out
+*.so
