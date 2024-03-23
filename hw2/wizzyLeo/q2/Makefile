@@ -11,7 +11,7 @@ $(TARGET): $(SRC)
 	$(CXX) $(CXXFLAGS) $^ $(LDFLAGS) -o $@
 
 test:
-	pytest
+	python3 -m pytest -v
 
 clean:
 	rm -f $(TARGET) *.so *.pyc
