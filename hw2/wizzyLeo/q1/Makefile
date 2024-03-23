@@ -1,9 +1,10 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall
-
+CXXFLAGS = -Wall -std=c++11
 EXEC = line_program
 SOURCES = main.cpp Line.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
+
+all: $(EXEC)
 
 $(EXEC): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $(EXEC) $(OBJECTS)
@@ -14,8 +15,8 @@ $(EXEC): $(OBJECTS)
 clean:
 	rm -f $(EXEC) $(OBJECTS)
 
-run: $(EXEC)
+run: all
 	./$(EXEC)
 
-check: $(EXEC)
+check: all
 	./$(EXEC) > result.txt

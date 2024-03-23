@@ -1,10 +1,21 @@
-#include"Line.h"
+#include "Line.h"
 
-Line::Line(){
-
+size_t Line::size() const {
+    return x_vals.size();
 }
 
-Line::Line(size_t size){
-    x_vals.resize(size, 0.0);
-    y_vals.resize(size, 0.0);
+const float& Line::x(size_t it) const {
+    return x_vals.at(it); 
+}
+
+float& Line::x(size_t it) {
+    return x_vals.at(it); 
+}
+
+const float& Line::y(size_t it) const {
+    return y_vals.at(it); 
+}
+
+float& Line::y(size_t it) {
+    return y_vals.at(it); 
 }
