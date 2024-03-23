@@ -1,11 +1,12 @@
 # make, make test, make clean
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -Werror -O3 -lm
+CXXFLAGS = -std=c++17 -Wall -Wextra -Werror -O3 -lm $(shell python3 -m pybind11 --includes)
+TARGET = _vector$(shell python3-config --extension-suffix)
 
 all: 
-	$(CXX) $(CXXFLAGS) -fPIC `python3 -m pybind11 --includes` _vector.cpp -shared -o _vector`python3-config --extension-suffix`
+	$(CXX) $(CXXFLAGS) -fPIC _vector.cpp -shared -o $(TARGET)
 
 test: 
 	python3 -m pytest
 clean:
-	rm -f *.so
+	rm -rf $(TARGET) *.pyc __pycache__ .pytest_cache
