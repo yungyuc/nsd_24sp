@@ -1,6 +1,7 @@
 #ifndef LINE_H
 #define LINE_H
 #include <vector>
+#include<cstddef>
 
 class Line {
 public:
