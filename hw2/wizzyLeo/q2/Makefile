@@ -1,11 +1,13 @@
 CXX = g++
-CXXFLAGS = -O3 -Wall -shared -std=c++11 -fPIC $(shell /usr/bin/python3 -m pybind11 --includes)
-LDFLAGS = $(shell /usr/bin/python3-config --ldflags)
-TARGET = _vector$(shell /usr/bin/python3-config --extension-suffix)
+CXXFLAGS = -O3 -Wall -shared -std=c++11 -fPIC $(shell python3-config --includes)
+LDFLAGS = $(shell python3-config --ldflags)
+
+TARGET = _vector$(shell python3-config --extension-suffix)
+SRC = pybind_wrapper.cpp _vector.cpp
 
 all: $(TARGET)
 
-$(TARGET): pybind_wrapper.cpp _vector.cpp
+$(TARGET): $(SRC)
 	$(CXX) $(CXXFLAGS) $^ $(LDFLAGS) -o $@
 
 test:
