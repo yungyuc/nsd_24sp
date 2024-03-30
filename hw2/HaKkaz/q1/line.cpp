@@ -12,6 +12,7 @@ Line::Line(const Line& other) {
 }
 
 Line::Line(Line&& other) {
+    if (&other == this) return;
     px = std::move(other.px);
     py = std::move(other.py);
 }
