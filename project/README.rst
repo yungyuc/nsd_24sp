@@ -42,3 +42,7 @@ Follow the format to add your project:
 1. `github_account_name <https://github.com/github_account_name>`__ for
    `Project subject <github_account_name/README.rst>`__:
    https://github.com/github_account_name/project_name
+
+2. `bhchen2001 <https://github.com/bhchen2001>`__ for
+   `Parallel Vonoroi Diagram <bhchen2001/README.rst>`__:
+   https://github.com/bhchen2001/Parallel_Vonoroi_Diagram
