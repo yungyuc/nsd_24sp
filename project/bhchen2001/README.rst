@@ -5,7 +5,7 @@ Parallel Vonoroi Diagram
 Basic Information
 =================
 
-Github Repository:
+Github Repository: https://github.com/bhchen2001/Parallel_Vonoroi_Diagram
 
 Vonoroi diagram is a partitioning of a plane into regions based on distance to a specific points,
 which is widely used in many fields, such as computer graphics and face recognition.
@@ -43,9 +43,7 @@ This library will be developed in ``C++`` and be compatible with ``Python``.
 API Description
 ===============
 
-The ``C++`` API:
-
-.. code-block:: c++
+The ``C++`` API::
 
     // Generate vonoroi diagram
     void generate_vonoroi_diagram(const std::vector<Point>& points, VonoroiDiagram& diagram);
@@ -53,9 +51,7 @@ The ``C++`` API:
     // Get the neighbors of a specific point
     std::vector<Point> get_neighbors(const Point& point, const VonoroiDiagram& diagram);
 
-The ``Python`` API:
-
-.. code-block:: python
+The ``Python`` API::
 
     # Generate vonoroi diagram
     diagram = generate_vonoroi_diagram(points)
@@ -81,17 +77,17 @@ Schedule
 * Week 2 (04/15): Implement data structure ``Point`` and design input data for testing.
 * Week 3 (04/22): Implement data structure ``VonoroiDiagram``.
 * Week 4 (04/29)
-    * Implement ``fortune's algorithm``.
-    * Implement ``draw_vonoroi_diagram`` function.
+  * Implement ``fortune's algorithm``.
+  * Implement ``draw_vonoroi_diagram`` function.
 * Week 5 (05/06): 
-    * Testing and debugging for the serial version.
-    * Implement ``get_neighbors`` function.
+  * Testing and debugging for the serial version.
+  * Implement ``get_neighbors`` function.
 * Week 6 (05/13): Implement the parallel version.
 * Week 7 (05/20):
-    * Testing and debugging for the parallel version.
-    * Wrap the C++ code with ``Pybind11``.
+  * Testing and debugging for the parallel version.
+  * Wrap the C++ code with ``Pybind11``.
 * Week 8 (05/27):
-    * Prepare the presentation.
+  * Prepare the presentation.
 
 References
 ==========
