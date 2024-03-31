@@ -46,3 +46,7 @@ Follow the format to add your project:
 6. `kevinshlo <https://github.com/kevinshlo>`__ for
    `Corner Stitching <kevinshlo/README.md>`__:
    https://github.com/kevinshlo/CornerStitching
+
+  1. `github_account_name <https://github.com/Andymyyon>`__ for
+   `Project subject <Andymyyon/README.rst>`__:
+   https://github.com/Andymyyon/DAMS
