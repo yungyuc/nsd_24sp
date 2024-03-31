@@ -16,7 +16,7 @@ LDFLAGS=${MKLROOT}/libmkl_def.so \
 all: $(LIB_TARGET)
 
 $(LIB_TARGET): $(sources)
-	$(CXX) -o $@  $(CXXFLAGS) ${LDFLAGS} $<
+	$(CXX) -o $@  $(CXXFLAGS) $(shell python3 -m pybind11 --includes) ${LDFLAGS} $<
 
 test: _matrix.so
 	python3 -m pytest -v
