@@ -73,10 +73,10 @@ def visualize_optimized_route(route: List[Tuple[float, float]]) -> None:
 
 ## Schedule
 
-- Week 1-2 (4/8 - 4/15): Define project requirements, design system architecture, plan implementation strategy, and incorporate algorithm learning.
-- Week 3-4 (4/22 - 4/29): Implement route optimization algorithms in C++, including cost matrix generation and optimization techniques.
-- Week 5-6 (5/6 - 5/13): Develop a Python interface for data input and visualization of optimized routes.
-- Week 7 (5/20): Integrate backend and frontend components, write unit tests, and perform system testing.
+- Week 1 (4/8): Define project requirements, design system architecture, plan implementation strategy, and incorporate algorithm learning.
+- Week 2-3 (4/15 - 4/22): Implement route optimization algorithms in C++, including cost matrix generation and optimization techniques.
+- Week 4-5 (4/29 - 5/6): Develop a Python interface for data input and visualization of optimized routes.
+- Week 6-7 (5/13 - 5/20): Integrate backend and frontend components, write unit tests, and perform system testing.
 - Week 8 (5/27): Document the code and prepare for presentation
 
 ## References
