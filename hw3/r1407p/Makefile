@@ -2,7 +2,7 @@ sources = _matrix.cpp
 PROG_TARGET = matrix_test.py
 LIB_TARGET = _matrix.so
 CXX = g++
-CXXFLAGS = -std=c++11 -O3 -Wall -shared -fPIC -blas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
+CXXFLAGS = -std=c++11 -O3 -Wall -shared -fPIC -lblas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
 executable = _matrix$(shell python3-config --extension-suffix)
 
 MKLROOT=/usr/lib/x86_64-linux-gnu
@@ -18,10 +18,11 @@ all: $(LIB_TARGET)
 
 $(LIB_TARGET): $(sources)
 	pip install pybind11
-	$(CXX)  $(CXXFLAGS) $(LDFLAGS) $(shell python3 -m pybind11 --includes) $(sources)-o $(executable)
+	$(CXX)  $(CXXFLAGS) $(shell python3 -m pybind11 --includes) $(sources) -o $(executable)
 
 test: $(LIB_TARGET)
 	python3 -m pytest -v
 
 clean:
-	rm -rf $(PROG_TARGET) $(LIB_TARGET) __pycache__ .pytest* *.so
+	rm -rf $(PROG_TARGET) $(LIB_TARGET) $(executable) __pycache__ .pytest* *.so
+	
