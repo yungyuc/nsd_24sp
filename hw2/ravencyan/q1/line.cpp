@@ -32,7 +32,7 @@ size_t Line::size() const {
 }
 
 float const &Line::x(size_t it) const {
-    return vx[it];   
+    return vx[it];
 }
 
 float &Line::x(size_t it) {
@@ -41,7 +41,7 @@ float &Line::x(size_t it) {
 
 float const &Line::y(size_t it) const {
     return vy[it];
-}  
+}
 
 float &Line::y(size_t it) {
     return vy[it];
