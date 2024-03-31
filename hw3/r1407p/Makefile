@@ -16,10 +16,11 @@ LDFLAGS=${MKLROOT}/libmkl_def.so \
 all: $(LIB_TARGET)
 
 $(LIB_TARGET): $(sources)
+	pip install pybind11
 	$(CXX) -o $@  $(CXXFLAGS) $(shell python3 -m pybind11 --includes) ${LDFLAGS} $<
 
-test: _matrix.so
+test: $(LIB_TARGET)
 	python3 -m pytest -v
 
 clean:
-	rm -rf $(executable) __pycache__ .pytest* *.so
+	rm -rf $(PROG_TARGET) $(LIB_TARGET) __pycache__ .pytest* *.so
