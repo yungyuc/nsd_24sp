@@ -71,14 +71,13 @@ def visualize_optimized_route(route: List[Tuple[float, float]]) -> None:
 - Use `git` for version control.
 - Use `pytest` for testing.
 
-Schedule
-The development of DeliveryOptimizer will be divided into several phases:
+## Schedule
 
-1. Planning and Design (Week 1-2): Define project requirements, design system architecture, plan implementation strategy, and incorporate algorithm learning.
-2. Backend Development (Week 3-4): Implement route optimization algorithms in C++, including cost matrix generation and optimization techniques.
-3. Frontend Development (Week 5-6): Develop a Python interface for data input and visualization of optimized routes.
-4. Integration and Testing (Week 7-8): Integrate backend and frontend components, write unit tests, and perform system testing.
-5. Documentation and Release (Week 9-10): Write user documentation, create release packages, and publish the project on GitHub.
+- Week 1-2 (4/8 - 4/15): Define project requirements, design system architecture, plan implementation strategy, and incorporate algorithm learning.
+- Week 3-4 (4/22 - 4/29): Implement route optimization algorithms in C++, including cost matrix generation and optimization techniques.
+- Week 5-6 (5/6 - 5/13): Develop a Python interface for data input and visualization of optimized routes.
+- Week 7 (5/20): Integrate backend and frontend components, write unit tests, and perform system testing.
+- Week 8 (5/27): Document the code and prepare for presentation
 
 ## References
 
