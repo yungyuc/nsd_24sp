@@ -22,14 +22,13 @@ factors.
 ## Problem to Solve
 
 Understanding the dynamics of natural selection and ecosystem evolution
-involves complex interactions among organisms and their environments. SimEvo
-aims to provide a simplified yet powerful simulation environment where users
-can define various organisms, their genetic makeup, and environmental factors,
-to observe how natural selection unfolds over generations. In this context, the
-implementation of spatial indexing algorithms plays a critical role. Efficient
-spatial indexing is essential for managing the simulation's computational
-complexity, enabling the simulation to handle large numbers of organisms and
-their interactions within the environment accurately and swiftly.
+involves complex interactions among organisms and their environments, where
+spatial dynamics are crucial. The core challenge SimEvo addresses is
+efficiently managing these interactions through advanced spatial indexing,
+specifically using Quadtree algorithms. This approach is fundamental for
+accurately and swiftly handling the complex web of organism interactions and
+environmental factors, essential for observing natural selection's unfolding
+over generations.
 
 ## Prospective Users
 
