@@ -1,7 +1,7 @@
 sources = _matrix.cpp
 PROG_TARGET = matrix_test.py
 LIB_TARGET = _matrix.so
-CXX = g++
+CXX = clang++
 CXXFLAGS = -std=c++11 -O3 -Wall -shared -fPIC -lblas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
 executable = _matrix$(shell python3-config --extension-suffix)
 
@@ -12,7 +12,7 @@ LDFLAGS=${MKLROOT}/libmkl_def.so \
 		${MKLROOT}/libmkl_intel_lp64.so \
 		${MKLROOT}/libmkl_sequential.so \
 		-lpthread -lm -ldl \
-	     -lblas -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -L/opt/intel/lib/intel64 -L/opt/intel/mkl/lib/intel64 
+	    -lblas -lmkl_rt -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -L/opt/intel/lib/intel64 -L/opt/intel/mkl/lib/intel64 
 
 all: $(LIB_TARGET)
 
