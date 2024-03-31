@@ -5,7 +5,7 @@ SimEvo: A Simple Python Library for Simulations of Natural Selection
 
 > **Project Overview:** Simulating Natural Selection in Ecosystems using C++ and Python
 
-SimSel leverages the computational efficiency of C++ for the core simulation engine and offers an intuitive Python interface for ease of use and accessibility. It models ecosystems composed of organisms with genetically determined traits, interacting within an environment that includes resources like food. The simulation observes the principles of natural selection, with organism survival and reproduction influenced by their traits and environmental factors.
+SimEvo leverages the computational efficiency of C++ for the core simulation engine and offers an intuitive Python interface for ease of use and accessibility. It models ecosystems composed of organisms with genetically determined traits, interacting within an environment that includes resources like food. The simulation observes the principles of natural selection, with organism survival and reproduction influenced by their traits and environmental factors.
 
 - 📂 **GitHub Repository**: [https://github.com/YJack0000/SimEvo](https://github.com/YJack0000/SimEvo)
 - 💻 **Implemented In**:
@@ -13,18 +13,18 @@ SimSel leverages the computational efficiency of C++ for the core simulation eng
   - **Bindings & Interface**: Python
 
 ## Problem to Solve
-Understanding the dynamics of natural selection and ecosystem evolution involves complex interactions among organisms and their environments. SimSel aims to provide a simplified yet powerful simulation environment where users can define various organisms, their genetic makeup, and environmental factors, to observe how natural selection unfolds over generations.
+Understanding the dynamics of natural selection and ecosystem evolution involves complex interactions among organisms and their environments. SimEvo aims to provide a simplified yet powerful simulation environment where users can define various organisms, their genetic makeup, and environmental factors, to observe how natural selection unfolds over generations.
 In this context, the implementation of spatial indexing algorithms plays a critical role. Efficient spatial indexing is essential for managing the simulation's computational complexity, enabling the simulation to handle large numbers of organisms and their interactions within the environment accurately and swiftly. 
 
 ## Prospective Users
 
-SimSel is aimed at a broad audience interested in evolutionary biology, including:
+SimEvo is aimed at a broad audience interested in evolutionary biology, including:
 - **Educators and Students**: For teaching and learning evolutionary concepts through interactive simulations.
 - **Researchers**: For conducting experiments on evolutionary strategies and hypotheses.
 - **Hobbyists**: For exploring the principles of evolution in a virtual environment.
 
 ## System Architecture
-SimSel comprises a high-performance simulation engine written in C++ for handling the complex computations of natural selection dynamics efficiently. Python bindings, created using pybind11, make this engine accessible to users who can interact with the simulation using a simple Python API.
+SimEvo comprises a high-performance simulation engine written in C++ for handling the complex computations of natural selection dynamics efficiently. Python bindings, created using pybind11, make this engine accessible to users who can interact with the simulation using a simple Python API.
 
 ### Components:
 
@@ -35,10 +35,10 @@ SimSel comprises a high-performance simulation engine written in C++ for handlin
 
 ### Spatial Indexing Data Structure
 
-Spatial indexing is critical in simulations of natural environments, where the efficient querying of organism positions and interactions can drastically reduce computational overhead. By indexing the spatial data, SimSel can quickly perform operations such as locating nearby food sources for organisms or detecting potential mates within a specified radius.
+Spatial indexing is critical in simulations of natural environments, where the efficient querying of organism positions and interactions can drastically reduce computational overhead. By indexing the spatial data, SimEvo can quickly perform operations such as locating nearby food sources for organisms or detecting potential mates within a specified radius.
 
 #### Abstraction Layer
-SimSel introduces an abstraction layer for spatial indexing, encapsulated by the interfaces `ISpatialIndex` and `ISpatialObject`. This design allows for future expansions or modifications to the underlying spatial data structures without necessitating changes in the core simulation logic.
+SimEvo introduces an abstraction layer for spatial indexing, encapsulated by the interfaces `ISpatialIndex` and `ISpatialObject`. This design allows for future expansions or modifications to the underlying spatial data structures without necessitating changes in the core simulation logic.
 
 **ISpatialIndex Interface**: Defines the methods for adding, removing, and querying spatial objects. This interface is pivotal for integrating different spatial data structures according to the simulation's needs.
 
@@ -48,11 +48,11 @@ SimSel introduces an abstraction layer for spatial indexing, encapsulated by the
 
 **Default Implementation**: In the initial stages or in simulations where the density of entities is low, a brute-force approach is employed. This method involves calculating the distances between all pairs of objects to determine proximity-based interactions. While straightforward, this approach is computationally intensive as the number of entities increases.
 
-**Optimized Implementation**: For more complex simulations with a higher density of entities, SimSel utilizes a Quadtree data structure for spatial indexing. Quadtrees are highly efficient for 2D spatial data, allowing for rapid queries of objects within specific areas. This optimization significantly reduces the computational cost of distance calculations and interaction determinations, making the simulation more scalable and performant.
+**Optimized Implementation**: For more complex simulations with a higher density of entities, SimEvo utilizes a Quadtree data structure for spatial indexing. Quadtrees are highly efficient for 2D spatial data, allowing for rapid queries of objects within specific areas. This optimization significantly reduces the computational cost of distance calculations and interaction determinations, making the simulation more scalable and performant.
 
 ## API Description
 
-The SimSel library offers a Python API designed for simplicity and ease of use, enabling users to simulate and study natural selection dynamics within virtual ecosystems. Here's an overview of the key components and functionalities provided by the API:
+The SimEvo library offers a Python API designed for simplicity and ease of use, enabling users to simulate and study natural selection dynamics within virtual ecosystems. Here's an overview of the key components and functionalities provided by the API:
 
 ### Environment Class
 
@@ -81,10 +81,10 @@ The SimSel library offers a Python API designed for simplicity and ease of use, 
 
 ### Python Script Examples
 
-The script sets up a SimSel simulation in a 500x500 space, initializing 10 "ABCD" gene organisms and distributing food to model resource scarcity. Operating in an "optimize" mode for efficiency, it cycles through 100 generations, each time scattering food and advancing the simulation to observe natural selection as organisms interact, feed, and reproduce based on genetic traits.
+The script sets up a SimEvo simulation in a 500x500 space, initializing 10 "ABCD" gene organisms and distributing food to model resource scarcity. Operating in an "optimize" mode for efficiency, it cycles through 100 generations, each time scattering food and advancing the simulation to observe natural selection as organisms interact, feed, and reproduce based on genetic traits.
 
 ```python
-from SimSel import Environment, Organism, Genes
+from SimEvo import Environment, Organism, Genes
 import random
 
 def setup_base_organism(env, count=10):
