@@ -46,3 +46,7 @@ Follow the format to add your project:
 6. `kevinshlo <https://github.com/kevinshlo>`__ for
    `Corner Stitching <kevinshlo/README.md>`__:
    https://github.com/kevinshlo/CornerStitching
+
+7. `Ananaee <https://github.com/Ananaee>`__ for
+   `GameStrategy <Ananaee/README.md>`__:
+   https://github.com/Ananaee/GameStrategy
