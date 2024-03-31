@@ -67,7 +67,7 @@ size_t Matrix::ncol() const{
 const double* Matrix::get_buffer_const() const {
     return m_buffer;
 }
-double* Matrix::get_buffer(){
+double* Matrix::get_buffer() const{
     return m_buffer;
 }
     
