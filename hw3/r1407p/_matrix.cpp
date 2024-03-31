@@ -4,7 +4,7 @@
 #include <pybind11/stl.h>
 #include <pybind11/operators.h>
 
-#include <cblas.h>
+#include <mkl.h>
 
 namespace py=pybind11;
 
