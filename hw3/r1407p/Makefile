@@ -1,6 +1,6 @@
+sources = _matrix.cpp
 CXX = clang++
-CPPFLAGS = -O3 -Wall -shared -std=c++11 -fPIC -lblas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
-PROG_TARGET = matrix_test.py
+CXXFLAGS = -O3 -Wall -shared -std=c++11 -fPIC -lblas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
 LIB_TARGET = _matrix.so
 MKLROOT=/usr/lib/x86_64-linux-gnu
 LDFLAGS=${MKLROOT}/libmkl_def.so \
@@ -9,12 +9,14 @@ LDFLAGS=${MKLROOT}/libmkl_def.so \
         ${MKLROOT}/libmkl_intel_lp64.so \
         ${MKLROOT}/libmkl_sequential.so \
         -lpthread -lm -ldl \
-         -lblas -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -L/opt/intel/lib/intel64 -L/opt/intel/mkl/lib/intel64 
+        -lblas -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -L/opt/intel/lib/intel64 -L/opt/intel/mkl/lib/intel64 
 
 all: $(LIB_TARGET)
 
-$(LIB_TARGET): _matrix.cpp
-    $(CXX) -o $@  $(CPPFLAGS) ${LDFLAGS} $<
+$(LIB_TARGET): $(sources)
+	pip install pybind11
+	$(CXX)  $(CXXFLAGS) $(LDFLAGS) $(shell python3 -m pybind11 --includes) $(sources) -o $@
+
 
 .PHONY: test
 test: _matrix.so
@@ -22,4 +24,4 @@ test: _matrix.so
 
 .PHONY: clean
 clean:
-    rm -rf *.o *.so .pytest_cache/ __pycache__/
+	rm -rf $(LIB_TARGET) $(executable) __pycache__ .pytest* *.so
