@@ -42,6 +42,12 @@ Follow the format to add your project:
 1. `github_account_name <https://github.com/github_account_name>`__ for
    `Project subject <github_account_name/README.rst>`__:
    https://github.com/github_account_name/project_name
+
 2. `YJack0000 <https://github.com/YJack0000>`__ for
    `Project subject <YJack0000/README.md>`__:
    https://github.com/YJack0000/SimEvo
+
+6. `kevinshlo <https://github.com/kevinshlo>`__ for
+   `Corner Stitching <kevinshlo/README.md>`__:
+   https://github.com/kevinshlo/CornerStitching
+
