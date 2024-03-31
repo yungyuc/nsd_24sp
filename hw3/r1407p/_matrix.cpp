@@ -64,9 +64,7 @@ size_t Matrix::nrow() const{
 size_t Matrix::ncol() const{
     return m_ncol;
 }
-const double* Matrix::get_buffer_const() const {
-    return m_buffer;
-}
+
 double* Matrix::get_buffer() const{
     return m_buffer;
 }
