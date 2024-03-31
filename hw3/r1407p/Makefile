@@ -2,7 +2,7 @@ sources = _matrix.cpp
 PROG_TARGET = matrix_test.py
 LIB_TARGET = _matrix.so
 CXX = g++
-CXXFLAGS = -std=c++11 -O3 -Wall -shared -fPIC -lblas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
+CXXFLAGS = -std=c++11 -O3 -Wall -shared -fPIC `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
 executable = _matrix$(shell python3-config --extension-suffix)
 
 MKLROOT=/usr/lib/x86_64-linux-gnu
