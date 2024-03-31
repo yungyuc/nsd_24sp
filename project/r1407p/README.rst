@@ -95,8 +95,7 @@ Engineering Infrastructure
 
 Schedule
 ---------
-- Week 1 (4/8): Research the matrix optimization algorithm and implement the 
-C++ version of the algorithm.
+- Week 1 (4/8): Research the matrix optimization algorithm and implement the C++ version of the algorithm.
 - Week 2 (4/15): Write unit test.
 - Week 3 (4/22): Implement the method in C++ class and write the function.
 - Week 4 (4/29): Finish the basic API function.
