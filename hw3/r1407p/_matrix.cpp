@@ -4,10 +4,7 @@
 #include <pybind11/stl.h>
 #include <pybind11/operators.h>
 
-// #include <mkl/mkl.h>
-// #include <mkl/mkl_cblas.h>
-// #include <mkl/mkl_lapack.h>
-// #include <mkl/mkl_lapacke.h>
+#include <cblas.h>
 
 namespace py=pybind11;
 
@@ -132,19 +129,19 @@ Matrix multiply_tile(Matrix const &m1, Matrix const &m2, std::size_t size){
     return result;
 
 }
-// Matrix multiply_mkl(Matrix const &m1, Matrix const &m2){
-//     if(m1.ncol() != m2.nrow()){
-//         throw std::invalid_argument("matrix size does not match");
-//     }
-//     Matrix result(m1.nrow(), m2.ncol());
-//     cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans,
-//                 m1.nrow(), m2.ncol(), m1.ncol(),
-//                 1.0, m1.get_buffer(), m1.ncol(),
-//                 m2.get_buffer(), m2.ncol(),
-//                 0.0, result.get_buffer(), result.ncol());
+Matrix multiply_mkl(Matrix const &m1, Matrix const &m2){
+    if(m1.ncol() != m2.nrow()){
+        throw std::invalid_argument("matrix size does not match");
+    }
+    Matrix result(m1.nrow(), m2.ncol());
+    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans,
+                m1.nrow(), m2.ncol(), m1.ncol(),
+                1.0, m1.get_buffer(), m1.ncol(),
+                m2.get_buffer(), m2.ncol(),
+                0.0, result.get_buffer(), result.ncol());
 
-//     return result;
-// }
+    return result;
+}
 
 PYBIND11_MODULE(_matrix, m) {
     py::class_<Matrix>(m, "Matrix")
@@ -165,6 +162,6 @@ PYBIND11_MODULE(_matrix, m) {
 
     m.def("multiply_naive", &multiply_naive, "");
     m.def("multiply_tile", &multiply_tile, "");
-    // m.def("multiply_mkl", &multiply_mkl, "");
+    m.def("multiply_mkl", &multiply_mkl, "");
 
 }
