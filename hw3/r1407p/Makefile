@@ -19,7 +19,7 @@ $(LIB_TARGET): $(sources)
 
 
 .PHONY: test
-test: _matrix.so
+test: $(LIB_TARGET)
     env PYTHONPATH=".:$PYTHONPATH" python3 -m pytest -v
 
 .PHONY: clean
