@@ -7,7 +7,6 @@ class Matrix{
 private:
     size_t m_nrow, m_ncol;
     double *m_buffer;
-    bool m_transpose;
 public:
     Matrix();
     Matrix(size_t nrow, size_t ncol);
