@@ -15,7 +15,7 @@ all: $(LIB_TARGET)
 
 $(LIB_TARGET): $(sources)
 	pip install pybind11
-	$(CXX)  $(CXXFLAGS) $(LDFLAGS) $(shell python3 -m pybind11 --includes) $(sources) -o $@
+	$(CXX)  $(CXXFLAGS) $(shell python3 -m pybind11 --includes) $(sources) -o $@
 
 
 .PHONY: test
