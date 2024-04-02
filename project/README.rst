@@ -51,3 +51,6 @@ Follow the format to add your project:
    `Corner Stitching <kevinshlo/README.md>`__:
    https://github.com/kevinshlo/CornerStitching
 
+7. `QuentinDucoulombier <https://github.com/QuentinDucoulombier>`__ for
+   `Project subject <QuentinDucoulombier/README.md>`__:
+   https://github.com/QuentinDucoulombier/DeliveryOptimizer
