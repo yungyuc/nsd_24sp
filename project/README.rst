@@ -43,6 +43,10 @@ Follow the format to add your project:
    `Project subject <github_account_name/README.rst>`__:
    https://github.com/github_account_name/project_name
 
+2. `YJack0000 <https://github.com/YJack0000>`__ for
+   `Project subject <YJack0000/README.md>`__:
+   https://github.com/YJack0000/SimEvo
+
 6. `kevinshlo <https://github.com/kevinshlo>`__ for
    `Corner Stitching <kevinshlo/README.md>`__:
    https://github.com/kevinshlo/CornerStitching
@@ -50,3 +54,8 @@ Follow the format to add your project:
 7. `Ananaee <https://github.com/Ananaee>`__ for
    `GameStrategy <Ananaee/README.md>`__:
    https://github.com/Ananaee/GameStrategy
+
+8. `QuentinDucoulombier <https://github.com/QuentinDucoulombier>`__ for
+   `Project subject <QuentinDucoulombier/README.md>`__:
+   https://github.com/QuentinDucoulombier/DeliveryOptimizer
+
