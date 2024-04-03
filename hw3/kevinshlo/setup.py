@@ -3,7 +3,7 @@
 from setuptools import setup, Extension
 
 module = Extension(
-    "_matrix", sources=["matrix.cpp"], libraries=["cblas"], extra_compile_args=["-O3"]
+    "_matrix", sources=["matrix.cpp"], libraries=["openblas"], extra_compile_args=["-O3"]
 )
 
 setup(

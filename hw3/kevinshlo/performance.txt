@@ -1,21 +1,21 @@
-Start multiply_naive (repeat=5), take min = 0.924696533002134 seconds
-Start multiply_mkl (repeat=5), take min = 0.46741747300256975 seconds
-MKL speed-up over naive: 1.97831 x
+Start multiply_naive (repeat=5), take min = 0.940647590000026 seconds
+Start multiply_mkl (repeat=5), take min = 0.036467451999897094 seconds
+MKL speed-up over naive: 25.7942 x
 
-Tiling & Naive compared to MKL (500x500): (non-vendor BLAS)
-naive ratio: 2.0130344833296587
-tile 16 ratio: 1.1380808335897432
-time16/time0: 0.5600671502112399
-tile 17 ratio: 1.1598254784742588
-time17/time0: 0.5760233142588664
-tile 19 ratio: 1.1270095916487306
-time19/time0: 0.557256629720389
+Tiling & Naive compared to MKL (500x500): (OpenBLAS)
+naive ratio: 19.982209269656764
+tile 16 ratio: 11.182630208441495
+time16/time0: 0.5437536421824185
+tile 17 ratio: 11.267211831469837
+time17/time0: 0.5473673310297592
+tile 19 ratio: 11.292809641021554
+time19/time0: 0.5497654969929556
 
-Tiling & Naive compared to MKL (1024x1024): (non-vendor BLAS)
-naive ratio: 19.18733832269891
-tile 16 ratio: 0.7953422578690819
-time16/time0: 0.041470494121248286
-tile 17 ratio: 0.8404240959450541
-time17/time0: 0.04382584405596422
-tile 19 ratio: 0.7329801255188256
-time19/time0: 0.04210544642304516
+Tiling & Naive compared to MKL (1024x1024): (OpenBLAS)
+naive ratio: 237.11121028091506
+tile 16 ratio: 9.87201824579343
+time16/time0: 0.04100200433612231
+tile 17 ratio: 10.259370671421182
+time17/time0: 0.04364101443931834
+tile 19 ratio: 9.636848246083627
+time19/time0: 0.040720138743816525
