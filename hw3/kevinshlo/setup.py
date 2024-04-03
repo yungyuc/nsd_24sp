@@ -2,7 +2,9 @@
 
 from setuptools import setup, Extension
 
-module = Extension("_matrix", sources=["matrix.cpp"], libraries=["cblas"])
+module = Extension(
+    "_matrix", sources=["matrix.cpp"], libraries=["cblas"], extra_compile_args=["-O3"]
+)
 
 setup(
     name="_matrix",

@@ -78,7 +78,7 @@ class GradingTest(unittest.TestCase):
         mat1, mat2, *_ = self.make_matrices(size)
 
         ret_naive = _matrix.multiply_naive(mat1, mat2)
-        ret_tile = _matrix.multiply_tile(mat1, mat2, 0)
+        ret_tile = _matrix.multiply_tile(mat1, mat2, 16)
 
         for i in [ret_naive.nrow, ret_naive.ncol, ret_tile.nrow, ret_tile.ncol]:
             self.assertEqual(size, i)
