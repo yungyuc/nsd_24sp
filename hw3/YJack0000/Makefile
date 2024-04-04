@@ -5,10 +5,10 @@ INCLUDES        = -I$(MKL_INCLUDE_DIR) $(PYINC) $(PYBIND11_INC)
 LDFLAGS         = -lblas -lmkl_rt $(PYLIB)
 MKL_INCLUDE_DIR = /usr/include/mkl
 
-PYINC           = $(shell $(PYEXEC)-config --includes)
-PYBIND11_INC    = $(shell $(PYEXEC) -m pybind11 --includes)
-PYLIB           = $(shell $(PYEXEC)-config --ldflags)
-PYSUFFIX        = $(shell $(PYEXEC)-config --extension-suffix)
+PYINC           = $(shell python3-config --includes)
+PYBIND11_INC    = $(shell python3 -m pybind11 --includes)
+PYLIB           = $(shell python3-config --ldflags)
+PYSUFFIX        = $(shell python3-config --extension-suffix)
 PYBIND11_MODULE = _matrix
 PYTAR           = $(PYBIND11_MODULE)$(PYSUFFIX)
 
