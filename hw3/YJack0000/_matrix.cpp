@@ -28,7 +28,7 @@ bool Matrix::operator==(const Matrix &other) const {
     return false;
   for (size_t i = 0; i < m_nrow; i++)
     for (size_t j = 0; j < m_ncol; j++)
-      if ((*this)(i, j) != other(i, j))
+      if (m_buffer[index(i, j)] != other.m_buffer[index(i, j)])
         return false;
   return true;
 }
@@ -66,16 +66,16 @@ Matrix multiply_tile(Matrix const &mat1, Matrix const &mat2, size_t tsize) {
   for (size_t i = 0; i < max_i; i += tsize) {
     for (size_t j = 0; j < max_j; j += tsize) {
       for (size_t k = 0; k < max_k; k += tsize) {
+        // compute the upper bound of the tile
         size_t upper_i = std::min(i + tsize, max_i);
         size_t upper_j = std::min(j + tsize, max_j);
         size_t upper_k = std::min(k + tsize, max_k);
+
         for (size_t t_i = i; t_i < upper_i; ++t_i) {
           for (size_t t_j = j; t_j < upper_j; ++t_j) {
-            double sum = .0;
             for (size_t t_k = k; t_k < upper_k; ++t_k) {
-              sum += mat1(t_i, t_k) * mat2(t_k, t_j);
+              result(t_i, t_j) += mat1(t_i, t_k) * mat2(t_k, t_j);
             }
-            result(t_i, t_j) += sum;
           }
         }
       }
