@@ -15,10 +15,12 @@ Matrix::Matrix(const Matrix &mat) : m_nrow(mat.m_nrow), m_ncol(mat.m_ncol) {
 
 Matrix::~Matrix() { delete[] m_buffer; }
 
+// no bounds checking
 double Matrix::operator()(size_t row, size_t col) const {
   return m_buffer[index(row, col)];
 }
 
+// no bounds checking
 double &Matrix::operator()(size_t row, size_t col) {
   return m_buffer[index(row, col)];
 }
@@ -73,9 +75,11 @@ Matrix multiply_tile(Matrix const &mat1, Matrix const &mat2, size_t tsize) {
 
         for (size_t t_i = i; t_i < upper_i; ++t_i) {
           for (size_t t_j = j; t_j < upper_j; ++t_j) {
+            double sum = 0.0;
             for (size_t t_k = k; t_k < upper_k; ++t_k) {
-              result(t_i, t_j) += mat1(t_i, t_k) * mat2(t_k, t_j);
+              sum = mat1(t_i, t_k) * mat2(t_k, t_j);
             }
+            result(t_i, t_j) += sum;
           }
         }
       }
