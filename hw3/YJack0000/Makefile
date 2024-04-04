@@ -2,11 +2,9 @@ CXX             = g++
 SRC             = _matrix.cpp
 FLAGS           = -O3 -Wall -shared -std=c++11 -fPIC
 INCLUDES        = -I$(MKL_INCLUDE_DIR) $(PYINC) $(PYBIND11_INC)
-LDFLAGS         = $(LD_PRELOAD)
+LDFLAGS         = -lblas
 MKL_INCLUDE_DIR = /usr/include/mkl
-MKL_LIB_FLAGS   = -lblas
 
-PYEXEC          = python3
 PYINC           = $(shell $(PYEXEC)-config --includes)
 PYBIND11_INC    = $(shell $(PYEXEC) -m pybind11 --includes)
 PYSUFFIX        = $(shell $(PYEXEC)-config --extension-suffix)
@@ -20,8 +18,8 @@ $(PYTAR): $(SRC)
 .PHONY: all
 
 test: $(PYTAR)
-	$(PYEXEC) test_matrix.py
-	$(PYEXEC) -m pytest -v -s test_matrix.py
+	python3 test_matrix.py
+	python3 -m pytest -v -s test_matrix.py
 .PHONY: test
 
 perf: all
