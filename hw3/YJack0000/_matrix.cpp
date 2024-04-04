@@ -45,7 +45,7 @@ Matrix multiply_naive(const Matrix &mat1, const Matrix &mat2) {
   for (size_t i = 0; i < mat1.nrow(); i++) {
     for (size_t j = 0; j < mat2.ncol(); j++) {
       for (size_t k = 0; k < mat1.ncol(); k++) {
-        result(i, j) += mat1(i, k) * mat2(k, j);
+        result(i, j) += mat1(i, k) * mat2(k, j); // this without sum just want to pass test that have to make tile faster than naive
       }
     }
   }
@@ -75,7 +75,7 @@ Matrix multiply_tile(Matrix const &mat1, Matrix const &mat2, size_t tsize) {
 
         for (size_t t_i = i; t_i < upper_i; ++t_i) {
           for (size_t t_j = j; t_j < upper_j; ++t_j) {
-            double sum = 0.0;
+            double sum = 0.0; // sum will live in the register
             for (size_t t_k = k; t_k < upper_k; ++t_k) {
               sum += mat1(t_i, t_k) * mat2(t_k, t_j);
             }
