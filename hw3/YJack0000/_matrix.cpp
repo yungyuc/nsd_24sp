@@ -4,7 +4,7 @@
 Matrix::Matrix(size_t nrow, size_t ncol) : m_nrow(nrow), m_ncol(ncol) {
   size_t nelements = nrow * ncol;
   m_buffer = new double[nelements];
-  memset(m_buffer, nelements, sizeof(double));
+  memset(m_buffer, 0, nelements * sizeof(double));
 }
 
 Matrix::Matrix(const Matrix &mat) : m_nrow(mat.m_nrow), m_ncol(mat.m_ncol) {
