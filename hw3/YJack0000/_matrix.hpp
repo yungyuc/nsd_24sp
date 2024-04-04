@@ -24,7 +24,7 @@ public:
 
   size_t nrow() const { return m_nrow; }
   size_t ncol() const { return m_ncol; }
-  double *data() { return m_buffer; }
+  double *data() const { return m_buffer; }
 
 private:
   size_t index(size_t row, size_t col) const { return m_ncol * row + col; }
