@@ -34,7 +34,7 @@ bool Matrix::operator==(const Matrix &other) const {
 }
 
 Matrix multiply_naive(const Matrix &mat1, const Matrix &mat2) {
-  if(mat1.ncol() != mat2.nrow()) {
+  if (mat1.ncol() != mat2.nrow()) {
     throw std::out_of_range("the number of first matrix column "
                             "differs from that of second matrix row");
   }
@@ -47,6 +47,8 @@ Matrix multiply_naive(const Matrix &mat1, const Matrix &mat2) {
       }
     }
   }
+
+  return result;
 }
 
 Matrix multiply_tile(Matrix const &mat1, Matrix const &mat2, size_t tsize) {
@@ -89,32 +91,28 @@ Matrix multiply_mkl(const Matrix &mat1, const Matrix &mat2) {
                             "differs from that of second matrix row");
   }
   Matrix result(mat1.nrow(), mat2.ncol());
-  cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans,
-              mat1.nrow(), mat2.ncol(), mat1.ncol(),
-              1.0, mat1.data(), mat1.ncol(), mat2.data(), mat2.ncol(),
-              0.0, result.data(), result.ncol());
+  cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, mat1.nrow(),
+              mat2.ncol(), mat1.ncol(), 1.0, mat1.data(), mat1.ncol(),
+              mat2.data(), mat2.ncol(), 0.0, result.data(), result.ncol());
   return result;
 }
 
 namespace py = pybind11;
-PYBIND11_MODULE(_matrix, m)
-{
-    m.doc() = "matrix-matrix multiplication";
+PYBIND11_MODULE(_matrix, m) {
+  m.doc() = "matrix-matrix multiplication";
 
-    m.def("multiply_naive", &multiply_naive, "multiply_naive");
-    m.def("multiply_tile", &multiply_tile, "multiply_tile");
-    m.def("multiply_mkl", &multiply_mkl, "multiply_mkl");
-    py::class_<Matrix>(m, "Matrix")
-        .def(py::init<size_t, size_t>())
-        .def_property_readonly("nrow", &Matrix::nrow)
-        .def_property_readonly("ncol", &Matrix::ncol)
-        .def("__eq__", [](const Matrix &a, const Matrix &b) { return a == b; })
-        .def("__setitem__",
-             [](Matrix &self, std::pair<size_t, size_t> idx, double val) {
-                 self(idx.first, idx.second) = val;
-             })
-        .def("__getitem__",
-             [](const Matrix &self, std::pair<size_t, size_t> idx) {
-                 return self(idx.first, idx.second);
-             });
+  m.def("multiply_naive", &multiply_naive, "multiply_naive");
+  m.def("multiply_tile", &multiply_tile, "multiply_tile");
+  m.def("multiply_mkl", &multiply_mkl, "multiply_mkl");
+  py::class_<Matrix>(m, "Matrix")
+      .def(py::init<size_t, size_t>())
+      .def_property_readonly("nrow", &Matrix::nrow)
+      .def_property_readonly("ncol", &Matrix::ncol)
+      .def("__eq__", [](const Matrix &a, const Matrix &b) { return a == b; })
+      .def("__setitem__", [](Matrix &self, std::pair<size_t, size_t> idx,
+                             double val) { self(idx.first, idx.second) = val; })
+      .def("__getitem__",
+           [](const Matrix &self, std::pair<size_t, size_t> idx) {
+             return self(idx.first, idx.second);
+           });
 }
