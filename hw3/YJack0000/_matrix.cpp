@@ -77,7 +77,7 @@ Matrix multiply_tile(Matrix const &mat1, Matrix const &mat2, size_t tsize) {
           for (size_t t_j = j; t_j < upper_j; ++t_j) {
             double sum = 0.0;
             for (size_t t_k = k; t_k < upper_k; ++t_k) {
-              sum = mat1(t_i, t_k) * mat2(t_k, t_j);
+              sum += mat1(t_i, t_k) * mat2(t_k, t_j);
             }
             result(t_i, t_j) += sum;
           }
