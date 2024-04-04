@@ -96,6 +96,7 @@ Matrix multiply_mkl(const Matrix &mat1, const Matrix &mat2) {
   return result;
 }
 
+namespace py = pybind11;
 PYBIND11_MODULE(_matrix, m)
 {
     m.doc() = "matrix-matrix multiplication";
