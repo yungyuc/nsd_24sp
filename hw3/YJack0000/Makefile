@@ -4,7 +4,7 @@ FLAGS           = -O3 -Wall -shared -std=c++11 -fPIC
 INCLUDES        = -I$(MKL_INCLUDE_DIR) $(PYINC) $(PYBIND11_INC)
 LDFLAGS         = $(LD_PRELOAD)
 MKL_INCLUDE_DIR = /usr/include/mkl
-MKL_LIB_FLAGS   = -lmkl_rt
+MKL_LIB_FLAGS   = -lblas
 
 PYEXEC          = python3
 PYINC           = $(shell $(PYEXEC)-config --includes)
