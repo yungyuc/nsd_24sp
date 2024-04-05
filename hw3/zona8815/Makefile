@@ -26,6 +26,10 @@ MKL_EXT         = $(MKL_COMPILER) $(MKL_LINKS)
 .PHONY : test
 test: clean $(CC_SRC)
 	$(CXX) $(CXX_FLAGS) $(MKL_EXT) $(BIND_FLAGS) $(CC_SRC) -o $(EXE_SRC) $(LD_FLAGS)
+	@echo ""
+	@echo " ***     COMPILE COMPLETED     *** "
+	@echo " ***       TESTING START       *** "
+	@echo ""
 	-python3 -m pytest $(TEST_SRC)
 	python3 $(PERFORM_SRC)
 
