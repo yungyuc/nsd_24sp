@@ -5,9 +5,9 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-#include <cblas.h>
+// #include <cblas.h>
 // #ifdef HASMKL
-// #include <mkl.h>
+#include <mkl.h>
 // #include <mkl/mkl_lapack.h>
 // #include <mkl/mkl_lapacke.h>
 // #endif // HASMKL
@@ -96,11 +96,11 @@ Matrix multiply_tile(Matrix const & mat1, Matrix const & mat2, std::size_t tsize
     for (std::size_t i = 0; i < mat1.row(); i += tsize) {
         for (std::size_t j = 0; j < mat2.col(); j += tsize) {
             for (std::size_t k = 0; k < mat1.col(); k += tsize) {
-                std::size_t ii_range = std::min(i + tsize, mat1.row());
+                std::size_t const ii_range = std::min(i + tsize, mat1.row());
                 for (std::size_t ii = i; ii < ii_range; ++ii) {
-                    std::size_t jj_range = std::min(j + tsize, mat2.col());
+                    std::size_t const jj_range = std::min(j + tsize, mat2.col());
                     for (std::size_t jj = j; jj < jj_range; ++jj) {
-                        std::size_t kk_range = std::min(k + tsize, mat1.col());
+                        std::size_t const kk_range = std::min(k + tsize, mat1.col());
                         double temp_sum = 0.0;
                         for (std::size_t kk = k; kk < kk_range; ++kk) {
                             temp_sum += mat1(ii, kk) * mat2(kk, jj);
