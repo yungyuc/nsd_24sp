@@ -7,7 +7,7 @@
 
 // #include <cblas.h>
 // #ifdef HASMKL
-#include <mkl.h>
+#include <mkl/mkl.h>
 // #include <mkl/mkl_lapack.h>
 // #include <mkl/mkl_lapacke.h>
 // #endif // HASMKL
