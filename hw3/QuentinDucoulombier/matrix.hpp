@@ -2,8 +2,10 @@
 #include <iostream>
 #include <cstddef>
 #include <algorithm> 
+#include <iomanip>
+#include <chrono>
 
-const size_t TILE_SIZE = 16;
+const size_t TILE_SIZE = 128;
 
 class Matrix {
 public:
@@ -27,9 +29,11 @@ public:
     double operator()(size_t row, size_t col) const;
     double& operator()(size_t row, size_t col);
 
-    // Getters
+    // Getters and setters
     size_t rows() const;
     size_t cols() const;
+    double* data();
+    const double* data() const;
 
 private:
     size_t rows_;

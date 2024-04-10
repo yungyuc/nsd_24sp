@@ -1,5 +1,5 @@
 #include "matrix.hpp"
-#include <iomanip>
+#include "mkl.h"
 
 Matrix multiply_naive(const Matrix& A, const Matrix& B);
 
@@ -9,6 +9,22 @@ void populate(Matrix& matrix) {
             matrix(i, j) = i * 10 + j;
         }
     }
+}
+
+void multiply_mkl(const Matrix& A, const Matrix& B, Matrix& C) {
+    if (A.cols() != B.rows() || A.rows() != C.rows() || B.cols() != C.cols()) {
+        throw std::invalid_argument("Incompatible dimensions for matrix multiplication.");
+    }
+
+    const double alpha = 1.0;
+    const double beta = 0.0;
+    const MKL_INT m = A.rows();
+    const MKL_INT n = B.cols();
+    const MKL_INT k = A.cols();
+
+    // DGEMM performs C = alpha*A*B + beta*C
+    // Note: MKL uses column-major storage, ensure your Matrix class is compatible or adjust accordingly
+    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m, n, k, alpha, A.data(), k, B.data(), n, beta, C.data(), n);
 }
 
 void printMatrix(const Matrix& matrix) {
@@ -27,7 +43,7 @@ Matrix multiply_naive(const Matrix& A, const Matrix& B) {
     }
 
     size_t m = A.rows();
-    size_t n = A.cols(); // or B.rows();
+    size_t n = A.cols(); 
     size_t p = B.cols();
 
     Matrix C(m, p);
@@ -52,19 +68,19 @@ Matrix multiply_tile(const Matrix& A, const Matrix& B) {
     }
     
     size_t m = A.rows();
-    size_t n = A.cols(); // ou B.rows();
+    size_t n = A.cols();
     size_t p = B.cols();
     Matrix C(m, p);
     
     
     for (size_t i = 0; i < m; i += TILE_SIZE) {
-        for (size_t j = 0; j < p; j += TILE_SIZE) {
-            for (size_t k = 0; k < n; k += TILE_SIZE) {
-                // Pour chaque tuile, effectuer la multiplication de matrices sur les éléments de la tuile
+        for (size_t k = 0; k < n; k += TILE_SIZE) {
+            for (size_t j = 0; j < p; j += TILE_SIZE) {
                 for (size_t ii = i; ii < std::min(i + TILE_SIZE, m); ++ii) {
-                    for (size_t jj = j; jj < std::min(j + TILE_SIZE, p); ++jj) {
-                        for (size_t kk = k; kk < std::min(k + TILE_SIZE, n); ++kk) {
-                            C(ii, jj) += A(ii, kk) * B(kk, jj);
+                    for (size_t kk = k; kk < std::min(k + TILE_SIZE, n); ++kk) {
+                        double r = A(ii, kk);
+                        for (size_t jj = j; jj < std::min(j + TILE_SIZE, p); ++jj) {
+                            C(ii, jj) += r * B(kk, jj);
                         }
                     }
                 }
@@ -77,7 +93,7 @@ Matrix multiply_tile(const Matrix& A, const Matrix& B) {
 
 int main(int argc, char const *argv[])
 {
-    size_t size = 1000;
+    size_t size = 10000;
 
     Matrix A(size, size);
     
@@ -85,17 +101,32 @@ int main(int argc, char const *argv[])
 
     Matrix B = A;
 
+    auto start = std::chrono::high_resolution_clock::now();
+    Matrix result1 = multiply_naive(A, B);
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> elapsed_naive = end - start;
+    std::cout << "Naive multiplication took " << elapsed_naive.count() << " ms.\n";
 
-    std::cout << "Matrix A:" << std::endl;
-    printMatrix(A);
+    start = std::chrono::high_resolution_clock::now();
+    Matrix result2 = multiply_tile(A, B);
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> elapsed_tile = end - start;
+    std::cout << "Tiled multiplication took " << elapsed_tile.count() << " ms.\n";
 
-    std::cout << std::endl << "Matrix B:" << std::endl;
-    printMatrix(B);
+    Matrix result3(size, size);
+    start = std::chrono::high_resolution_clock::now();
+    multiply_mkl(A, B, result3);
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> elapsed_mkl = end - start;
+    std::cout << "MKL multiplication took " << elapsed_mkl.count() << " ms.\n";
 
-    Matrix result = multiply_naive(A, B);
+    double percent_reduction_tile_from_naive = (1 - elapsed_tile.count() / elapsed_naive.count()) * 100;
+    double percent_reduction_mkl_from_naive = (1 - elapsed_mkl.count() / elapsed_naive.count()) * 100;
+    double percent_reduction_mkl_from_tile = (1 - elapsed_mkl.count() / elapsed_tile.count()) * 100;
 
-    std::cout << std::endl << "Result of A * B:" << std::endl;
-    printMatrix(result);
+    std::cout << "\nPercentage speed increase of Tiling over Naive: " << percent_reduction_tile_from_naive << "%\n";
+    std::cout << "Percentage speed increase of MKL over Naive: " << percent_reduction_mkl_from_naive << "%\n";
+    std::cout << "Percentage speed increase of MKL over Tiling: " << percent_reduction_mkl_from_tile << "%\n";
 
     return 0;
 }

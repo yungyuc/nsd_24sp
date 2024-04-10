@@ -66,3 +66,11 @@ size_t Matrix::rows() const {
 size_t Matrix::cols() const {
     return cols_;
 }
+
+double* Matrix::data() {
+    return buffer_;
+}
+
+const double* Matrix::data() const {
+    return buffer_;
+}
