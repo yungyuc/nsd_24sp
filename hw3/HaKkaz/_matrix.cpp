@@ -90,10 +90,13 @@ Matrix multiply_tile(const Matrix &m1, const Matrix &m2, size_t tile_size){
     for (size_t i = 0; i < m1.nrow(); i += tile_size){
         for (size_t j = 0; j < m2.ncol(); j += tile_size){
             for (size_t k = 0; k < m1.ncol(); k += tile_size){
-                for (size_t ii = i; ii < std::min(i + tile_size, m1.nrow()); ii++){
-                    for (size_t jj = j; jj < std::min(j + tile_size, m2.ncol()); jj++){
+                size_t mn_i = std::min(i + tile_size, m1.nrow());
+                size_t mn_j = std::min(j + tile_size, m2.ncol());
+                size_t mn_k = std::min(k + tile_size, m1.ncol());
+                for (size_t ii = i; ii < mn_i; ii++){
+                    for (size_t jj = j; jj < mn_j; jj++){
                         double tmp = 0;
-                        for (size_t kk = k; kk < std::min(k + tile_size, m1.ncol()); kk++){
+                        for (size_t kk = k; kk < mn_k; kk++){
                             tmp += m1(ii, kk) * m2(kk, jj);
                         }
                         result(ii, jj) += tmp;
