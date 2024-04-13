@@ -3,19 +3,19 @@ import _matrix
 
 def test_matrix_creation_and_access():
     """Test the creation of a matrix and access to its elements."""
-    rows, cols = 2, 3
-    m = _matrix.Matrix(rows, cols)
-    assert m.rows() == rows
-    assert m.cols() == cols
+    nrow, ncol = 2, 3
+    m = _matrix.Matrix(nrow, ncol)
+    assert m.nrow == nrow
+    assert m.ncol == ncol
 
     # Test initialization and access using __setitem__ and __getitem__
-    for i in range(rows):
-        for j in range(cols):
-            m[i, j] = i * cols + j  
+    for i in range(nrow):
+        for j in range(ncol):
+            m[i, j] = i * ncol + j  
 
-    for i in range(rows):
-        for j in range(cols):
-            assert m[i, j] == i * cols + j 
+    for i in range(nrow):
+        for j in range(ncol):
+            assert m[i, j] == i * ncol + j 
 
 def populate_matrix(A, B):
     """Populate matrices A and B for multiplication using __setitem__."""
@@ -48,7 +48,7 @@ def test_multiply_tile():
     B = _matrix.Matrix(2, 2)
     populate_matrix(A, B)
 
-    C = _matrix.multiply_tile(A, B)
+    C = _matrix.multiply_tile(A, B, 128)
     
     assert C[0, 0] == 4
     assert C[0, 1] == 4
@@ -77,7 +77,7 @@ def test_incompatible_dimensions():
         _matrix.multiply_naive(A, B)
 
     with pytest.raises(ValueError):
-        _matrix.multiply_tile(A, B)
+        _matrix.multiply_tile(A, B, 128)
 
     with pytest.raises(ValueError):
         _matrix.multiply_mkl(A, B)

@@ -5,7 +5,7 @@ TEST_SRC := test_matrix.py
 
 # Compiler and flags
 CXX := g++
-CXXFLAGS := -Wall -std=c++11 -fPIC
+CXXFLAGS := -O3 -Wall -std=c++11 -fPIC
 # Include MKL headers and link flags. Adjust these paths according to your MKL installation.
 MKLROOT := /opt/intel/oneapi/mkl/latest
 CXXFLAGS += -I$(MKLROOT)/include
@@ -48,6 +48,10 @@ test: clean $(MODULE)
 	@echo " ***       TESTING START       *** "
 	python3 -m pytest $(TEST_SRC)
 
+# Performance testing
+perf: $(PROG)
+	./$(PROG) >> performance.txt 2>&1
+
 # Clean the directory
 clean:
 	rm -f $(PROG) $(OBJECTS) $(MODULE)$(EXT_SUFFIX) $(PYBIND_OBJECTS)
@@ -56,4 +60,4 @@ clean:
 	-rm -rf __pycache__ .pytest_cache
 
 # Phony targets
-.PHONY: all run clean test
+.PHONY: all run clean test perf

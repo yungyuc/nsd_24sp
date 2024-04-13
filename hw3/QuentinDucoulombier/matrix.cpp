@@ -1,12 +1,12 @@
 #include "matrix.hpp"
 
-Matrix::Matrix(size_t rows, size_t cols) 
-    : rows_(rows), cols_(cols), buffer_(new double[rows * cols]) {}
-
+Matrix::Matrix(size_t nrow, size_t ncol) 
+    : nrow_(nrow), ncol_(ncol), buffer_(new double[nrow * ncol]) {}
+    
 // Copy constructor
 Matrix::Matrix(const Matrix& other) 
-    : rows_(other.rows_), cols_(other.cols_), buffer_(new double[other.rows_ * other.cols_]) {
-    for (size_t i = 0; i < rows_ * cols_; ++i) {
+    : nrow_(other.nrow_), ncol_(other.ncol_), buffer_(new double[other.nrow_ * other.ncol_]) {
+    for (size_t i = 0; i < nrow_ * ncol_; ++i) {
         buffer_[i] = other.buffer_[i];
     }
 }
@@ -15,10 +15,10 @@ Matrix& Matrix::operator=(const Matrix& other) {
     if (this != &other) { 
         delete[] buffer_;
 
-        rows_ = other.rows_;
-        cols_ = other.cols_;
-        buffer_ = new double[rows_ * cols_];
-        for (size_t i = 0; i < rows_ * cols_; ++i) {
+        nrow_ = other.nrow_;
+        ncol_ = other.ncol_;
+        buffer_ = new double[nrow_ * ncol_];
+        for (size_t i = 0; i < nrow_ * ncol_; ++i) {
             buffer_[i] = other.buffer_[i];
         }
     }
@@ -27,9 +27,9 @@ Matrix& Matrix::operator=(const Matrix& other) {
 
 // Move constructor
 Matrix::Matrix(Matrix&& other) noexcept
-    : rows_(other.rows_), cols_(other.cols_), buffer_(other.buffer_) {
-    other.rows_ = 0;
-    other.cols_ = 0;
+    : nrow_(other.nrow_), ncol_(other.ncol_), buffer_(other.buffer_) {
+    other.nrow_ = 0;
+    other.ncol_ = 0;
     other.buffer_ = nullptr;
 }
 
@@ -37,12 +37,12 @@ Matrix& Matrix::operator=(Matrix&& other) noexcept {
     if (this != &other) { 
         delete[] buffer_; 
 
-        rows_ = other.rows_;
-        cols_ = other.cols_;
+        nrow_ = other.nrow_;
+        ncol_ = other.ncol_;
         buffer_ = other.buffer_;
 
-        other.rows_ = 0;
-        other.cols_ = 0;
+        other.nrow_ = 0;
+        other.ncol_ = 0;
         other.buffer_ = nullptr;  }
     return *this;
 }
@@ -52,19 +52,32 @@ Matrix::~Matrix() {
 }
 
 double Matrix::operator()(size_t row, size_t col) const {
-    return buffer_[row * cols_ + col];
+    return buffer_[row * ncol_ + col];
 }
 
 double& Matrix::operator()(size_t row, size_t col) {
-    return buffer_[row * cols_ + col];
+    return buffer_[row * ncol_ + col];
 }
 
-size_t Matrix::rows() const {
-    return rows_;
+bool Matrix::operator==(const Matrix& other) const {
+    if (nrow_ != other.nrow_ || ncol_ != other.ncol_) {
+        return false;  
+    }
+    for (size_t i = 0; i < nrow_ * ncol_; i++) {
+        if (buffer_[i] != other.buffer_[i]) {
+            return false;  
+        }
+    }
+    return true;  // Return true only if all elements are identical
 }
 
-size_t Matrix::cols() const {
-    return cols_;
+
+size_t Matrix::nrow() const {
+    return nrow_;
+} 
+
+size_t Matrix::ncol() const {
+    return ncol_;
 }
 
 double* Matrix::data() {
@@ -76,13 +89,13 @@ const double* Matrix::data() const {
 }
 
 Matrix multiply_mkl(const Matrix& A, const Matrix& B) {
-    if (A.cols() != B.rows()) {
+    if (A.ncol() != B.nrow()) {
         throw std::invalid_argument("Incompatible dimensions for matrix multiplication.");
     }
 
-    const size_t m = A.rows();
-    const size_t n = B.cols();
-    const size_t k = A.cols();
+    const size_t m = A.nrow();
+    const size_t n = B.ncol();
+    const size_t k = A.ncol();
     Matrix C(m, n);
 
     const double alpha = 1.0;
@@ -98,23 +111,21 @@ Matrix multiply_mkl(const Matrix& A, const Matrix& B) {
 }
 
 Matrix multiply_naive(const Matrix& A, const Matrix& B) {
-    if (A.cols() != B.rows()) {
+    if (A.ncol() != B.nrow()) {
         throw std::invalid_argument("Incompatible dimensions for matrix multiplication.");
     }
 
-    size_t m = A.rows();
-    size_t n = A.cols(); 
-    size_t p = B.cols();
+    size_t m = A.nrow();
+    size_t n = A.ncol(); 
+    size_t p = B.ncol();
 
     Matrix C(m, p);
 
     for (size_t i = 0; i < m; ++i) {
         for (size_t j = 0; j < p; ++j) {
-            double sum = 0.0;
             for (size_t k = 0; k < n; ++k) {
-                sum += A(i, k) * B(k, j);
+                C(i, j)  += A(i, k) * B(k, j);
             }
-            C(i, j) = sum;
         }
     }
 
@@ -122,31 +133,39 @@ Matrix multiply_naive(const Matrix& A, const Matrix& B) {
 }
 
 
-Matrix multiply_tile(const Matrix& A, const Matrix& B) {
-    if (A.cols() != B.rows()) {
+Matrix multiply_tile(const Matrix& A, const Matrix& B, size_t tile_size) {
+    if (A.ncol() != B.nrow()) {
         throw std::invalid_argument("Incompatible dimensions for matrix multiplication.");
     }
-    
-    size_t m = A.rows();
-    size_t n = A.cols();
-    size_t p = B.cols();
+
+    size_t m = A.nrow();
+    size_t n = A.ncol();
+    size_t p = B.ncol();
     Matrix C(m, p);
-    
-    
-    for (size_t i = 0; i < m; i += TILE_SIZE) {
-        for (size_t k = 0; k < n; k += TILE_SIZE) {
-            for (size_t j = 0; j < p; j += TILE_SIZE) {
-                for (size_t ii = i; ii < std::min(i + TILE_SIZE, m); ++ii) {
-                    for (size_t kk = k; kk < std::min(k + TILE_SIZE, n); ++kk) {
-                        double r = A(ii, kk);
-                        for (size_t jj = j; jj < std::min(j + TILE_SIZE, p); ++jj) {
-                            C(ii, jj) += r * B(kk, jj);
+
+    for (size_t i = 0; i < m; ++i) {
+        for (size_t j = 0; j < p; ++j) {
+            C(i, j) = 0;
+        }
+    }
+
+    // Iterate over tiles
+    for (size_t i_tile = 0; i_tile < m; i_tile += tile_size) {
+        for (size_t j_tile = 0; j_tile < p; j_tile += tile_size) {
+            for (size_t k_tile = 0; k_tile < n; k_tile += tile_size) {
+                // Iterate within a tile
+                for (size_t i = i_tile; i < std::min(i_tile + tile_size, m); ++i) {
+                    for (size_t j = j_tile; j < std::min(j_tile + tile_size, p); ++j) {
+                        double sum = 0;
+                        for (size_t k = k_tile; k < std::min(k_tile + tile_size, n); ++k) {
+                            sum += A(i, k) * B(k, j);
                         }
+                        C(i, j) += sum;
                     }
                 }
             }
         }
     }
-    
+
     return C;
 }

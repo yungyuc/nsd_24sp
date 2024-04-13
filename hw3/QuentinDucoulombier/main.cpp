@@ -1,17 +1,17 @@
 #include "matrix.hpp"
 
 void populate(Matrix& matrix) {
-    for (size_t i = 0; i < matrix.rows(); ++i) {
-        for (size_t j = 0; j < matrix.cols(); ++j) {
+    for (size_t i = 0; i < matrix.nrow(); ++i) {
+        for (size_t j = 0; j < matrix.ncol(); ++j) {
             matrix(i, j) = i * 10 + j;
         }
     }
 }
 
 void printMatrix(const Matrix& matrix) {
-    for (size_t i = 0; i < matrix.rows(); ++i) {
+    for (size_t i = 0; i < matrix.nrow(); ++i) {
         std::cout << std::endl << " ";
-        for (size_t j = 0; j < matrix.cols(); ++j) {
+        for (size_t j = 0; j < matrix.ncol(); ++j) {
             std::cout << " " << std::setfill('0') << std::setw(2) << matrix(i, j);      
         }
         std::cout << std::endl;
@@ -20,7 +20,7 @@ void printMatrix(const Matrix& matrix) {
 
 int main(int argc, char const *argv[])
 {
-    size_t size = 1024;
+    size_t size = 1000;
 
     Matrix A(size, size);
     
@@ -35,7 +35,7 @@ int main(int argc, char const *argv[])
     std::cout << "Naive multiplication took " << elapsed_naive.count() << " ms.\n";
 
     start = std::chrono::high_resolution_clock::now();
-    Matrix result2 = multiply_tile(A, B);
+    Matrix result2 = multiply_tile(A, B, 16);
     end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::milli> elapsed_tile = end - start;
     std::cout << "Tiled multiplication took " << elapsed_tile.count() << " ms.\n";
@@ -51,9 +51,9 @@ int main(int argc, char const *argv[])
     double percent_reduction_mkl_from_naive = (1 - elapsed_mkl.count() / elapsed_naive.count()) * 100;
     double percent_reduction_mkl_from_tile = (1 - elapsed_mkl.count() / elapsed_tile.count()) * 100;
 
-    std::cout << "\nPercentage speed increase of Tiling over Naive: " << percent_reduction_tile_from_naive << "%\n";
+    std::cout << "\nPercentage speed increase of Tiling 16 over Naive: " << percent_reduction_tile_from_naive << "%\n";
     std::cout << "Percentage speed increase of MKL over Naive: " << percent_reduction_mkl_from_naive << "%\n";
-    std::cout << "Percentage speed increase of MKL over Tiling: " << percent_reduction_mkl_from_tile << "%\n";
+    std::cout << "Percentage speed increase of MKL over Tiling 16: " << percent_reduction_mkl_from_tile << "%\n";
 
     return 0;
 }

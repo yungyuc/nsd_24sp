@@ -1,3 +1,7 @@
-Start multiply_naive (repeat=5), take min = 6.534982185003173 seconds
-Start multiply_mkl (repeat=5), take min = 0.03852116299822228 seconds
-MKL speed-up over naive: 169.647 x
+Naive multiplication took 4469.11 ms.
+Tiled multiplication took 2584.52 ms.
+MKL multiplication took 51.5075 ms.
+
+Percentage speed increase of Tiling 16 over Naive: 42.1693%
+Percentage speed increase of MKL over Naive: 98.8475%
+Percentage speed increase of MKL over Tiling 16: 98.0071%
