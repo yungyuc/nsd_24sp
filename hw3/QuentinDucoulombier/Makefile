@@ -2,6 +2,7 @@
 PROG := exe
 LIBS := ./_matrix$(PYTHON_SUF)
 
+
 # Compiler settings
 CXX := g++
 CXXFLAGS := -std=c++11 -O2 -Wall -fPIC -shared -m64
@@ -32,6 +33,10 @@ $(LIBS): $(SRC)
 
 $(PROG): $(SRC)
 	$(CXX) $(CXXFLAGS) -I$(MKL_INC) $(PYBIND_INC_FLAGS) $(PYTHON_LIB_FLAGS) -o $@ $^ $(LDFLAGS)
+
+# Compiling
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $<
 
 # Run tests
 test: $(LIBS) $(PYTEST)
