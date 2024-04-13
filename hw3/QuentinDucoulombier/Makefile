@@ -39,7 +39,7 @@ $(MODULE): $(PYBIND_OBJECTS)
 
 # Compiling
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) $(PYBIND11_FLAGS) -c $<
+	$(CXX) -c -o $@ $(CXXFLAGS) $(PYBIND11_FLAGS) $<
 
 # Run the PROG
 run: $(PROG)
