@@ -3,6 +3,7 @@ CXXFLAGS = -O3 -std=c++11 -Wall -shared -fPIC
 LDFLAGS = -lblas -lmkl_rt
 PYINC = $(shell python3-config --includes --ldflags)
 PYBIND11_INC = $(shell python3 -m pybind11 --includes)
+MKL_PATH = /usr/include/mkl
 INCLUDES = -I$(MKL_PATH) $(PYINC) $(PYBIND11_INC)
 
 TARGET = _matrix.so
