@@ -4,7 +4,7 @@ TEST_SRC := test_matrix.py
 
 # Compiler and flags
 CXX := g++
-CXXFLAGS := -O3 -Wall -std=c++11 -fPIC $(shell pkg-config --cflags mkl-dynamic-lp64-iomp)
+CXXFLAGS := -O3 -Wall -m64 -std=c++11 -fPIC $(shell pkg-config --cflags mkl-dynamic-lp64-iomp)
 # Include MKL headers and link flags. Adjust these paths according to your MKL installation.
 MKL_INC := /usr/include/mkl
 #CXXFLAGS += -I$(MKL_INC)
