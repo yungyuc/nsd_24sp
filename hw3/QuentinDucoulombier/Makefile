@@ -1,58 +1,66 @@
-# Set the executable name
+# Name of the executable and Python module
 PROG := exe
-LIBS := ./_matrix$(PYTHON_SUF)
+MODULE := _matrix
+TEST_SRC := test_matrix.py
 
-
-# Compiler settings
+# Compiler and flags
 CXX := g++
-CXXFLAGS := -std=c++11 -O2 -Wall -fPIC -shared -m64
-LDFLAGS := -lblas -lmkl_rt
-
-# Python and MKL settings
-PYBIND_INC_FLAGS := $(shell python3 -m pybind11 --includes)
-PYTHON_LIB_FLAGS := $(shell python3-config --includes --ldflags)
-PYTHON_SUF := $(shell python3-config --extension-suffix)
+CXXFLAGS := -O3 -Wall -std=c++11 -fPIC
+# Include MKL headers and link flags. Adjust these paths according to your MKL installation.
 MKL_INC := /usr/include/mkl
+CXXFLAGS += -I$(MKL_INC)
 
-# Source files
-SRC := matrix.cpp pybind_matrix.cpp main.cpp
+# Library paths and the libraries to link against
+LDFLAGS := -L/usr/lib/x86_64-linux-gnu -lblas -lmkl_rt -lpthread -lm -ldl
 
-# Test and performance files
-PERF_OUTPUT := performance.txt
-PYTEST := test_matrix.py
+# Pybind11 and Python configuration
+PYTHON := python3
+PYBIND11_INCLUDE := $(shell $(PYTHON) -m pybind11 --includes)
+PYTHON_INCLUDES := $(shell $(PYTHON)-config --includes)
+PYBIND11_FLAGS := $(PYTHON_INCLUDES) -I$(PYBIND11_INCLUDE)
+EXT_SUFFIX := $(shell $(PYTHON)-config --extension-suffix)
 
-# Phony targets
-.PHONY: all run clean test perf
+# Source files and object files
+SOURCES := matrix.cpp main.cpp
+OBJECTS := $(SOURCES:.cpp=.o)
+PYBIND_SOURCES := matrix.cpp pybind_matrix.cpp
+PYBIND_OBJECTS := $(PYBIND_SOURCES:.cpp=.o)
 
-# Default build target
-all: $(PROG) $(LIBS)
+# Targets
+all: $(PROG) $(MODULE)
 
-# Executable and library builds
-$(LIBS): $(SRC)
-	$(CXX) $(CXXFLAGS) -I$(MKL_INC) $(PYBIND_INC_FLAGS) $(PYTHON_LIB_FLAGS) -o $@ $^ $(LDFLAGS)
+# Linking the executable
+$(PROG): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-$(PROG): $(SRC)
-	$(CXX) $(CXXFLAGS) -I$(MKL_INC) $(PYBIND_INC_FLAGS) $(PYTHON_LIB_FLAGS) -o $@ $^ $(LDFLAGS)
+# Creating the Python module
+$(MODULE):
+	$(CXX) $(CXXFLAGS) $(PYBIND11_FLAGS) -o $(MODULE)$(EXT_SUFFIX) $(PYBIND_SOURCES) $(LDFLAGS) -shared
 
 # Compiling
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $<
 
-# Run tests
-test: $(LIBS) $(PYTEST)
-	python3 -m pytest -v
-
-# Performance benchmark
-perf: $(PROG)
-	./$(PROG) > $(PERF_OUTPUT) 2>&1
-
-# Run program
+# Run the PROG
 run: $(PROG)
 	./$(PROG)
 
-# Clean up build and cache files
+# Test the Python module with PyTest
+test: clean $(MODULE)
+	@echo " ***       TESTING START       *** "
+	python3 -m pytest $(TEST_SRC)
+
+# Performance testing
+perf: $(PROG)
+	./$(PROG) >> performance.txt 2>&1
+	./$(PROG) > performance.txt 2>&1
+
+# Clean the directory
 clean:
-	rm -f $(PROG) $(LIBS)
+	rm -f $(PROG) $(OBJECTS) $(MODULE)$(EXT_SUFFIX) $(PYBIND_OBJECTS)
 	find . -type d -name __pycache__ -exec rm -r {} +
 	find . -type f -name '*.pyc' -delete
 	-rm -rf __pycache__ .pytest_cache
+
+# Phony targets
+.PHONY: all run clean test perf
