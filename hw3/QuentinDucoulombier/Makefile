@@ -1,6 +1,5 @@
 # Name of the executable and Python module
 PROG := exe
-MODULE := _matrix
 TEST_SRC := test_matrix.py
 
 # Compiler and flags
@@ -19,6 +18,7 @@ PYBIND11_INCLUDE := $(shell $(PYTHON) -m pybind11 --includes)
 PYTHON_INCLUDES := $(shell $(PYTHON)-config --includes)
 PYBIND11_FLAGS := $(PYTHON_INCLUDES) -I$(PYBIND11_INCLUDE)
 EXT_SUFFIX := $(shell $(PYTHON)-config --extension-suffix)
+MODULE := _matrix$(EXT_SUFFIX)
 
 # Source files and object files
 SOURCES := matrix.cpp main.cpp
@@ -31,22 +31,22 @@ all: $(PROG) $(MODULE)
 
 # Linking the executable
 $(PROG): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+	$(CXX) -o $@ $^ $(LDFLAGS)
 
 # Creating the Python module
-$(MODULE):
-	$(CXX) $(CXXFLAGS) $(PYBIND11_FLAGS) -o $(MODULE)$(EXT_SUFFIX) $(PYBIND_SOURCES) $(LDFLAGS) -shared
+$(MODULE): $(PYBIND_OBJECTS)
+	$(CXX) -shared -o $@ $^ $(LDFLAGS) 
 
 # Compiling
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $<
+	$(CXX) $(CXXFLAGS) $(PYBIND11_FLAGS) -c $<
 
 # Run the PROG
 run: $(PROG)
 	./$(PROG)
 
 # Test the Python module with PyTest
-test:
+test: $(MODULE)
 	@echo " ***       TESTING START       *** "
 	python3 -m pytest $(TEST_SRC)
 
@@ -57,7 +57,7 @@ perf: $(PROG)
 
 # Clean the directory
 clean:
-	rm -f $(PROG) $(OBJECTS) $(MODULE)$(EXT_SUFFIX) $(PYBIND_OBJECTS)
+	rm -f $(PROG) $(OBJECTS) $(MODULE) $(PYBIND_OBJECTS)
 	find . -type d -name __pycache__ -exec rm -r {} +
 	find . -type f -name '*.pyc' -delete
 	-rm -rf __pycache__ .pytest_cache
