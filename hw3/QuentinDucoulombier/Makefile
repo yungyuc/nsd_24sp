@@ -35,7 +35,7 @@ $(PROG): $(OBJECTS)
 
 # Creating the Python module
 $(MODULE): $(PYBIND_OBJECTS)
-	$(CXX) -shared -I$(MKL_INC) -o $@ $^ $(LDFLAGS) 
+	$(CXX) -shared -o $@ $^ $(LDFLAGS) 
 
 # Compiling
 %.o: %.cpp
