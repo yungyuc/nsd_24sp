@@ -5,13 +5,13 @@ TEST_SRC := test_matrix.py
 
 # Compiler and flags
 CXX := g++
-CXXFLAGS := -O3 -Wall -std=c++11 -fPIC
+CXXFLAGS := -O3 -Wall -std=c++11 -fPIC $(shell pkg-config --cflags mkl-dynamic-lp64-iomp)
 # Include MKL headers and link flags. Adjust these paths according to your MKL installation.
 MKL_INC := /usr/include/mkl
-CXXFLAGS += -I$(MKL_INC)
+#CXXFLAGS += -I$(MKL_INC)
 
 # Library paths and the libraries to link against
-LDFLAGS := -L/usr/lib/x86_64-linux-gnu -lblas -lmkl_rt -lpthread -lm -ldl
+LDFLAGS := $(shell pkg-config --libs mkl-dynamic-lp64-iomp)
 
 # Pybind11 and Python configuration
 PYTHON := python3

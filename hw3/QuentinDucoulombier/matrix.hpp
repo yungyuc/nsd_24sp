@@ -4,7 +4,7 @@
 #include <algorithm> 
 #include <iomanip>
 #include <chrono>
-#include <mkl/mkl.h>
+#include "mkl.h"
 
 const size_t TILE_SIZE = 128;
 
