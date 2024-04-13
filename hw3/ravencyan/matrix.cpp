@@ -29,7 +29,7 @@ bool Matrix::operator==(const Matrix& other) const {
     return true;
 }
 
-Matrix naiveMatMul(const Matrix& mat1, const Matrix& mat2) {
+Matrix multiply_naive(const Matrix& mat1, const Matrix& mat2) {
     size_t m = mat1.nrow();
     size_t p = mat1.ncol();
     size_t n = mat2.ncol();
@@ -51,7 +51,7 @@ Matrix naiveMatMul(const Matrix& mat1, const Matrix& mat2) {
     return result;
 }
 
-Matrix tilingMatMul(const Matrix& mat1, const Matrix& mat2, size_t tileSize) {
+Matrix multiply_tile(const Matrix& mat1, const Matrix& mat2, size_t tileSize) {
     size_t m = mat1.nrow();
     size_t p = mat1.ncol();
     size_t n = mat2.ncol();
@@ -79,7 +79,7 @@ Matrix tilingMatMul(const Matrix& mat1, const Matrix& mat2, size_t tileSize) {
     return result;
 }
 
-Matrix mklMatMul(const Matrix& mat1, const Matrix& mat2) {
+Matrix multiply_mkl(const Matrix& mat1, const Matrix& mat2) {
     size_t m = mat1.nrow();
     size_t p = mat1.ncol();
     size_t n = mat2.ncol();
@@ -99,12 +99,12 @@ namespace py = pybind11;
 PYBIND11_MODULE(_matrix, m) {
     py::class_<Matrix>(m, "Matrix")
         .def(py::init<size_t, size_t>())
-        .def_property_readonly("m_nrow", &Matrix::nrow)
-        .def_property_readonly("m_ncol", &Matrix::ncol)
+        .def_property_readonly("nrow", &Matrix::nrow)
+        .def_property_readonly("ncol", &Matrix::ncol)
         .def("__getitem__", [](Matrix &self, std::pair<int, int> idx) { return self(idx.first, idx.second); })
         .def("__setitem__", [](Matrix &self, std::pair<int, int> idx, double val) { self(idx.first, idx.second) = val; })
         .def("__eq__", [](const Matrix &mat1, const Matrix &mat2) { return mat1 == mat2; });
-    m.def("naiveMatMul", &naiveMatMul);
-    m.def("tilingMatMul", &tilingMatMul);
-    m.def("mklMatMul", &mklMatMul);
+    m.def("multiply_naive", &multiply_naive);
+    m.def("multiply_tile", &multiply_tile);
+    m.def("multiply_mkl", &multiply_mkl);
 }

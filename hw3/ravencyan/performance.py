@@ -1,45 +1,59 @@
-import _matrix
-import random
 import sys
 import timeit
 
-def makeMatrices():
-    m = random.randint(1, 1000)
-    k = random.randint(1, 1000)
-    n = random.randint(1, 1000)
+class Writer:
 
-    mat1 = _matrix.Matrix(m, k)
-    mat2 = _matrix.Matrix(k, n)
+    def __init__(self, streams):
 
-    for i in range(m):
-        for j in range(k):
-            mat1[i, j] = random.randint(1, 1000)
+        self.streams = streams
 
-    for i in range(k):
-        for j in range(n):
-            mat2[i, j] = random.randint(1, 1000)
+    def write(self, msg):
 
-    return mat1, mat2
+        for stream in self.streams:
 
-def testPerformance(tileSize):
-    mat1, mat2 = makeMatrices()
+            stream.write(msg)
 
-    nameSpace = dict(_matrix=_matrix, mat1=mat1, mat2=mat2, tileSize=tileSize)
-    naive_time = timeit.Timer("_matrix.naiveMatMul(mat1, mat2)", globals=nameSpace)
-    tiling_time = timeit.Timer("_matrix.tilingMatMul(mat1, mat2, tileSize)", globals=nameSpace)
-    mkl_time = timeit.Timer("_matrix.mklMatMul(mat1, mat2)", globals=nameSpace)
 
-    with open('performance.txt', 'w') as file:
-        file.write('The time for each method is the average of 10 executions\n')
-        file.write(f'm={mat1.m_nrow}, k={mat1.m_ncol}, n={mat2.m_ncol}\n')
-        avg_naive_time = sum(naive_time.repeat(10, 1)) / 10
-        file.write(f'Naive takes {avg_naive_time} seconds.\n')
-        avg_tiling_time = sum(tiling_time.repeat(10, 1)) / 10
-        file.write(f'Tiling takes {avg_tiling_time} seconds.\n')
-        avg_mkl_time = sum(mkl_time.repeat(10, 1)) / 10
-        file.write(f'MKL takes {avg_mkl_time} seconds.\n')
-        file.write(f'Ratio of Tiling over Naive (tileSize={tileSize}): {avg_tiling_time/avg_naive_time}.\n')
-        file.write(f'Ratio of MKL over Naive: {avg_mkl_time/avg_naive_time}.\n')
+def benchmark():
+
+    setup = '''
+import _matrix
+
+size = 1000
+
+mat1 = _matrix.Matrix(size,size)
+mat2 = _matrix.Matrix(size,size)
+
+for it in range(size):
+    for jt in range(size):
+        mat1[it, jt] = it * size + jt + 1
+        mat2[it, jt] = it * size + jt + 1
+'''
+
+    naive = timeit.Timer('_matrix.multiply_naive(mat1, mat2)', setup=setup)
+    mkl = timeit.Timer('_matrix.multiply_mkl(mat1, mat2)', setup=setup)
+    tile = timeit.Timer('_matrix.multiply_tile(mat1, mat2, 16)', setup=setup)
+
+    repeat = 5
+
+    with open('performance.txt', 'w') as fobj:
+
+        w = Writer([sys.stdout, fobj])
+
+        w.write(f'Start multiply_naive (repeat={repeat}), take min = ')
+        naivesec = minsec = min(naive.repeat(repeat=repeat, number=1))
+        w.write(f'{minsec} seconds\n')
+
+        w.write(f'Start multiply_mkl (repeat={repeat}), take min = ')
+        mklsec = minsec = min(mkl.repeat(repeat=repeat, number=1))
+        w.write(f'{minsec} seconds\n')
+
+        w.write(f'Start multiply_tile (repeat={repeat}), take min = ')
+        tilesec = minsec = min(tile.repeat(repeat=repeat, number=1))
+        w.write(f'{minsec} seconds\n')
+
+        w.write('MKL speed-up over naive: %g x\n' % (naivesec/mklsec))
+        w.write('Tile speed-up over naive: %g x\n' % (naivesec/tilesec))
 
 if __name__ == '__main__':
-    testPerformance(tileSize=16)
+    benchmark()

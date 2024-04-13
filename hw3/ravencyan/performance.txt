@@ -1,7 +1,5 @@
-The time for each method is the average of 10 executions
-m=412, k=615, n=497
-Naive takes 0.1650815112516284 seconds.
-Tiling takes 0.08340287897735835 seconds.
-MKL takes 0.020460245665162802 seconds.
-Ratio of Tiling over Naive (tileSize=16): 0.5052224100991543.
-Ratio of MKL over Naive: 0.12394026145045348.
+Start multiply_naive (repeat=5), take min = 1.4429818550124764 seconds
+Start multiply_mkl (repeat=5), take min = 0.1466809338890016 seconds
+Start multiply_tile (repeat=5), take min = 0.6430983422324061 seconds
+MKL speed-up over naive: 9.83756 x
+Tile speed-up over naive: 2.2438 x
