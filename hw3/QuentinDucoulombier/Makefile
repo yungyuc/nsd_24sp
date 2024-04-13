@@ -46,7 +46,7 @@ run: $(PROG)
 	./$(PROG)
 
 # Test the Python module with PyTest
-test: clean $(MODULE)
+test:
 	@echo " ***       TESTING START       *** "
 	python3 -m pytest $(TEST_SRC)
 
