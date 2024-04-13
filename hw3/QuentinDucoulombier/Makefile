@@ -8,8 +8,8 @@ CXX := g++
 CXXFLAGS := -O3 -Wall -std=c++11 -fPIC
 # Adjust these paths according to your actual MKL installation in /usr/include
 MKLROOT := /usr
-CXXFLAGS += -I$(MKLROOT)/include
-LDFLAGS := -L$(MKLROOT)/lib -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
+CXXFLAGS += -I$(MKLROOT)/include/mkl
+LDFLAGS := lblas -lmkl_rt
 
 # Pybind11 and Python configuration
 PYTHON := python3
