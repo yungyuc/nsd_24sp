@@ -50,7 +50,7 @@ test: clean $(MODULE)
 
 # Performance testing
 perf: $(PROG)
-	./$(PROG) >> performance.txt 2>&1
+	./$(PROG) > performance.txt 2>&1
 
 # Clean the directory
 clean:

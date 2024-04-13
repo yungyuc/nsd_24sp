@@ -23,7 +23,6 @@ int main(int argc, char const *argv[])
     size_t size = 1000;
 
     Matrix A(size, size);
-    
     populate(A);
 
     Matrix B = A;
@@ -37,8 +36,20 @@ int main(int argc, char const *argv[])
     start = std::chrono::high_resolution_clock::now();
     Matrix result2 = multiply_tile(A, B, 16);
     end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double, std::milli> elapsed_tile = end - start;
-    std::cout << "Tiled multiplication took " << elapsed_tile.count() << " ms.\n";
+    std::chrono::duration<double, std::milli> elapsed_tile16 = end - start;
+    std::cout << "Tiled multiplication with tile size 16 took " << elapsed_tile16.count() << " ms.\n";
+
+    start = std::chrono::high_resolution_clock::now();
+    Matrix result4 = multiply_tile(A, B, 32);
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> elapsed_tile32 = end - start;
+    std::cout << "Tiled multiplication with tile size 32 took " << elapsed_tile32.count() << " ms.\n";
+
+    start = std::chrono::high_resolution_clock::now();
+    Matrix result5 = multiply_tile(A, B, 64);
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> elapsed_tile64 = end - start;
+    std::cout << "Tiled multiplication with tile size 64 took " << elapsed_tile64.count() << " ms.\n";
 
     Matrix result3(size, size);
     start = std::chrono::high_resolution_clock::now();
@@ -47,13 +58,17 @@ int main(int argc, char const *argv[])
     std::chrono::duration<double, std::milli> elapsed_mkl = end - start;
     std::cout << "MKL multiplication took " << elapsed_mkl.count() << " ms.\n";
 
-    double percent_reduction_tile_from_naive = (1 - elapsed_tile.count() / elapsed_naive.count()) * 100;
+    double percent_reduction_tile16_from_naive = (1 - elapsed_tile16.count() / elapsed_naive.count()) * 100;
+    double percent_reduction_tile32_from_naive = (1 - elapsed_tile32.count() / elapsed_naive.count()) * 100;
+    double percent_reduction_tile64_from_naive = (1 - elapsed_tile64.count() / elapsed_naive.count()) * 100;
     double percent_reduction_mkl_from_naive = (1 - elapsed_mkl.count() / elapsed_naive.count()) * 100;
-    double percent_reduction_mkl_from_tile = (1 - elapsed_mkl.count() / elapsed_tile.count()) * 100;
+    double percent_reduction_mkl_from_tile16 = (1 - elapsed_mkl.count() / elapsed_tile16.count()) * 100;
 
-    std::cout << "\nPercentage speed increase of Tiling 16 over Naive: " << percent_reduction_tile_from_naive << "%\n";
+    std::cout << "\nPercentage speed increase of Tiling 16 over Naive: " << percent_reduction_tile16_from_naive << "%\n";
+    std::cout << "Percentage speed increase of Tiling 32 over Naive: " << percent_reduction_tile32_from_naive << "%\n";
+    std::cout << "Percentage speed increase of Tiling 64 over Naive: " << percent_reduction_tile64_from_naive << "%\n";
     std::cout << "Percentage speed increase of MKL over Naive: " << percent_reduction_mkl_from_naive << "%\n";
-    std::cout << "Percentage speed increase of MKL over Tiling 16: " << percent_reduction_mkl_from_tile << "%\n";
+    std::cout << "Percentage speed increase of MKL over Tiling 16: " << percent_reduction_mkl_from_tile16 << "%\n";
 
     return 0;
 }
