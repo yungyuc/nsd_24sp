@@ -6,10 +6,10 @@ TEST_SRC := test_matrix.py
 # Compiler and flags
 CXX := g++
 CXXFLAGS := -O3 -Wall -std=c++11 -fPIC
-# Include MKL headers and link flags. Adjust these paths according to your MKL installation.
-MKLROOT := /opt/intel/oneapi/mkl/latest
+# Adjust these paths according to your actual MKL installation in /usr/include
+MKLROOT := /usr
 CXXFLAGS += -I$(MKLROOT)/include
-LDFLAGS := -L$(MKLROOT)/lib/intel64 -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
+LDFLAGS := -L$(MKLROOT)/lib -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
 
 # Pybind11 and Python configuration
 PYTHON := python3
