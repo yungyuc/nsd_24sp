@@ -1,10 +1,8 @@
 sources = _matrix.cpp
-CXX = g++
+CXX = clang++
 CXXFLAGS = -O3 -Wall -shared -std=c++11 -fPIC -lblas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
 LIB_TARGET = _matrix.so
 MKLROOT=/usr/lib/x86_64-linux-gnu
-
-
 LDFLAGS=${MKLROOT}/libmkl_def.so \
         ${MKLROOT}/libmkl_avx2.so \
         ${MKLROOT}/libmkl_core.so \
@@ -16,6 +14,7 @@ LDFLAGS=${MKLROOT}/libmkl_def.so \
 all: $(LIB_TARGET)
 
 $(LIB_TARGET): $(sources)
+	pip install pybind11
 	$(CXX)  $(CXXFLAGS) $(shell python3 -m pybind11 --includes) $(sources) -o $@
 
 

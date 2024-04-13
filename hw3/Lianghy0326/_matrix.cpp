@@ -11,103 +11,85 @@
 namespace py=pybind11;
 
 Matrix::Matrix(){
-    // Default constructor
-    this->crow = 0;
-    this->ccol = 0;
-    this->data = nullptr;
+    this->m_nrow = 0;
+    this->m_ncol = 0;
+    this->m_buffer = nullptr;
 }
 
 Matrix::Matrix(size_t nrow, size_t ncol){
-    // Constructor with specified number of rows and columns
-    this->crow = nrow;
-    this->ccol = ncol;
-    this->data = new double[nrow * ncol];
+    this->m_nrow = nrow;
+    this->m_ncol = ncol;
+    this->m_buffer = new double[nrow * ncol];
     for(size_t i = 0; i < nrow * ncol; i++){
-        this->data[i] = 0;
+        this->m_buffer[i] = 0;
     }
 }
 
 Matrix::Matrix(size_t row, size_t col, double val){
-    // Constructor with specified number of rows, columns, and initialization value
-    this->crow = row;
-    this->ccol = col;
-    this->data = new double[row * col];
+    this->m_nrow = row;
+    this->m_ncol = col;
+    this->m_buffer = new double[row * col];
     for(size_t i = 0; i < row * col; i++){
-        this->data[i] = val;
+        this->m_buffer[i] = val;
     }
 }
 
 Matrix::Matrix(size_t row, size_t col,const std::vector<double> &v){
-    // Constructor with specified number of rows, columns, and initialization vector
-    this->crow = row;
-    this->ccol = col;
-    this->data = new double[row * col];
+    this->m_nrow = row;
+    this->m_ncol = col;
+    this->m_buffer = new double[row * col];
     if(v.size() != row * col){
         throw std::invalid_argument("size of vector does not match matrix size");
     }
     for(size_t i = 0; i < row * col; i++){
-        this->data[i] = v[i];
+        this->m_buffer[i] = v[i];
     }
 }
-
 Matrix::Matrix(const Matrix &m){
-    // Copy constructor
-    this->crow = m.crow;
-    this->ccol = m.ccol;
-    this->data = new double[m.crow * m.ccol];
-    for(size_t i = 0; i < m.crow * m.ccol; i++){
-        this->data[i] = m.data[i];
+    this->m_nrow = m.m_nrow;
+    this->m_ncol = m.m_ncol;
+    this->m_buffer = new double[m.m_nrow * m.m_ncol];
+    for(size_t i = 0; i < m.m_nrow * m.m_ncol; i++){
+        this->m_buffer[i] = m.m_buffer[i];
     }
 } 
 
 size_t Matrix::index(size_t i, size_t j) const{
-    // Get the linear index of the element at position (i, j)
-    return i * ccol + j;
+    return i * m_ncol + j;
 }
-
 size_t Matrix::nrow() const{
-    // Get the number of rows
-    return crow;
+    return m_nrow;
 }
-
 size_t Matrix::ncol() const{
-    // Get the number of columns
-    return ccol;
+    return m_ncol;
 }
 
 double* Matrix::get_buffer() const{
-    // Get a pointer to the buffer containing the matrix data
-    return data;
+    return m_buffer;
 }
     
 Matrix::~Matrix() {
-    // Destructor
-    delete[] data;
+    delete[] m_buffer;
 }
 
 double Matrix::operator() (size_t row, size_t col) const{
-    // Accessor for reading matrix elements
-    if (row < 0 || row >= crow || col < 0 || col > ccol){
+    if (row < 0 || row >= m_nrow || col < 0 || col > m_ncol){
         throw std::out_of_range("index out of range");
     }
-    return data[index(row, col)];
+    return m_buffer[index(row, col)];
 }
-
 double &Matrix::operator() (size_t row, size_t col){
-    // Accessor for modifying matrix elements
-    if (row < 0 || row >= crow || col < 0 || col > ccol){
+    if (row < 0 || row >= m_nrow || col < 0 || col > m_ncol){
         throw std::out_of_range("index out of range");
     }
-    return data[index(row, col)];
+    return m_buffer[index(row, col)];
 }
-
 bool Matrix::operator==(const Matrix &m){
-    // Comparison operator for checking equality of matrices
-    if(this->crow != m.crow || this->ccol != m.ccol){
+    if(this->m_nrow != m.m_nrow || this->m_ncol != m.m_ncol){
         return false;
     }
-    for(size_t i = 0; i < this->crow * this->ccol; i++){
-        if(this->data[i] != m.data[i]){
+    for(size_t i = 0; i < this->m_nrow * this->m_ncol; i++){
+        if(this->m_buffer[i] != m.m_buffer[i]){
             return false;
         }
     }
@@ -115,7 +97,6 @@ bool Matrix::operator==(const Matrix &m){
 }
 
 Matrix multiply_naive(Matrix const &m1, Matrix const &m2){
-    // Naive matrix multiplication
     if(m1.ncol() != m2.nrow()){
         throw std::invalid_argument("matrix size does not match");
     }
@@ -129,9 +110,7 @@ Matrix multiply_naive(Matrix const &m1, Matrix const &m2){
     }
     return result;
 }
-
 Matrix multiply_tile(Matrix const &m1, Matrix const &m2, std::size_t size){
-    // Tiled matrix multiplication
     if(m1.ncol() != m2.nrow()){
         throw std::invalid_argument("matrix size does not match");
     }
@@ -150,10 +129,9 @@ Matrix multiply_tile(Matrix const &m1, Matrix const &m2, std::size_t size){
         }
     }
     return result;
-}
 
+}
 Matrix multiply_mkl(Matrix const &m1, Matrix const &m2){
-    // MKL matrix multiplication
     if(m1.ncol() != m2.nrow()){
         throw std::invalid_argument("matrix size does not match");
     }
@@ -168,7 +146,6 @@ Matrix multiply_mkl(Matrix const &m1, Matrix const &m2){
 }
 
 PYBIND11_MODULE(_matrix, m) {
-    // Python bindings using pybind11
     py::class_<Matrix>(m, "Matrix")
     .def(py::init<>())
     .def(py::init<size_t, size_t>())
@@ -188,4 +165,5 @@ PYBIND11_MODULE(_matrix, m) {
     m.def("multiply_naive", &multiply_naive, "");
     m.def("multiply_tile", &multiply_tile, "");
     m.def("multiply_mkl", &multiply_mkl, "");
+
 }
