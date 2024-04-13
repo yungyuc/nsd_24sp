@@ -1,63 +1,53 @@
-# Name of the executable and Python module
+# Set the executable name
 PROG := exe
-MODULE := _matrix
-TEST_SRC := test_matrix.py
+LIBS := ./_matrix$(PYTHON_SUF)
 
-# Compiler and flags
+# Compiler settings
 CXX := g++
-CXXFLAGS := -O3 -Wall -std=c++11 -fPIC
-# Adjust these paths according to your actual MKL installation in /usr/include
-MKLROOT := /usr
-CXXFLAGS += -I$(MKLROOT)/include/mkl
-LDFLAGS := lblas -lmkl_rt
+CXXFLAGS := -std=c++11 -O2 -Wall -fPIC -shared -m64
+LDFLAGS := -lblas -lmkl_rt
 
-# Pybind11 and Python configuration
-PYTHON := python3
-PYBIND11_INCLUDE := $(shell $(PYTHON) -m pybind11 --includes)
-PYTHON_INCLUDES := $(shell $(PYTHON)-config --includes)
-PYBIND11_FLAGS := $(PYTHON_INCLUDES) -I$(PYBIND11_INCLUDE)
-EXT_SUFFIX := $(shell $(PYTHON)-config --extension-suffix)
+# Python and MKL settings
+PYBIND_INC_FLAGS := $(shell python3 -m pybind11 --includes)
+PYTHON_LIB_FLAGS := $(shell python3-config --includes --ldflags)
+PYTHON_SUF := $(shell python3-config --extension-suffix)
+MKL_INC := /usr/include/mkl
 
-# Source files and object files
-SOURCES := matrix.cpp main.cpp
-OBJECTS := $(SOURCES:.cpp=.o)
-PYBIND_SOURCES := matrix.cpp pybind_matrix.cpp
-PYBIND_OBJECTS := $(PYBIND_SOURCES:.cpp=.o)
+# Source files
+SRC := matrix.cpp pybind_matrix.cpp main.cpp
 
-# Targets
-all: $(PROG) $(MODULE)
-
-# Linking the executable
-$(PROG): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
-
-# Creating the Python module
-$(MODULE):
-	$(CXX) $(CXXFLAGS) $(PYBIND11_FLAGS) -o $(MODULE)$(EXT_SUFFIX) $(PYBIND_SOURCES) $(LDFLAGS) -shared
-
-# Compiling
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $<
-
-# Run the PROG
-run: $(PROG)
-	./$(PROG)
-
-# Test the Python module with PyTest
-test: clean $(MODULE)
-	@echo " ***       TESTING START       *** "
-	python3 -m pytest $(TEST_SRC)
-
-# Performance testing
-perf: $(PROG)
-	./$(PROG) > performance.txt 2>&1
-
-# Clean the directory
-clean:
-	rm -f $(PROG) $(OBJECTS) $(MODULE)$(EXT_SUFFIX) $(PYBIND_OBJECTS)
-	find . -type d -name __pycache__ -exec rm -r {} +
-	find . -type f -name '*.pyc' -delete
-	-rm -rf __pycache__ .pytest_cache
+# Test and performance files
+PERF_OUTPUT := performance.txt
+PYTEST := test_matrix.py
 
 # Phony targets
 .PHONY: all run clean test perf
+
+# Default build target
+all: $(PROG) $(LIBS)
+
+# Executable and library builds
+$(LIBS): $(SRC)
+	$(CXX) $(CXXFLAGS) -I$(MKL_INC) $(PYBIND_INC_FLAGS) $(PYTHON_LIB_FLAGS) -o $@ $^ $(LDFLAGS)
+
+$(PROG): $(SRC)
+	$(CXX) $(CXXFLAGS) -I$(MKL_INC) $(PYBIND_INC_FLAGS) $(PYTHON_LIB_FLAGS) -o $@ $^ $(LDFLAGS)
+
+# Run tests
+test: $(LIBS) $(PYTEST)
+	python3 -m pytest -v
+
+# Performance benchmark
+perf: $(PROG)
+	./$(PROG) > $(PERF_OUTPUT) 2>&1
+
+# Run program
+run: $(PROG)
+	./$(PROG)
+
+# Clean up build and cache files
+clean:
+	rm -f $(PROG) $(LIBS)
+	find . -type d -name __pycache__ -exec rm -r {} +
+	find . -type f -name '*.pyc' -delete
+	-rm -rf __pycache__ .pytest_cache
