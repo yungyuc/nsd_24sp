@@ -14,9 +14,9 @@ LDFLAGS := $(shell pkg-config --libs mkl-dynamic-lp64-iomp)
 
 # Pybind11 and Python configuration
 PYTHON := python3
-PYBIND11_INCLUDE := $(shell $(PYTHON) -m pybind11 --includes)
+PYBIND11_INCLUDES := $(shell $(PYTHON) -m pybind11 --includes)
 PYTHON_INCLUDES := $(shell $(PYTHON)-config --includes)
-PYBIND11_FLAGS := $(PYTHON_INCLUDES) -I$(PYBIND11_INCLUDE)
+PYBIND11_FLAGS := $(PYTHON_INCLUDES) $(PYBIND11_INCLUDES)
 EXT_SUFFIX := $(shell $(PYTHON)-config --extension-suffix)
 MODULE := _matrix$(EXT_SUFFIX)
 
