@@ -3,6 +3,9 @@ CXX = clang++
 CXXFLAGS = -O3 -Wall -shared -std=c++11 -fPIC -lblas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
 LIB_TARGET = _matrix.so
 MKLROOT=/usr/lib/x86_64-linux-gnu
+
+
+
 LDFLAGS=${MKLROOT}/libmkl_def.so \
         ${MKLROOT}/libmkl_avx2.so \
         ${MKLROOT}/libmkl_core.so \
@@ -10,11 +13,10 @@ LDFLAGS=${MKLROOT}/libmkl_def.so \
         ${MKLROOT}/libmkl_sequential.so \
         -lpthread -lm -ldl \
         -lblas -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -L/opt/intel/lib/intel64 -L/opt/intel/mkl/lib/intel64 
-
 all: $(LIB_TARGET)
 
+
 $(LIB_TARGET): $(sources)
-	pip install pybind11
 	$(CXX)  $(CXXFLAGS) $(shell python3 -m pybind11 --includes) $(sources) -o $@
 
 

@@ -3,8 +3,9 @@ using namespace std;
 
 class Matrix{
 private:
-    size_t m_nrow, m_ncol;
+    size_t rows, cols;
     double *m_buffer;
+
 public:
     // Default constructor
     Matrix();

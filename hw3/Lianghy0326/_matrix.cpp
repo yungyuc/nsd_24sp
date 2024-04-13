@@ -11,14 +11,14 @@
 namespace py=pybind11;
 
 Matrix::Matrix(){
-    this->m_nrow = 0;
-    this->m_ncol = 0;
+    this->rows = 0;
+    this->cols = 0;
     this->m_buffer = nullptr;
 }
 
 Matrix::Matrix(size_t nrow, size_t ncol){
-    this->m_nrow = nrow;
-    this->m_ncol = ncol;
+    this->rows = nrow;
+    this->cols = ncol;
     this->m_buffer = new double[nrow * ncol];
     for(size_t i = 0; i < nrow * ncol; i++){
         this->m_buffer[i] = 0;
@@ -26,8 +26,8 @@ Matrix::Matrix(size_t nrow, size_t ncol){
 }
 
 Matrix::Matrix(size_t row, size_t col, double val){
-    this->m_nrow = row;
-    this->m_ncol = col;
+    this->rows = row;
+    this->cols = col;
     this->m_buffer = new double[row * col];
     for(size_t i = 0; i < row * col; i++){
         this->m_buffer[i] = val;
@@ -35,8 +35,8 @@ Matrix::Matrix(size_t row, size_t col, double val){
 }
 
 Matrix::Matrix(size_t row, size_t col,const std::vector<double> &v){
-    this->m_nrow = row;
-    this->m_ncol = col;
+    this->rows = row;
+    this->cols = col;
     this->m_buffer = new double[row * col];
     if(v.size() != row * col){
         throw std::invalid_argument("size of vector does not match matrix size");
@@ -46,22 +46,22 @@ Matrix::Matrix(size_t row, size_t col,const std::vector<double> &v){
     }
 }
 Matrix::Matrix(const Matrix &m){
-    this->m_nrow = m.m_nrow;
-    this->m_ncol = m.m_ncol;
-    this->m_buffer = new double[m.m_nrow * m.m_ncol];
-    for(size_t i = 0; i < m.m_nrow * m.m_ncol; i++){
+    this->rows = m.rows;
+    this->cols = m.cols;
+    this->m_buffer = new double[m.rows * m.cols];
+    for(size_t i = 0; i < m.rows * m.cols; i++){
         this->m_buffer[i] = m.m_buffer[i];
     }
 } 
 
 size_t Matrix::index(size_t i, size_t j) const{
-    return i * m_ncol + j;
+    return i * cols + j;
 }
 size_t Matrix::nrow() const{
-    return m_nrow;
+    return rows;
 }
 size_t Matrix::ncol() const{
-    return m_ncol;
+    return cols;
 }
 
 double* Matrix::get_buffer() const{
@@ -73,22 +73,22 @@ Matrix::~Matrix() {
 }
 
 double Matrix::operator() (size_t row, size_t col) const{
-    if (row < 0 || row >= m_nrow || col < 0 || col > m_ncol){
+    if (row < 0 || row >= rows || col < 0 || col > cols){
         throw std::out_of_range("index out of range");
     }
     return m_buffer[index(row, col)];
 }
 double &Matrix::operator() (size_t row, size_t col){
-    if (row < 0 || row >= m_nrow || col < 0 || col > m_ncol){
+    if (row < 0 || row >= rows || col < 0 || col > cols){
         throw std::out_of_range("index out of range");
     }
     return m_buffer[index(row, col)];
 }
 bool Matrix::operator==(const Matrix &m){
-    if(this->m_nrow != m.m_nrow || this->m_ncol != m.m_ncol){
+    if(this->rows != m.rows || this->cols != m.cols){
         return false;
     }
-    for(size_t i = 0; i < this->m_nrow * this->m_ncol; i++){
+    for(size_t i = 0; i < this->rows * this->cols; i++){
         if(this->m_buffer[i] != m.m_buffer[i]){
             return false;
         }
