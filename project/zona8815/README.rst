@@ -74,53 +74,50 @@ API Description
 
 - **The truthtable by the aging**
 
-```c++
-// truthtable.h
-int TableHalfAdder(int a, int b) {
-    return a, b;
-}
-int TableFullAdder(int a, int b, int c) {
-    return a, b, c;
-}
-```
+.. code-block:: cpp
+
+    // truthtable.h
+    int TableHalfAdder(int a, int b);
+    int TableFullAdder(int a, int b, int c);
 
 - **Calculation of MAC operation**
 
-```c++
-// multiplier.h
-Multiplier::Multiplier() : a_(0), b_(0), c_(0) {}
+.. code-block:: cpp
 
-Multiplier::Multiplier(std::size_t a, std::size_t b, std::size_t c)
-  : a_(a), b_(b), c_(c) {}
+    // multiplier.h 
+    Multiplier::Multiplier() : a_(0), b_(0), c_(0) {}
 
-Multiplier::~Multiplier() {}
+    Multiplier::Multiplier(std::size_t a, std::size_t b, std::size_t c)
+    : a_(a), b_(b), c_(c) {}
 
-std::size_t Multiplier::a() const { return a_; }
-std::size_t Multiplier::b() const { return b_; }
-std::size_t Multiplier::c() const { return c_; }
+    Multiplier::~Multiplier() {}
 
-Multiplier HalfAdder(std::size_t a, std::size_t b);
-Multiplier FullAdder(std::size_t a, std::size_t b, std::size_t c);
-```
+    std::size_t Multiplier::a() const { return a_; }
+    std::size_t Multiplier::b() const { return b_; }
+    std::size_t Multiplier::c() const { return c_; }
+
+    Multiplier HalfAdder(std::size_t a, std::size_t b);
+    Multiplier FullAdder(std::size_t a, std::size_t b, std::size_t c);
 
 - **CNN (2D convolution)**
 
-```python
-import torch
-from torch.nn.modules.utils import _pair
+.. code-block:: python
+    
+    # myconv2d.py
+    # self-defined convolution
+    import torch
+    from torch.nn.modules.utils import _pair
 
-class MyConv2d(torch.nn.modules.conv._ConvNd): 
-    def __init__(self, in_channels, out_channels, kernel_size, stride=1,
-                 padding=0, dilation=1, groups=1,
-                 bias=True, padding_mode='zeros'):
-    
-    def conv2d_forward(self, input, weight):
-    
-    def forward(self, input):
-    
-def myconv2d(input, weight, bias=None, stride=1, padding=0, dilation=1, groups=1):
-
-```
+    class MyConv2d(torch.nn.modules.conv._ConvNd): 
+        def __init__(self, in_channels, out_channels, kernel_size, stride=1,
+                    padding=0, dilation=1, groups=1,
+                    bias=True, padding_mode='zeros'):
+        
+        def conv2d_forward(self, input, weight):
+        
+        def forward(self, input):
+        
+    def myconv2d(input, weight, bias=None, stride=1, padding=0, dilation=1, groups=1):
 
 Engineering Infrastructure
 --------------------------
