@@ -1,13 +1,13 @@
 Hardware Aging Acceleration
 ------------------------------------
 
-Accelerate the hardware aging simulation of the CNN MAC operations. 
+Accelerate the hardware aging simulation of the CNN MAC (Multiply Accumulate) operations. 
 
 Basic Information
 -----------------
 
 In the research of the AI Accelerator, we sometimes need to focus on the 
-different results of the CNN MAC (Multiply Accumulate) operations which 
+different results of the CNN MAC operations which 
 caused by the hardware aging to judge the reliability. With the aging of 
 the MOS, the each operation result of the MAC operations will become 
 different, result in that we need to build the truthtable for all inputs. 
