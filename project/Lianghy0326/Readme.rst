@@ -1,73 +1,49 @@
-=============================
-Path Finding Using Algorithms
-=============================
-
-Basic Information
-=================
-
-Github Repository: https://github.com/Lianghy0326/Path-finding-visualization
-
-Pathfinding is a fundamental problem in computer science and has numerous applications in various domains, including robotics, video games, and network routing. 
-The objective of pathfinding algorithms is to find the optimal path between two points in a given environment while considering obstacles, costs, and other constraints.
-In this project, we aim to explore and implement different pathfinding algorithms, such as A* (A-star), Depth-First Search (DFS), and possibly others, to address the diverse needs of users in path planning scenarios. Through this endeavor, we seek to provide researchers and developers with a versatile toolkit for efficiently navigating complex environments and finding optimal paths. Additionally, we will develop visualization tools to aid in understanding the behavior and performance of these algorithms.
-
-Problem to Solve
-=================
-
-The primary goal of this project is to implement various pathfinding algorithms, including A*, DFS, etc., and visualize the paths they generate.
-
-Prospective Users
-=================
-
-The prospective users of this project are researchers and developers who have requirements for pathfinding in large-scale environments.
-
-System Architecture
-===================
-
-This library will be developed in ``C++`` .
-``Python`` library will be used if nessesary.
-* ``C++``: Used to implement the algorithm .
+# DE
+Automatic Differential Equation Solver Optimizer
 
 
-API Description
-===============
-
-The ``C++`` API::
-
-    // Find a path using A* algorithm
-    Path find_path_a_star(const Grid& grid, const Point& start, const Point& goal);
-
-    // Find a path using Depth-First Search algorithm
-    Path find_path_dfs(const Grid& grid, const Point& start, const Point& goal);
+## Basic Information
+Github Repository: https://github.com/Lianghy0326/DE
 
 
-The ``Python`` API::
+Design an intelligent C++ solver that automatically selects the optimal solving method for differential equation (DE) problems. 
+The solver should choose the best integration method and step size based on problem characteristics to 
+maximize solving speed and accuracy.
 
-    # Find a path using A* algorithm
-    path_a_star = find_path_a_star(grid, start, goal)
+## Problem to Solve
+The goal is to develop an intelligent solver capable of automatically selecting 
+the most suitable solving method for DE problems. This involves analyzing problem 
+characteristics such as initial conditions, boundary conditions, and equation forms 
+to determine the appropriate integration method and optimization strategies. 
+By doing so, we aim to maximize solving speed and accuracy, addressing the 
+challenges of efficiently solving DE problems.
 
-    # Find a path using Depth-First Search algorithm
-    path_dfs = find_path_dfs(grid, start, goal)
+## Prospective Users
+- Researchers and engineers in fields utilizing DEs for modeling and simulation.
+- Academic institutions for teaching and research purposes.
+
+## System Architecture
+- Solver Module: Contains the core logic for analyzing problem characteristics and selecting appropriate solving methods.
+- Integration Methods: Implementations of various integration methods such as Euler's method, Runge-Kutta methods, etc.
+- Step Size Control: Module responsible for implementing adaptive step size control algorithms.
+- Testing Module: Includes unit tests and performance evaluation tools.
 
 
-Engineering Infrastructure
-==========================
+## API Description
 
+## Engineering Infrastructure
 * ``make``: Used to build the software system.
 * ``git``: Used for version control.
-* ``pytest``: Used for unit testing.
+* ``gtest``: Used for unit testing.
 
-Schedule
-========
+## Schedule
+- Week 1 (04/08): Research
+- Week 2 (04/15): Research
+- Week 3 (04/22): Research && Implementation
+- Week 4 (04/29): Implementation
+- Week 5 (05/06): Implementation
+- Week 6 (05/13): Implementation && Test and debug
+- Week 7 (05/20): Test and debug
+- Week 8 (05/27): Prepare the presentation.
 
-* Week 1 (04/08): Research on A* algorithm and DFS.
-* Week 2 (04/15): Implement basic data structures and design input data for testing.
-* Week 3 (04/22): Implement A* algorithm.
-* Week 4 (04/29): Implement DFS algorithm.
-* Week 5 (05/06): Visualizing and debugging for both algorithms.
-* Week 6 (05/13): Implement additional pathfinding algorithms.
-* Week 7 (05/20): Testing and debugging for all implemented algorithms.
-* Week 8 (05/27): Prepare the presentation.
-
-References
-==========
+## References
