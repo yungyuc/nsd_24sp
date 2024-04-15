@@ -42,3 +42,7 @@ Follow the format to add your project:
 1. `github_account_name <https://github.com/github_account_name>`__ for
    `Project subject <github_account_name/README.rst>`__:
    https://github.com/github_account_name/project_name
+
+2. `r1407p <https://github.com/r1407p>`__ for
+   `PyMatrixOpt <r1407p/README.rst>`__:
+   https://github.com/r1407p/PyMatrixOpt
