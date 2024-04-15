@@ -35,9 +35,7 @@ $(PROG): $(OBJECTS)
 
 # Creating the Python module
 $(MODULE): $(PYBIND_OBJECTS)
-	export LD_LIBRARY_PATH=/opt/intel/oneapi/compiler/latest/lib::$$LD_LIBRARY_PATH
-	$(CXX) -shared -o $@ $^ $(LDFLAGS) 
-
+	LD_LIBRARY_PATH=/opt/intel/oneapi/compiler/latest/lib:$$LD_LIBRARY_PATH $(CXX) -shared -o $@ $^ $(LDFLAGS)
 # Compiling
 %.o: %.cpp
 	$(CXX) -c -o $@ $(CXXFLAGS) -I$(MKL_INC) $(PYBIND11_FLAGS) $<
