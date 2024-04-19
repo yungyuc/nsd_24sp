@@ -1,43 +1,64 @@
-========================
-Parallel Vonoroi Diagram
-========================
+=================
+Search in KD-Tree
+=================
 
 Basic Information
 =================
 
-Github Repository: https://github.com/bhchen2001/Parallel_Vonoroi_Diagram
+Github Repository: 
 
-Vonoroi diagram is a partitioning of a plane into regions based on distance to a specific points,
-which is widely used in many fields, such as computer graphics and face recognition.
-There are some classic algorithms to generate vonoroi diagram, such as divide and conquer method, fortune's algorithm,
-and their time complexity is O(nlogn).
-However, with large-scale data, these algorithms will become time-consuming.
+KD-Tree is a data structure that is used to organize multiple dimensions
+of data, and is used to perform searches on data. It is a binary tree that
+is used to partition the data based on different dimensions.
+
 
 Problem to Solve
-=================
+================
 
-The primary goal if this project is to implement a thread-level parallel version of 
-two-dimensional vonoroi diagram algorithm on shared-memory multi-core machines.
+The primary goal of this project is to implement a KD-Tree structure
+and use it to perform K-Nearest Neighbor search and Range search on
+a dataset.
 
-For the parallel version, the following requirements should be satisfied:
+K-Nearest Neighbor search with KD-Tree (pseudo code)::
 
-1. A high-speed data structure for storing the vonoroi diagram and searching the nearby points.
-2. K-d tree for decomposing the points into different blocks.
-3. ``Fortune's algorithm`` for generating the vonoroi diagram independently at each thread on the blocks assigned to it.
+    L: list of k-nearest neighbors
+    1. Traverse the KD-Tree (subtree).
+    2. When reaching a leaf node and if it's not visited:
+      a. add the point if L is not full
+      b. if L is full, replace the farthest point in L with the current point
+    3. If current node is root node, return L. Otherwise, go to step 4.
+    4. Traverse the parent node and if it's not visited:
+      a. add the point if L is not full
+      b. if L is full, replace the farthest point in L with the current point
+    5. Compare the distance between current point and the hyperplane of the current node and the farthest point in L
+      a. If the distance is less than the farthest point in L or L is not full, traverse the other sub-tree (step 1).
+      b. If the distance is greater than the farthest point in L, go to step 3.
+
+Range search with KD-Tree (pseudo code)::
+
+    Q: query range, L: list of points within the query range
+    1. Traverse the KD-Tree (subtree)
+    2. If current node is leaf node, check if the point is within the query range
+      a. If the point is within the query range, add it to L.
+      b. If the point is not within the query range, do nothing and return
+    3. If the current node is not leaf node, check if the region of the current node intersects with the query range
+      a. If the region does not overlap Q, return
+      b. Else add the point to L if it's within the query range and traverse the left and right sub-trees (step 1).
 
 Prospective Users
 =================
 
 The prospective users of this project are researchers and developers
-who have requirements for generating vonoroi diagram with large-scale data.
+who are interested in multi-dimensional data searching and range queries.
 
 System Architecture
 ===================
 
-This library will be developed in ``C++`` and be compatible with ``Python``.
+This library will be developed in ``C++`` and be compatible with
+``Python``.
 
-* ``C++``: Used to implement the core algorithm and parallelization.
-* ``Python``: Used to read the input data and visualize the vonoroi diagram.
+* ``C++``: Used to implement the KD-Tree structure and perform the KNN and Range search.
+* ``Python``: Used to read the input data.
 * ``Pybind11``: Used to wrap the C++ code and make it compatible with Python.
 
 API Description
@@ -45,51 +66,88 @@ API Description
 
 The ``C++`` API::
 
-    // Generate vonoroi diagram
-    void generate_vonoroi_diagram(const std::vector<Point>& points, VonoroiDiagram& diagram);
+    // class to represent a point in multi-dimensional space
+    class Point{
+        public:
+            std::vector<double> coordinates;
+    };
 
-    // Get the neighbors of a specific point
-    std::vector<Point> get_neighbors(const Point& point, const VonoroiDiagram& diagram);
+    // class to represent a rectangle
+    class Rect{
+        public:
+            Point lower;
+            Point upper;
+    };
+
+    // class to represent a node in the KD-Tree
+    class KDNode {
+        public:
+            Point point;
+            KDNode* left;
+            KDNode* right;
+            // region that the node belongs to depending on split dimension
+            Rect region;
+    };
+
+    // class to represent the KD-Tree
+    class KDTree {
+        public:
+            KDTree(std::vector<Point> points);
+            void Insert(Point point);
+            void Delete(Point point);
+            std::vector<Point> KNN(Point point, int k);
+            std::vector<Point> RangeSearch(Rect query_range);
+
+        private:
+            KDNode* root;
+            KDNode* buildKDTree(std::vector<Point> points, int depth);
+    };
 
 The ``Python`` API::
 
-    # Generate vonoroi diagram
-    diagram = generate_vonoroi_diagram(points)
+    # Generate KD-tree
+    my_kd_tree = KDTree(points)
+    
+    # Insert a point
+    my_kd_tree.Insert(point)
 
-    # Get the neighbors of a specific point
-    neighbors = get_neighbors(point, diagram)
+    # Delete a point
+    my_kd_tree.Delete(point)
 
-    # draw the vonoroi diagram
-    draw_vonoroi_diagram(diagram)
+    # Perform KNN search
+    k_nearest_points = my_kd_tree.KNN(point, k)
+
+    # Perform Range search
+    points_in_range = my_kd_tree.RangeSearch(range)
 
 Engineering Infrastructure
 ==========================
 
 * ``make``: Used to build the software system.
 * ``git``: Used for version control.
-* ``perf``: Used for performance analysis.
 * ``pytest``: Used for unit testing.
 
 Schedule
 ========
 
-* Week 1 (04/08): Research on ``fortune's algorithm`` and ``k-d tree``.
-* Week 2 (04/15): Implement data structure ``Point`` and design input data for testing.
-* Week 3 (04/22): Implement data structure ``VonoroiDiagram``.
+* Week 1 (04/08): Research on ``KD-Tree``
+* Week 2 (04/15): 
+  * Implement data structure ``Point``, ``KDNode``
+  * Research on ``KNN`` and ``RangeSearch`` based on ``KD-Tree``
+  * Design input data for ``Insert`` and ``Delete`` functions
+* Week 3 (04/22):
+  * Implement ``Insert`` and ``Delete`` functions
+  * Design input data for ``KNN`` and ``RangeSearch`` functions
 * Week 4 (04/29)
-  * Implement ``fortune's algorithm``.
-  * Implement ``draw_vonoroi_diagram`` function.
+  * Testing and refactoring for ``Insert`` and ``Delete`` functions
+  * Implement ``KNN`` searching function
 * Week 5 (05/06): 
-  * Testing and debugging for the serial version.
-  * Implement ``get_neighbors`` function.
-* Week 6 (05/13): Implement the parallel version.
+  * Testing and refactoring for ``KNN`` function
+  * Implement ``RangeSearch`` searching function
+* Week 6 (05/13): 
+  * Testing and refactoring for ``RangeSearch`` function
 * Week 7 (05/20):
-  * Testing and debugging for the parallel version.
-  * Wrap the C++ code with ``Pybind11``.
+  * Final testing and refactoring
+  * Wrap the C++ code with ``Pybind11``
 * Week 8 (05/27):
-  * Prepare the presentation.
-
-References
-==========
-
-* `ParVoro++: A scalable parallel algorithm for constructing 3D Voronoi tessellations based on kd-tree decomposition <https://www.sciencedirect.com/science/article/pii/S0167819123000017>`__
+  * Prepare the presentation
