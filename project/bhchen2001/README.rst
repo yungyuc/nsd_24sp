@@ -1,11 +1,11 @@
-=================
-Search in KD-Tree
-=================
+===========================
+ Searching-based-on-KD-Tree
+===========================
 
 Basic Information
 =================
 
-Github Repository: 
+Github Repository: https://github.com/bhchen2001/Searching-based-on-KD-Tree.git
 
 KD-Tree is a data structure that is used to organize multiple dimensions
 of data, and is used to perform searches on data. It is a binary tree that
