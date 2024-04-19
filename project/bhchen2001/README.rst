@@ -1,5 +1,5 @@
 ===========================
- Searching-based-on-KD-Tree
+ Searching based on KD-Tree
 ===========================
 
 Basic Information
