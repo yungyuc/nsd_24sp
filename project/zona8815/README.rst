@@ -45,7 +45,9 @@ As we want to speed up the simulation time, we can list some problems:
     operation of the addition. 
 2. **Speed up**: 
     We will try the best to find the ways to speed up the whole processes, 
-    and compare those results to find the best performance one. 
+    and compare those results to find the best performance one. For example, 
+    we may use pybind11 to bind python and C++, and do some tricks in the 
+    C++ program to get better performance. 
 3. **Accuracy**: 
     While focus on the speed of simulation, we still need to ensure the 
     accuracy of the results. We will do some unit tests for this problem. 
