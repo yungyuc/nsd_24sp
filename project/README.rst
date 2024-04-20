@@ -46,6 +46,10 @@ Follow the format to add your project:
 2. `YJack0000 <https://github.com/YJack0000>`__ for
    `Project subject <YJack0000/README.md>`__:
    https://github.com/YJack0000/SimEvo
+   
+3. `bhchen2001 <https://github.com/bhchen2001>`__ for
+   `Searching based on KD-Tree <bhchen2001/README.rst>`__:
+   https://github.com/bhchen2001/Searching-based-on-KD-Tree
 
 6. `kevinshlo <https://github.com/kevinshlo>`__ for
    `Corner Stitching <kevinshlo/README.md>`__:
