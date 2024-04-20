@@ -42,8 +42,3 @@ Follow the format to add your project:
 1. `github_account_name <https://github.com/github_account_name>`__ for
    `Project subject <github_account_name/README.rst>`__:
    https://github.com/github_account_name/project_name
-
-
-11. `zona8815 <https://github.com/zona8815>`__ for
-    `Hardware Aging Acceleration <zona8815/README.rst>`__:
-    https://github.com/zona8815/Hardware-Aging-Acceleration
