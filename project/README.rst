@@ -59,3 +59,6 @@ Follow the format to add your project:
    `Project subject <QuentinDucoulombier/README.md>`__:
    https://github.com/QuentinDucoulombier/DeliveryOptimizer
 
+8. `zona8815 <https://github.com/zona8815>`__ for
+   `Hardware Aging Acceleration <zona8815/README.rst>`__:
+   https://github.com/zona8815/Hardware-Aging-Acceleration
