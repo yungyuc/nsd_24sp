@@ -32,8 +32,9 @@ Prospective Users
 - Researchers and engineers in fields utilizing DEs for modeling and simulation.
 - Academic institutions for teaching and research purposes.
 
+
 System Architecture
-=================
+===================
 
 * Solver Module: Contains the core logic for analyzing problem characteristics 
 and selecting appropriate solving methods.
