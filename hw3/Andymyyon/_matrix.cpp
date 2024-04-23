@@ -3,7 +3,7 @@
 #include <vector>
 #include <stdexcept>
 #include <math.h>
-#include "mkl.h"
+#include <mkl/mkl.h>
 #include <chrono>
 #include <fstream>
 
@@ -182,8 +182,8 @@ Matrix operator*(Matrix const & mat1, Matrix const & mat2)
     }
 
     Matrix ret(mat1.nrow(), mat2.ncol());
-    for (int i = 0; i < mat1.nrow(); ++i) {
-        for (int j = 0; j < mat2.ncol(); ++j) {
+    for (size_t i = 0; i < mat1.nrow(); ++i) {
+        for (size_t j = 0; j < mat2.ncol(); ++j) {
             ret(i, j) = 0.0;  // Explicit initialization
     }
 }
@@ -253,20 +253,20 @@ Matrix multiply_tile(Matrix const & mat1, Matrix const & mat2, const int tile_si
     }
 
     Matrix res(mat1.nrow(), mat2.ncol());
-    for (int i = 0; i < mat1.nrow(); ++i) {
-        for (int j = 0; j < mat2.ncol(); ++j) {
+    for (size_t i = 0; i < mat1.nrow(); ++i) {
+        for (size_t j = 0; j < mat2.ncol(); ++j) {
             res(i, j) = 0.0;  // Explicit initialization
         }
     }
     // First, we 'create' and iterate over the different tiles
-    for(int i_tile = 0; i_tile< mat1.nrow(); i_tile = i_tile + tile_size){
-        for(int j_tile = 0; j_tile < mat2.ncol(); j_tile = j_tile + tile_size){
-            for(int k_tile = 0; k_tile < mat1.ncol(); k_tile = k_tile + tile_size){
+    for(size_t i_tile = 0; i_tile< mat1.nrow(); i_tile = i_tile + tile_size){
+        for(size_t j_tile = 0; j_tile < mat2.ncol(); j_tile = j_tile + tile_size){
+            for(size_t k_tile = 0; k_tile < mat1.ncol(); k_tile = k_tile + tile_size){
     // And now we iterate inside each tile
-                for(int i = i_tile; i < std::min(i_tile + tile_size, int(mat1.nrow())); i++){
-                    for(int j = j_tile; j < std::min(j_tile + tile_size, int(mat2.ncol())); j++){
+                for(int i = i_tile; i < std::min(int(i_tile + tile_size), int(mat1.nrow())); i++){
+                    for(int j = j_tile; j < std::min(int(j_tile + tile_size), int(mat2.ncol())); j++){
                         double sum = 0;
-                        for(int k = k_tile; k < std::min(k_tile + tile_size, int(mat1.ncol())); k++){
+                        for(int k = k_tile; k < std::min(int(k_tile + tile_size), int(mat1.ncol())); k++){
                             sum = sum + mat1(i,k)*mat2(k,j);
                         }
                         res(i,j) = res(i,j) + sum;
@@ -298,8 +298,8 @@ bool check_result(Matrix const & mat1, Matrix const & mat2){
 
     double tolerance = 1e-9;
 
-    for(int i = 0; i < mat1.nrow(); i++){
-        for(int j = 0; j < mat1.ncol(); j++){
+    for(size_t i = 0; i < mat1.nrow(); i++){
+        for(size_t j = 0; j < mat1.ncol(); j++){
             if(std::abs(mat1(i,j) - mat2(i,j)) > tolerance){
                 return false;
             }
@@ -448,7 +448,7 @@ int main(int argc, char ** argv)
             double naiveOverTiled = static_cast<double>(durationNaive) / durationTiled;
             std::cout << "Tiled multiplication is " << (naiveOverTiled - 1) * 100 << "\% faster than the naive implication" << std::endl;
             double tiledOverMkl = static_cast<double>(durationTiled) / durationMkl;
-            std::cout << "MKL multiplication is " << (durationMkl - 1) * 100 << "\% faster than the tiled implication" << std::endl;
+            std::cout << "MKL multiplication is " << (tiledOverMkl - 1) * 100 << "\% faster than the tiled implication" << std::endl;
 
             outFile << "The performance may differ due to the randomness of the matrix, but it differs lightly (~140\% for the tiled implementation for two 1024*1024 matrix with a tiling size of 32)\n";
             outFile << "Changing the tiling size to 64 doesn't change much\n";
