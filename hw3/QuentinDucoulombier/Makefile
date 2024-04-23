@@ -1,64 +1,59 @@
-# Name of the executable and Python module
-PROG := exe
-TEST_SRC := test_matrix.py
+# Compiler settings
+CXX = g++
+CXXFLAGS = -O3 -Wall -std=c++11 -fPIC -m64
+MKL_INC = /usr/include/mkl
+PYBIND11_INCLUDES = $(shell python3 -m pybind11 --includes)
+PYTHON_INCLUDES = $(shell python3-config --includes --ldflags)
+PYBIND11_FLAGS = $(PYTHON_INCLUDES) $(PYBIND11_INCLUDES)
+PYTHON_EXT_SUFFIX = $(shell python3-config --extension-suffix)
 
-# Compiler and flags
-CXX := g++
-CXXFLAGS := -O3 -Wall -m64 -std=c++11 -fPIC $(shell pkg-config --cflags mkl-dynamic-lp64-iomp)
-# Include MKL headers and link flags. Adjust these paths according to your MKL installation.
-MKL_INC := /usr/include/mkl
-#CXXFLAGS += -I$(MKL_INC)
+# Library and Linker settings
+LDFLAGS = -lblas -lmkl_rt
 
-# Library paths and the libraries to link against
-LDFLAGS := $(shell pkg-config --libs mkl-dynamic-lp64-iomp)
+# Source and Target settings
+EXE = matrix_performance
+MODULE = _matrix$(PYTHON_EXT_SUFFIX)
+SOURCES = main.cpp matrix.cpp
+OBJECTS = $(SOURCES:.cpp=.o)
+PYBIND_SOURCES = matrix.cpp pybind_matrix.cpp
+PYBIND_OBJECTS = $(PYBIND_SOURCES:.cpp=.o)
 
-# Pybind11 and Python configuration
-PYTHON := python3
-PYBIND11_INCLUDES := $(shell $(PYTHON) -m pybind11 --includes)
-PYTHON_INCLUDES := $(shell $(PYTHON)-config --includes)
-PYBIND11_FLAGS := $(PYTHON_INCLUDES) $(PYBIND11_INCLUDES)
-EXT_SUFFIX := $(shell $(PYTHON)-config --extension-suffix)
-MODULE := _matrix$(EXT_SUFFIX)
-
-# Source files and object files
-SOURCES := matrix.cpp main.cpp
-OBJECTS := $(SOURCES:.cpp=.o)
-PYBIND_SOURCES := matrix.cpp pybind_matrix.cpp
-PYBIND_OBJECTS := $(PYBIND_SOURCES:.cpp=.o)
+# Test settings
+TEST_SRC = test_matrix.py
+PERF_SRC = perf_matrix.py
+PERF_OUTPUT = performance.txt
 
 # Targets
-all: $(PROG) $(MODULE)
+all: $(EXE) $(MODULE)
 
-# Linking the executable
-$(PROG): $(OBJECTS)
+# Linking the executable for performance testing
+$(EXE): $(OBJECTS)
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 # Creating the Python module
 $(MODULE): $(PYBIND_OBJECTS)
-	$(CXX) -shared -o $@ $^ $(LDFLAGS)
-# Compiling
+	$(CXX) -shared -o $@ $^ $(LDFLAGS) $(PYBIND11_FLAGS)
+
+# Compiling C++ source files
 %.o: %.cpp
-	$(CXX) -c -o $@ $(CXXFLAGS) -I$(MKL_INC) $(PYBIND11_FLAGS) $<
+	$(CXX) -c $< -o $@ $(CXXFLAGS) -I$(MKL_INC)
 
-# Run the PROG
-run: $(PROG)
-	./$(PROG)
+# Compiling Pybind11 source files
+%.o: %.cpp
+	$(CXX) -c $< -o $@ $(CXXFLAGS) -I$(MKL_INC) $(PYBIND11_FLAGS)
 
-# Test the Python module with PyTest
+# Testing the Python module with PyTest
 test: $(MODULE)
-	@echo " ***       TESTING START       *** "
-	python3 -m pytest $(TEST_SRC)
+	python3 -m pytest -v $(TEST_SRC)
 
 # Performance testing
-perf: $(PROG)
-	./$(PROG) > performance.txt 2>&1
+perf: $(EXE)
+	./$(EXE) > $(PERF_OUTPUT) 2>&1
 
-# Clean the directory
+# Clean the build directory
 clean:
-	rm -f $(PROG) $(OBJECTS) $(MODULE) $(PYBIND_OBJECTS)
-	find . -type d -name __pycache__ -exec rm -r {} +
-	find . -type f -name '*.pyc' -delete
-	-rm -rf __pycache__ .pytest_cache
+	rm -f $(EXE) $(MODULE) $(OBJECTS) $(PYBIND_OBJECTS)
+	rm -rf __pycache__ .pytest_cache *.so *.txt
 
 # Phony targets
-.PHONY: all run clean test perf
+.PHONY: all clean test perf
