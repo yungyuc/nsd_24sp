@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "matrix.hpp"
 
 
@@ -14,14 +12,14 @@ int main(int, char **)
     std::vector<double> elmement{1,2,3,4,5,6};
     Matrix m1(2, 3, elmement);
     Matrix m2(3, 2, elmement);
-    
-  
+
+
 
     // Perform matrix multiplication
     Matrix result1 = multiply_naive(m1, m2);
     // Matrix result2 = multiply_mkl(m1, m2);
     Matrix result2 = multiply_tile(m1, m2, 128);
-    
+
     // Display the result
     int verif = 0;
     std::cout << "Result of matrix multiplication:" << std::endl;
@@ -32,11 +30,11 @@ int main(int, char **)
                 verif=1;
             }
         }
-        
+
     }
     if (verif == 0){
         std::cout << "Good job  :  " << result1.buffer()<< std::endl;
     }
-     
+
     return 0;
 }

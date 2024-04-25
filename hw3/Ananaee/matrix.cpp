@@ -1,11 +1,10 @@
-#include <iostream>
-#include <cstdint>
-#include <mkl.h>
 #include "matrix.hpp"
-
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/operators.h>
 
 // const size_t tile_size = 128;
-Matrix::Matrix() : m_nrow(0), m_ncol(0), m_buffer(nullptr) {}
+// Matrix::Matrix() : m_nrow(0), m_ncol(0), m_buffer(nullptr) {}
 
 Matrix::Matrix(size_t nrow, size_t ncol)
     : m_nrow(nrow), m_ncol(ncol)
@@ -19,7 +18,7 @@ Matrix::Matrix(size_t nrow, size_t ncol, std::vector<double> const & vec)
 {
     size_t nelement = nrow * ncol;
     m_buffer = new double[nelement];
-    for (size_t i = 0; i < nelement; ++i) {
+    for (size_t i = 0; i < nelement; i++) {
         m_buffer[i] = vec[i];
     }
 }
@@ -36,7 +35,7 @@ Matrix::Matrix(Matrix const & other)
         m_buffer = new double[m_nrow * m_ncol];
         std::copy(other.m_buffer, other.m_buffer + m_nrow * m_ncol, m_buffer);
     }
-    
+
 }
 
 // Move constructor
@@ -51,7 +50,7 @@ Matrix::Matrix(Matrix && other)
 Matrix& Matrix::operator=(const Matrix& other) {
 
     if (this == &other) { return *this; }
-    
+
     delete[] m_buffer;
     m_nrow = other.m_nrow;
     m_ncol = other.m_ncol;
@@ -88,11 +87,16 @@ double& Matrix::operator() (size_t row, size_t col)
 }
 
 bool Matrix::operator==(const Matrix& other) const {
-    if (m_nrow != other.m_nrow || m_ncol != other.m_ncol) return false;
-    for (size_t i = 0; i < m_nrow; i++)
-        for (size_t j = 0; j < m_ncol; j++)
-            if (m_buffer[i*m_ncol+j] != other.m_buffer[i*m_ncol+j])
+    if (m_nrow != other.m_nrow || m_ncol != other.m_ncol) {
+        return false;
+    }
+    for (size_t i = 0; i < m_nrow; i++) {
+        for (size_t j = 0; j < m_ncol; j++) {
+            if (m_buffer[i*m_ncol+j] != other.m_buffer[i*m_ncol+j]){
                 return false;
+            }
+        }
+    }
     return true;
 }
 
@@ -107,10 +111,7 @@ size_t Matrix::ncol() const
     return m_ncol;
 }
 
-// const double* Matrix::buffer() const
-// { 
-//     return m_buffer;
-// }
+
 
 double* Matrix::buffer() const
 { 
@@ -136,11 +137,10 @@ Matrix multiply_naive(const Matrix& m1, const Matrix& m2) {
 
     for (size_t i = 0; i < nrow_m1; i++) {
         for (size_t j = 0; j < ncol_m2; j++) {
-            double sum = 0.0;
+            result(i, j) = 0.0;
             for (size_t k = 0; k < ncol_m1; k++) {
-                sum += m1(i, k) * m2(k, j);
+                result(i, j) += m1(i, k) * m2(k, j);
             }
-            result(i, j) = sum;
         }
     }
 
@@ -162,6 +162,11 @@ Matrix multiply_tile(const Matrix& mat1, const Matrix& mat2, size_t tile_size) {
     // Create a result matrix
     Matrix result(nrow1, ncol2);
 
+    for (size_t i = 0; i < mat1.nrow(); ++i) {
+        for (size_t j = 0; j < mat2.ncol(); ++j) {
+            result(i, j) = 0;
+        }
+    }
     // Perform tiling multiplication
     for (size_t i = 0; i < nrow1; i += tile_size) {
         for (size_t j = 0; j < ncol2; j += tile_size) {
@@ -172,8 +177,8 @@ Matrix multiply_tile(const Matrix& mat1, const Matrix& mat2, size_t tile_size) {
                 size_t k_end = std::min(k + tile_size, ncol1);
 
                 // Multiply the current tile
-                for (size_t ii = i; ii < i_end; ++ii) {
-                    for (size_t jj = j; jj < j_end; ++jj) {
+                for (size_t ii = i; ii < i_end; ii++) {
+                    for (size_t jj = j; jj < j_end; jj++) {
                         double sum = 0.0;
                         for (size_t kk = k; kk < k_end; ++kk) {
                             sum += mat1(ii, kk) * mat2(kk, jj);
@@ -200,45 +205,41 @@ Matrix multiply_mkl(const Matrix& mat1, const Matrix& mat2) {
     Matrix result(mat1.nrow(), mat2.ncol());
 
     // Call MKL's DGEMM routine for matrix multiplication
-         cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 
-            mat1.nrow(), 
-            mat2.ncol(), 
-            mat1.ncol(), 
-            1.0, 
-            mat1.buffer(), 
-            mat1.ncol(), 
-            mat2.buffer(), 
-            mat2.ncol(), 
-            0.0, 
-            result.buffer(), 
-            result.ncol());
-
+    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 
+                mat1.nrow(), 
+                mat2.ncol(), 
+                mat1.ncol(), 
+                1.0, 
+                mat1.buffer(), 
+                mat1.ncol(), 
+                mat2.buffer(), 
+                mat2.ncol(), 
+                0.0, 
+                result.buffer(), 
+                result.ncol());
 
     return result;
 }
 
-#ifndef SKIP_PYBIND11
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+
 namespace py = pybind11;
 
-PYBIND11_MODULE(_matrix, m){
-    pybind11::class_<Matrix>(m, "Matrix")
+PYBIND11_MODULE(_matrix, m) {
+    py::class_<Matrix>(m, "Matrix")
         .def(pybind11::init<size_t, size_t>())
         .def(pybind11::init<size_t, size_t, std::vector<double> const &>())
-        .def("__setitem__", [](Matrix &m, std::pair<size_t, size_t> const & p, double val){
-            m(p.first, p.second) = val;
+        .def("__getitem__", [](const Matrix &m, std::pair<size_t, size_t> idx) {
+            return m(idx.first, idx.second);
         })
-        .def("__getitem__", [](Matrix &m, std::pair<size_t, size_t> const & p){
-            return m(p.first, p.second);
+        .def("__setitem__", [](Matrix &m, std::pair<size_t, size_t> idx, double val) {
+            m(idx.first, idx.second) = val;
         })
-        .def("nrow", &Matrix::nrow)
-        .def("ncol", &Matrix::ncol)
-        .def("__eq__", [](const Matrix &mat1, const Matrix &mat2) { return mat1 == mat2; });
+        .def("__eq__", &Matrix::operator==)
+        .def_property_readonly("nrow", &Matrix::nrow)
+        .def_property_readonly("ncol", &Matrix::ncol)
+        .def("buffer", &Matrix::buffer);
+
     m.def("multiply_naive", &multiply_naive);
     m.def("multiply_tile", &multiply_tile);
     m.def("multiply_mkl", &multiply_mkl);
 }
-
-#endif
-

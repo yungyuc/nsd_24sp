@@ -1,6 +1,5 @@
 import sys
 import timeit
-import _matrix
 
 class Writer:
 
