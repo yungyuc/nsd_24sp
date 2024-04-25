@@ -31,8 +31,7 @@ PYBIND11_MODULE(_matrix, m) {
     m.def("multiply_mkl", &multiply_mkl); 
 
     // Exposing memory tracking functions
-    m.def("bytes", []() { return CustomAllocator<double>::current_allocated; });
-    m.def("allocated", []() { return CustomAllocator<double>::current_allocated; });
-    m.def("deallocated", []() { return CustomAllocator<double>::current_deallocated; });
-    
+    m.def("bytes", []() { return CustomAllocator<double>::current_allocated; }, "Returns the current amount of memory allocated.");
+    m.def("allocated", []() { return CustomAllocator<double>::total_allocated; }, "Returns the total amount of memory ever allocated.");
+    m.def("deallocated", []() { return CustomAllocator<double>::total_deallocated; }, "Returns the total amount of memory deallocated.");
 }

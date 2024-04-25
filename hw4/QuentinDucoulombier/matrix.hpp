@@ -20,7 +20,8 @@ public:
     using value_type = T;
 
     static size_t current_allocated;
-    static size_t current_deallocated;
+    static size_t total_allocated;
+    static size_t total_deallocated;
 
     template<typename U>
     struct rebind {
@@ -35,24 +36,27 @@ public:
     pointer allocate(size_type n, const void* hint = 0) {
         pointer ptr = std::allocator<T>::allocate(n, hint);
         current_allocated += n * sizeof(T);
+        total_allocated += n * sizeof(T); 
         std::cout << "Allocated " << n * sizeof(T) << " bytes\n";
         return ptr;
     }
 
     void deallocate(pointer p, size_type n) {
-        current_deallocated += n * sizeof(T);
+        total_deallocated += n * sizeof(T);
         current_allocated -= n * sizeof(T);
         std::cout << "Deallocated " << n * sizeof(T) << " bytes\n";
         std::allocator<T>::deallocate(p, n);
     }
-    
 };
 
 template<typename T>
 size_t CustomAllocator<T>::current_allocated = 0;
 
 template<typename T>
-size_t CustomAllocator<T>::current_deallocated = 0;
+size_t CustomAllocator<T>::total_allocated = 0;
+
+template<typename T>
+size_t CustomAllocator<T>::total_deallocated = 0;
 
 class Matrix {
 public:
