@@ -27,7 +27,7 @@ int main(int argc, char const *argv[])
     populate(A);
 
     std::cout << "Creating Matrix B...\n";
-    Matrix B = A; // This will use the copy constructor
+    Matrix B = A;
 
     std::cout << "Performing naive multiplication...\n";
     auto start = std::chrono::high_resolution_clock::now();
