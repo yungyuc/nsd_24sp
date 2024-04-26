@@ -9,7 +9,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstddef>
-#include <mkl.h>
+#include <mkl/mkl.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 namespace py = pybind11;
