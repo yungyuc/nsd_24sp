@@ -78,14 +78,14 @@ Matrix::Matrix(size_t row, size_t col,const std::vector<double> &v){
         this->m_buffer[i] = v[i];
     }
 }
-Matrix::Matrix(const Matrix &m){
-    this->m_nrow = m.m_nrow;
-    this->m_ncol = m.m_ncol;
-    this->m_buffer = vector<double, CustomAllocator<double>>(m.m_nrow * m.m_ncol);
-    for(size_t i = 0; i < m.m_nrow * m.m_ncol; i++){
-        this->m_buffer[i] = m.m_buffer[i];
-    }
-} 
+// Matrix::Matrix(const Matrix &m){
+//     this->m_nrow = m.m_nrow;
+//     this->m_ncol = m.m_ncol;
+//     this->m_buffer = vector<double, CustomAllocator<double>>(m.m_nrow * m.m_ncol);
+//     for(size_t i = 0; i < m.m_nrow * m.m_ncol; i++){
+//         this->m_buffer[i] = m.m_buffer[i];
+//     }
+// } 
 
 size_t Matrix::index(size_t i, size_t j) const{
     return i * m_ncol + j;
@@ -101,9 +101,9 @@ double* Matrix::get_buffer() const{
     return (double *)m_buffer.data();
 }
     
-Matrix::~Matrix() {
-    m_buffer.clear();
-}
+// Matrix::~Matrix() {
+//     m_buffer.clear();
+// }
 
 double Matrix::operator() (size_t row, size_t col) const{
     if (row < 0 || row >= m_nrow || col < 0 || col > m_ncol){
@@ -188,7 +188,7 @@ PYBIND11_MODULE(_matrix, m) {
     .def(py::init<size_t, size_t>())
     .def(py::init<size_t, size_t, double>())
     .def(py::init<size_t, size_t, const std::vector<double> &>())
-    .def(py::init<const Matrix &>())
+    // .def(py::init<const Matrix &>())
     .def("__getitem__", [](Matrix &m, std::vector<std::size_t> idx){ 	 
         return m(idx[0],idx[1]);       
     })
