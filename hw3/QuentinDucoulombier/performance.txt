@@ -1,0 +1,11 @@
+Naive multiplication took 4525.7 ms.
+Tiled multiplication with tile size 16 took 2813.37 ms.
+Tiled multiplication with tile size 32 took 2654.43 ms.
+Tiled multiplication with tile size 64 took 2380.31 ms.
+MKL multiplication took 22.8864 ms.
+
+Percentage speed increase of Tiling 16 over Naive: 37.8356%
+Percentage speed increase of Tiling 32 over Naive: 41.3476%
+Percentage speed increase of Tiling 64 over Naive: 47.4045%
+Percentage speed increase of MKL over Naive: 99.4943%
+Percentage speed increase of MKL over Tiling 16: 99.1865%
