@@ -118,8 +118,6 @@ public:
 
     // equality
     bool operator==(Matrix const & other) const;
-    // inequality
-    bool operator!=(Matrix const & other) const;
 
     // shape of row
     std::size_t row() const;
@@ -195,10 +193,6 @@ bool Matrix::operator==(Matrix const & other) const {
         }
     }
     return true;
-}
-
-bool Matrix::operator!=(Matrix const & other) const {
-    return !((*this) == other);
 }
 
 std::size_t Matrix::row() const { return row_; }
@@ -299,8 +293,6 @@ PYBIND11_MODULE(_matrix, m) {
 
         // equality
         .def("__eq__", &Matrix::operator==);
-        // inequality
-        .def("__ne__", &Matrix::operator!=);
         
     // naive matrix matrix multiplication
     m.def("multiply_naive", &multiply_naive, "");
