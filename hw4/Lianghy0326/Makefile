@@ -1,11 +1,12 @@
 CXX = g++
-CXX_FLAGS = -std=c++11 -O2 -Wall -fPIC -shared
 CXX_INCS = -I./include $(PYBIND_INC_FLAGS)
+CXXFLAGS = -std=c++11 -O2 -Wall -fPIC -shared $(PYTHON_LIB_FLAGS)
+LDFLAGS = -lblas -lmkl_rt
 
 PYBIND_INC_FLAGS = $(shell python3 -m pybind11 --includes)
 PYTHON_LIB_FLAGS = $(shell python3-config --includes --ldflags)
 PYTHON_SUF = $(shell python3-config --extension-suffix)
-MKL_INC = /opt/intel/oneapi/mkl/2023.2.2/include
+MKL_INC = /usr/include/mkl
 
 Target = matrix
 SRC = matrix.cpp
