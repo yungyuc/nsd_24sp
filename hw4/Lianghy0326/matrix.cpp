@@ -84,8 +84,8 @@ bool Matrix::operator==(const Matrix &rhs) const{
     return true;
 }
 // get buffer
-Matrix::buffer_type Matrix::get_buffer() const{
-    return buffer;
+double* Matrix::get_buffer() const{
+    return (double *)buffer.data();
 }
 
 
@@ -142,7 +142,7 @@ Matrix multiply_mkl(const Matrix &m1,const Matrix &m2){
     // create a new matrix
     Matrix result(m1.nrow(),m2.ncol());
     // CBLAS
-    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m1.nrow(), m2.ncol(), m1.ncol(), 1.0, m1.get_buffer().data(), m1.ncol(), m2.get_buffer().data(), m2.ncol(), 0.0, result.get_buffer().data(), result.ncol());
+    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m1.nrow(), m2.ncol(), m1.ncol(), 1.0, m1.get_buffer(), m1.ncol(), m2.get_buffer(), m2.ncol(), 0.0, result.get_buffer(), result.ncol());
     return result;
 }
 // pybind module

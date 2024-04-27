@@ -53,7 +53,7 @@ class Matrix{
         size_t nrow() const; // get row
         size_t ncol() const; // get col
         bool operator==(const Matrix &rhs) const; // operator == : compare two matrix
-        buffer_type get_buffer() const; // get buffer
+        double* get_buffer() const;
         
 
     private:
