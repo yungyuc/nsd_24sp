@@ -48,35 +48,35 @@ size_t CustomAllocator<Type>::deallocated(){
 //========Matrix==============
 // constructor
 Matrix::Matrix(size_t nrow, size_t ncol){
-    this->nrow = nrow;
-    this->ncol = ncol;
+    this->row = nrow;
+    this->col = ncol;
     // buffer the data
-    buffer =  buffer_type(nrow*ncol);
+    buffer =  buffer_type(row*col);
 }
 // operator() : get the value of matrix at row, col
 double Matrix::operator()(size_t nrow,size_t ncol) const{
-    return buffer[nrow*this->ncol+ncol];
+    return buffer[nrow*this->col+ncol];
 }
 // operator() : get the value of matrix at row, col
 double & Matrix::operator()(size_t nrow, size_t ncol){
-    return buffer[nrow*this->ncol+ncol];
+    return buffer[nrow*this->col+ncol];
 }
 // get row
 size_t Matrix::nrow() const{
-    return nrow;
+    return row;
 }
 // get col
 size_t Matrix::ncol() const{
-    return ncol;
+    return col;
 }
 // operator == : compare two matrix
 bool Matrix::operator==(const Matrix &rhs) const{
     // if row and col are not equal, return false
-    if (nrow != rhs.nrow || ncol != rhs.ncol){
+    if (row != rhs.row || col != rhs.col){
         return false;
     }
     // compare the buffer data
-    for (size_t i=0; i<nrow*ncol; i++){
+    for (size_t i=0; i<row*col; i++){
         if (buffer[i] != rhs.buffer[i]){
             return false;
         }

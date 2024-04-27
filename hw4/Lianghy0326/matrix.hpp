@@ -58,8 +58,8 @@ class Matrix{
 
     private:
         // row and column
-        size_t nrow=0;
-        size_t ncol=0;
+        size_t row=0;
+        size_t col=0;
         // buffer data;
         buffer_type buffer;
 
