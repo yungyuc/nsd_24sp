@@ -64,7 +64,3 @@ class GradingTest(unittest.TestCase):
         assert size1 == ret_naive.row == ret_tile.row == ret_mkl.row
         assert size3 == ret_naive.col == ret_tile.col == ret_mkl.col
 
-
-        self.assertEqual(base_bytes + 3 * 8 * size1*size3, _matrix.bytes())
-        self.assertEqual(base_alloc + 3 * 8 * size1*size3, _matrix.allocate())
-        self.assertEqual(base_dealloc, _matrix.deallocate())

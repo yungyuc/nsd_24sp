@@ -67,7 +67,7 @@ class CustomAllocator{
                 throw std::bad_alloc(); // momory allocation failed
             }
             // calculate the bytes of allocated memory
-            const auto bytes = n*sizeof(Type);
+            const size_t bytes = n*sizeof(Type);
             // allocate memory dynamically and point to T
             // malloc return (void *) pointer,透過cast to (T *) pointer.
             // use this memory area to stores T type object. 
@@ -88,18 +88,15 @@ class CustomAllocator{
         // deallocate function
         void deallocate(Type *p, size_t n) noexcept
         {
-            // if p is nullptr, return
-            if (!p){
-                return;
-            }
             // calculate the bytes of deallocated memory
-            const auto bytes = n*sizeof(Type);
+            const size_t bytes = n*sizeof(Type);
             // deallocate memory
             std::free(p);
             // decrease the deallocated memory
             CountByte<Type>::decrease(bytes);
         }
 };
+
 
 // 3. Matrix
 class Matrix{
