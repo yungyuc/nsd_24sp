@@ -62,11 +62,11 @@ double & Matrix::operator()(size_t row, size_t col){
     return buffer[row*this->col+col];
 }
 // get row
-size_t Matrix::get_row() const{
+size_t Matrix::nrow() const{
     return row;
 }
 // get col
-size_t Matrix::get_col() const{
+size_t Matrix::nrow() const{
     return col;
 }
 // operator == : compare two matrix
@@ -91,15 +91,15 @@ Matrix::buffer_type Matrix::get_buffer() const{
 
 // multiply naive
 Matrix multiply_naive(const Matrix &m1,const Matrix &m2){
-    if (m1.get_col() != m2.get_row()){
+    if (m1.ncol() != m2.nrow()){
         throw std::invalid_argument("Matrix size mismatch");
     }
     // create a new matrix
-    Matrix result(m1.get_row(),m2.get_col());
+    Matrix result(m1.nrow(),m2.ncol());
     // multiply the matrix
-    for (size_t i=0; i<m1.get_row(); i++){
-        for (size_t j=0; j<m2.get_col(); j++){
-            for (size_t k=0; k<m1.get_col(); k++){
+    for (size_t i=0; i<m1.nrow(); i++){
+        for (size_t j=0; j<m2.ncol(); j++){
+            for (size_t k=0; k<m1.ncol(); k++){
                 result(i,j) += m1(i,k)*m2(k,j);
             }
         }
@@ -108,20 +108,20 @@ Matrix multiply_naive(const Matrix &m1,const Matrix &m2){
 }
 // multiply tile
 Matrix multiply_tile(const Matrix &m1,const Matrix &m2,size_t tile_size){
-    if (m1.get_col() != m2.get_row()){
+    if (m1.ncol() != m2.nrow()){
         throw std::invalid_argument("Matrix size mismatch");
     }
     // create a new matrix
-    Matrix result(m1.get_row(),m2.get_col());
+    Matrix result(m1.nrow(),m2.ncol());
     // multiply the matrix
-    for (size_t i=0; i<m1.get_row(); i+=tile_size){
-        for (size_t j=0; j<m2.get_col(); j+=tile_size){
-            for (size_t k=0; k<m1.get_col(); k+=tile_size){
-                size_t limit = std::min(m1.get_row(),i+tile_size);
+    for (size_t i=0; i<m1.nrow(); i+=tile_size){
+        for (size_t j=0; j<m2.ncol(); j+=tile_size){
+            for (size_t k=0; k<m1.ncol(); k+=tile_size){
+                size_t limit = std::min(m1.nrow(),i+tile_size);
                 for (size_t ii=i; ii<limit; ii++){
-                    size_t limit2 = std::min(m2.get_col(),j+tile_size);
+                    size_t limit2 = std::min(m2.ncol(),j+tile_size);
                     for (size_t jj=j; jj<limit2; jj++){
-                        size_t limit3 = std::min(m1.get_col(),k+tile_size);
+                        size_t limit3 = std::min(m1.ncol(),k+tile_size);
                         double sum = 0;
                         for (size_t kk=k; kk<limit3; kk++){
                             sum += m1(ii,kk)*m2(kk,jj);
@@ -136,13 +136,13 @@ Matrix multiply_tile(const Matrix &m1,const Matrix &m2,size_t tile_size){
 }
 // muliply mkl
 Matrix multiply_mkl(const Matrix &m1,const Matrix &m2){
-    if (m1.get_col() != m2.get_row()){
+    if (m1.ncol() != m2.nrow()){
             throw std::invalid_argument("Matrix size mismatch");
         }
     // create a new matrix
-    Matrix result(m1.get_row(),m2.get_col());
+    Matrix result(m1.nrow(),m2.ncol());
     // CBLAS
-    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m1.get_row(), m2.get_col(), m1.get_col(), 1.0, m1.get_buffer().data(), m1.get_col(), m2.get_buffer().data(), m2.get_col(), 0.0, result.get_buffer().data(), result.get_col());
+    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, m1.nrow(), m2.ncol(), m1.ncol(), 1.0, m1.get_buffer().data(), m1.ncol(), m2.get_buffer().data(), m2.ncol(), 0.0, result.get_buffer().data(), result.ncol());
     return result;
 }
 // pybind module
@@ -158,8 +158,8 @@ PYBIND11_MODULE(_matrix, m)
         .def("__getitem__", [](Matrix &m, std::pair<size_t, size_t> const & p){
             return m(p.first, p.second);
         })
-        .def_property_readonly("row", &Matrix::get_row)
-        .def_property_readonly("col", &Matrix::get_col)
+        .def_property_readonly("row", &Matrix::nrow)
+        .def_property_readonly("col", &Matrix::ncol)
         .def("__eq__", &Matrix::operator==);
     m.def("multiply_naive", &multiply_naive);
     m.def("multiply_tile", &multiply_tile);

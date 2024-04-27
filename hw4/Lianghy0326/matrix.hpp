@@ -50,8 +50,8 @@ class Matrix{
         Matrix(size_t row, size_t col); //constructor
         double operator()(size_t row, size_t col) const; // operator() : get the value of matrix at row, col
         double & operator()(size_t row, size_t col); // operator() : get the value of matrix at row, col
-        size_t get_row() const; // get row
-        size_t get_col() const; // get col
+        size_t nrow() const; // get row
+        size_t ncol() const; // get col
         bool operator==(const Matrix &rhs) const; // operator == : compare two matrix
         buffer_type get_buffer() const; // get buffer
         
