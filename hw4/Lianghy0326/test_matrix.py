@@ -36,13 +36,6 @@ class GradingTest(unittest.TestCase):
         self.assertTrue(mat1 is not mat2)
 
     def test_multiply_match(self):
-
-        '''
-        unit test matrix multiplication correctness
-            - naive
-            - tile
-            - mkl
-        '''
         size1 = 100
         size2 = 200
         size3 = 300

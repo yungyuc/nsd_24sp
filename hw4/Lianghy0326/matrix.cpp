@@ -66,7 +66,7 @@ size_t Matrix::nrow() const{
     return row;
 }
 // get col
-size_t Matrix::nrow() const{
+size_t Matrix::ncol() const{
     return col;
 }
 // operator == : compare two matrix
