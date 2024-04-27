@@ -34,12 +34,12 @@ class Matrix {
         Matrix(size_t nrow, size_t ncol);
         Matrix(size_t nrow, size_t ncol, std::vector<double> const & vec);
         // Matrix & operator=(std::vector<double> const & vec);
-        Matrix(Matrix const & other);
+        // Matrix(Matrix const & other);
         // Matrix & operator=(Matrix const & other);
         // Matrix(Matrix && other);
         // Matrix & operator=(Matrix && other);
 
-        ~Matrix();
+        // ~Matrix();
 
         double   operator() (size_t row, size_t col) const;
         double & operator() (size_t row, size_t col);

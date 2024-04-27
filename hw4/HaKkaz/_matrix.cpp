@@ -67,14 +67,14 @@ Matrix::Matrix(size_t nrow, size_t ncol, std::vector<double> const & numbers){
     }
 }
 
-Matrix::Matrix(Matrix const & other){
-    n_row = other.n_row;
-    n_col = other.n_col;
-    buf = vector<double, CustomAllocator<double>>(n_row * n_col);
-    for (size_t i = 0; i < n_row * n_col; i++){
-        buf[i] = other.buf[i];
-    }
-}
+// Matrix::Matrix(Matrix const & other){
+//     n_row = other.n_row;
+//     n_col = other.n_col;
+//     buf = vector<double, CustomAllocator<double>>(n_row * n_col);
+//     for (size_t i = 0; i < n_row * n_col; i++){
+//         buf[i] = other.buf[i];
+//     }
+// }
 
 double Matrix::operator() (size_t row, size_t col) const{
     return buf[index(row, col)];
@@ -104,9 +104,9 @@ bool Matrix::operator==(Matrix const & other) const{
     return true;
 }
 
-Matrix::~Matrix() {
-    // Add any cleanup code here if necessary
-}
+// Matrix::~Matrix() {
+//     // Add any cleanup code here if necessary
+// }
 
 double * Matrix::buffer() const{
     return (double *)buf.data();
@@ -185,7 +185,7 @@ PYBIND11_MODULE(_matrix, m){
         .def(pybind11::init<>())
         .def(pybind11::init<size_t, size_t>())
         .def(pybind11::init<size_t, size_t, std::vector<double> const &>())
-        .def(pybind11::init<Matrix const &>())
+        // .def(pybind11::init<Matrix const &>())
         .def("__setitem__", [](Matrix &m, std::pair<size_t, size_t> const & p, double val){
             m(p.first, p.second) = val;
         })
