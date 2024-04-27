@@ -14,41 +14,41 @@ class CountByte{
     public:
         // increase function - increase allocated
         static void increase(size_t inc){
-            allocated += inc;
+            allocated_num += inc;
         };
         // decrease function - increase for de_allocated
         static void decrease(size_t dec){
-            de_allocated += dec;
+            de_allocated_num += dec;
         };
         // 3 functions
         static size_t allocated(){
-            return allocated;
+            return allocated_num;
         }
         static size_t deallocated(){
-            return de_allocated;
+            return de_allocated_num;
         }
         static size_t bytes(){
-            return allocated-deallocated;
+            return allocated_num-de_allocated_num;
         }
 
     // private member 
     private:
         // allocated part
-        static size_t allocated;
-        static size_t de_allocated;
+        static size_t allocated_num;
+        static size_t de_allocated_num;
 };
 // initialize the static member
 template <class Type>
-size_t CountByte<Type>::allocated = 0;
+size_t CountByte<Type>::allocated_num = 0;
 template <class Type>
-size_t CountByte<Type>::de_allocated = 0;
+size_t CountByte<Type>::de_allocated_num = 0;
 
 
 // 2. CustomAllocator
 template <class Type>
 class CustomAllocator{
     public:
-        using value_type = T;
+        using value_type = Type;
         CustomAllocator() noexcept = default;
         
         // Allocate function
@@ -56,7 +56,7 @@ class CustomAllocator{
         { 
             // n : 分配的數量
             // check if n is bigger than limit
-            if (n>std::numeric_limits<size_t>::max()/sizeof(Type)){
+            if (n > std::numeric_limits<std::size_t>::max()/sizeof(Type)){
                 throw std::bad_alloc(); // momory allocation failed
             }
             // calculate the bytes of allocated memory
