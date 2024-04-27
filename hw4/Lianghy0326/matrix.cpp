@@ -106,7 +106,7 @@ Matrix multiply_mkl(const Matrix &m1,const Matrix &m2){
 // pybind module
 PYBIND11_MODULE(_matrix, m)
 {
-    m.doc() = "Matrix mutiplication module"
+    m.doc() = "Matrix mutiplication module";
     pybind11::class_<Martix>(m,"Matrix")
         .def(pybind11::init<size_t, size_t>())
 
@@ -118,7 +118,7 @@ PYBIND11_MODULE(_matrix, m)
         })
         .def_property_readonly("row", &Matrix::get_row)
         .def_property_readonly("col", &Matrix::get_col)
-        .def("__eq__", &Matrix::operator==)
+        .def("__eq__", &Matrix::operator==);
     m.def("multiply_naive", &multiply_naive);
     m.def("multiply_tile", &multiply_tile);
     m.def("multiply_mkl", &multiply_mkl);
