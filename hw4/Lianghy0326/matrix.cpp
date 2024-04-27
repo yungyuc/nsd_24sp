@@ -3,6 +3,48 @@
 #include <pybind11/stl.h>
 #include <pybind11/operators.h>
 
+// CustomAllocator
+template <typename Type> 
+Type *CustomAllocator<Type>::allocate(size_t n){
+    // allocate the memory
+    Type *p = (Type *)std::malloc(n*sizeof(Type));
+    // if the memory is not allocated, throw an exception
+    if (!p){
+        throw std::bad_alloc();
+    }
+    // calculate the bytes of allocated memory
+    const size_t bytes = n*sizeof(Type);
+    byte_num += bytes; // increase the allocated memory
+    allocated_num += bytes; // increase the allocated memory
+
+    return p; // return the pointer of allocated memory
+}
+// deallocate function
+template <typename Type>
+void CustomAllocator<Type>::deallocate(Type *p, size_t n){
+    // calculate the bytes of deallocated memory
+    const size_t bytes = n*sizeof(Type);
+    byte_num -= bytes; // decrease the allocated memory
+    de_allocated_num += bytes; // increase the deallocated memory
+    // free the memory
+    std::free(p);
+}
+// bytes function
+template <typename Type>
+size_t CustomAllocator<Type>::bytes(){
+    return byte_num;
+}
+// allocated function
+template <typename Type>
+size_t CustomAllocator<Type>::allocated(){
+    return allocated_num;
+}
+// deallocated function
+template <typename Type>
+size_t CustomAllocator<Type>::deallocated(){
+    return de_allocated_num;
+}
+
 //========Matrix==============
 // constructor
 Matrix::Matrix(size_t row, size_t col){

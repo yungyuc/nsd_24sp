@@ -16,7 +16,7 @@ using namespace std;
 // using buffer = std::vector<double,CustomAllocator<double>>;
 
 // 2. CustomAllocator
-template <class Type>
+template <typename Type>
 class CustomAllocator{
     private:
         static size_t byte_num;
@@ -26,54 +26,11 @@ class CustomAllocator{
         using value_type = Type;
         CustomAllocator() noexcept = default;
 
-        // Allocate function
-        Type * allocate(size_t n)
-        { 
-            // n : 分配的數量
-            // check if n is bigger than limit
-            if (n > std::numeric_limits<std::size_t>::max()/sizeof(Type)){
-                throw std::bad_alloc(); // momory allocation failed
-            }
-            // calculate the bytes of allocated memory
-            const size_t bytes = n*sizeof(Type);
-            // allocate memory dynamically and point to T
-            // malloc return (void *) pointer,透過cast to (T *) pointer.
-            // use this memory area to stores T type object. 
-            // " T *p means p is a pointer to T type object."
-            Type *p = static_cast<Type*>(std::malloc(bytes)); // malloc bytes and return the pointer, cast to Type.
-            // if p is nullptr, means memory allocation failed
-            if (!p){
-                throw std::bad_alloc();
-            }
-            byte_num += bytes; // increase the allocated memory
-            allocated_num += bytes; // increase the allocated memory
-
-            return p; // return the pointer of allocated memory
-        }
-        // deallocate function
-        void deallocate(Type *p, size_t n) noexcept
-        {
-            // calculate the bytes of deallocated memory
-            const size_t bytes = n*sizeof(Type);
-            byte_num -= bytes; // decrease the allocated memory
-            de_allocated_num += bytes; // increase the deallocated memory
-            // free the memory
-            std::free(p);
-        }
-        // 
-
-        // bytes function
-        static size_t bytes()
-        {
-            return byte_num;
-        }
-        static size_t allocated(){
-            return allocated_num;
-        };
-        static size_t deallocated()
-        {
-            return de_allocated_num;
-        };
+        Type *allocate(Type *p,size_t n)
+        void deallocate(Type *p, size_t n);
+        static size_t bytes();
+        static size_t allocated();
+        static size_t deallocated();
         
 };
 // initialize the static member
