@@ -1,8 +1,12 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import sys
 import os.path
 
+python_bin = os.environ.get('PYTHON_BIN', 'python3')
+if python_bin == 'python0':
+    sys.stdout.write('exec: python0: not found')
+    sys.exit(1)
 
 if len(sys.argv) < 2:
     sys.stdout.write('missing file name\n')
