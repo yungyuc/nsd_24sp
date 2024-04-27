@@ -49,11 +49,11 @@ class GradingTest(unittest.TestCase):
         t_size = 16
 
         mat1 = self.make_matrices(size1, size2) # 100 x 200
-        self.assertEqual(8 * size1*size2, _matrix.bytes())
+        self.assertEqual(8 * size1*size2, _matrix.get_bytes())
         mat2 = self.make_matrices(size2, size3) # 200 x 300
-        self.assertEqual(8 * size1*size2 + 8 * size2*size3, _matrix.bytes())
+        self.assertEqual(8 * size1*size2 + 8 * size2*size3, _matrix.get_bytes())
 
-        base_bytes = _matrix.bytes()
+        base_bytes = _matrix.get_bytes()
         base_alloc = _matrix.allocate()
         base_dealloc = _matrix.deallocate()
 
