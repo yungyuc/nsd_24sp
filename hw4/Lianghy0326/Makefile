@@ -8,7 +8,7 @@ PYTHON_LIB_FLAGS = $(shell python3-config --includes --ldflags)
 PYTHON_SUF = $(shell python3-config --extension-suffix)
 MKL_INC = /usr/include/mkl
 
-Target = matrix
+Target = _matrix
 SRC = matrix.cpp
 SRC_DIR = ./
 
