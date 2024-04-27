@@ -6,63 +6,68 @@ import timeit
 import unittest
 
 class GradingTest(unittest.TestCase):
+
+    def make_matrices(self, nrow, ncol):
+
+        mat = _matrix.Matrix(nrow, ncol)
+
+        for i in range(nrow):
+            for j in range(ncol):
+                mat[i,j] = i*ncol+j+1
+
+        return mat
+
     def test_basic(self):
-        size = 100
-        mat1, mat2, mat3, *_ = self.make_matrices(size)
-        for i in [mat1.row, mat1.col, mat2.row, mat2.col, mat3.row, mat3.col]:
-            self.assertEqual(size, i)
-        self.assertEqual(2, mat1[0, 1])
-        self.assertEqual(size + 2, mat1[1, 1])
-        self.assertEqual(size * 2, mat1[1, size - 1])
-        self.assertEqual(size * size, mat1[size - 1, size - 1])
-        for i in range(mat1.row):
-            for j in range(mat1.col):
-                self.assertNotEqual(0, mat1[i, j])
-                self.assertEqual(mat1[i, j], mat2[i, j])
-                self.assertEqual(0, mat3[i, j])
-            self.assertEqual(mat1, mat2)
-            self.assertTrue(mat1 is not mat2)
+        nrow = 100
+        ncol = 200
 
-    def make_matrices(self, size):
-        mat1 = _matrix.Matrix(size, size)
-        mat2 = _matrix.Matrix(size, size)
-        mat3 = _matrix.Matrix(size, size)
+        mat1 = self.make_matrices(nrow, ncol)
+        mat2 = self.make_matrices(nrow, ncol)
+        mat3 = self.make_matrices(nrow, ncol)
 
-        for it in range(size):
-            for jt in range(size):
-                mat1[it, jt] = it * size + jt + 1
-                mat2[it, jt] = it * size + jt + 1
-                mat3[it, jt] = 0
+        assert nrow == mat1.row == mat2.row == mat3.row
+        assert ncol == mat1.col == mat2.col == mat3.col
 
-        return mat1, mat2, mat3
-    
-    def test_match_naive_mkl(self):
-        size = 100
-        mat1, mat2, *_ = self.make_matrices(size)
+        for i in range(nrow):
+            for j in range(ncol):
+                assert (i * ncol + j + 1) == mat1[i,j] == mat2[i,j] == mat3[i,j]
+
+        self.assertEqual(mat1, mat2)
+        self.assertTrue(mat1 is not mat2)
+
+    def test_multiply_match(self):
+
+        '''
+        unit test matrix multiplication correctness
+            - naive
+            - tile
+            - mkl
+        '''
+        size1 = 100
+        size2 = 200
+        size3 = 300
+        t_size = 16
+
+        mat1 = self.make_matrices(size1, size2)
+        self.assertEqual(8 * size1*size2, _matrix.bytes())
+        mat2 = self.make_matrices(size2, size3)
+        self.assertEqual(8 * size1*size2 + 8 * size2*size3, _matrix.bytes())
+
+        base_bytes = _matrix.bytes()
+        base_alloc = _matrix.allocated()
+        base_dealloc = _matrix.deallocated()
 
         ret_naive = _matrix.multiply_naive(mat1, mat2)
+        ret_tile = _matrix.multiply_tile(mat1, mat2, t_size)
         ret_mkl = _matrix.multiply_mkl(mat1, mat2)
 
-        for i in [mat1.row, mat1.col, mat2.row, mat2.col]:
-            self.assertEqual(size, i)
-        self.assertEqual(ret_naive, ret_mkl)
-        self.assertNotEqual(mat1, ret_mkl)
-
-    def test_zero(self):
-        size = 100
-        mat1, mat2, mat3, *_ = self.make_matrices(size)
-
-        ret_naive = _matrix.multiply_naive(mat1, mat3)
-        ret_mkl = _matrix.multiply_mkl(mat1, mat3)
-
-        for i in [ret_naive.row, ret_naive.col, ret_mkl.row, ret_mkl.col]:
-            self.assertEqual(size, i)
+        assert size1 == ret_naive.row == ret_tile.row == ret_mkl.row
+        assert size3 == ret_naive.col == ret_tile.col == ret_mkl.col
 
         for i in range(ret_naive.row):
             for j in range(ret_naive.col):
-                self.assertEqual(0, ret_naive[i, j])
-                self.assertEqual(0, ret_mkl[i, j])
+                assert ret_naive[i,j] == ret_tile[i,j] == ret_mkl[i,j]
 
-
-if __name__ == "__main__":
-    unittest.main()
+        self.assertEqual(base_bytes + 3 * 8 * size1*size3, _matrix.bytes())
+        self.assertEqual(base_alloc + 3 * 8 * size1*size3, _matrix.allocated())
+        self.assertEqual(base_dealloc, _matrix.deallocated())
