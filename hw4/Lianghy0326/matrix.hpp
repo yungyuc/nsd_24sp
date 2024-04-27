@@ -47,9 +47,9 @@ class Matrix{
     public:
         // buffer type 
         using buffer_type = std::vector<double,CustomAllocator<double>>;
-        Matrix(size_t row, size_t col); //constructor
-        double operator()(size_t row, size_t col) const; // operator() : get the value of matrix at row, col
-        double & operator()(size_t row, size_t col); // operator() : get the value of matrix at row, col
+        Matrix(size_t nrow, size_t ncol); //constructor
+        double operator()(size_t nrow, size_t ncol) const; // operator() : get the value of matrix at row, col
+        double & operator()(size_t nrow, size_t ncol); // operator() : get the value of matrix at row, col
         size_t nrow() const; // get row
         size_t ncol() const; // get col
         bool operator==(const Matrix &rhs) const; // operator == : compare two matrix
@@ -58,8 +58,8 @@ class Matrix{
 
     private:
         // row and column
-        size_t row=0;
-        size_t col=0;
+        size_t nrow=0;
+        size_t ncol=0;
         // buffer data;
         buffer_type buffer;
 

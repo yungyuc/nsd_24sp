@@ -47,36 +47,36 @@ size_t CustomAllocator<Type>::deallocated(){
 
 //========Matrix==============
 // constructor
-Matrix::Matrix(size_t row, size_t col){
-    this->row = row;
-    this->col = col;
+Matrix::Matrix(size_t nrow, size_t ncol){
+    this->nrow = nrow;
+    this->ncol = ncol;
     // buffer the data
-    buffer =  buffer_type(row*col);
+    buffer =  buffer_type(nrow*ncol);
 }
 // operator() : get the value of matrix at row, col
-double Matrix::operator()(size_t row,size_t col) const{
-    return buffer[row*this->col+col];
+double Matrix::operator()(size_t nrow,size_t ncol) const{
+    return buffer[nrow*this->ncol+ncol];
 }
 // operator() : get the value of matrix at row, col
-double & Matrix::operator()(size_t row, size_t col){
-    return buffer[row*this->col+col];
+double & Matrix::operator()(size_t nrow, size_t ncol){
+    return buffer[nrow*this->ncol+ncol];
 }
 // get row
 size_t Matrix::nrow() const{
-    return row;
+    return nrow;
 }
 // get col
 size_t Matrix::ncol() const{
-    return col;
+    return ncol;
 }
 // operator == : compare two matrix
 bool Matrix::operator==(const Matrix &rhs) const{
     // if row and col are not equal, return false
-    if (row != rhs.row || col != rhs.col){
+    if (nrow != rhs.nrow || ncol != rhs.ncol){
         return false;
     }
     // compare the buffer data
-    for (size_t i=0; i<row*col; i++){
+    for (size_t i=0; i<nrow*ncol; i++){
         if (buffer[i] != rhs.buffer[i]){
             return false;
         }
@@ -158,8 +158,8 @@ PYBIND11_MODULE(_matrix, m)
         .def("__getitem__", [](Matrix &m, std::pair<size_t, size_t> const & p){
             return m(p.first, p.second);
         })
-        .def_property_readonly("row", &Matrix::nrow)
-        .def_property_readonly("col", &Matrix::ncol)
+        .def_property_readonly("nrow", &Matrix::nrow)
+        .def_property_readonly("ncol", &Matrix::ncol)
         .def("__eq__", &Matrix::operator==);
     m.def("multiply_naive", &multiply_naive);
     m.def("multiply_tile", &multiply_tile);
