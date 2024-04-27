@@ -3,6 +3,13 @@
 
 #include <iostream>
 #include <vector>
+#include <limits>
+#include<stdexcept>
+#include<mkl/mkl.h>
+#include<atomic>
+#include<cstddef>
+#include<new>
+#include<cstdlib>
 
 
 using namespace std;
