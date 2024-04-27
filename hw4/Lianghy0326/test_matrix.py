@@ -54,8 +54,8 @@ class GradingTest(unittest.TestCase):
         self.assertEqual(8 * size1*size2 + 8 * size2*size3, _matrix.bytes())
 
         base_bytes = _matrix.bytes()
-        base_alloc = _matrix.allocated()
-        base_dealloc = _matrix.deallocated()
+        base_alloc = _matrix.allocate()
+        base_dealloc = _matrix.deallocate()
 
         ret_naive = _matrix.multiply_naive(mat1, mat2)
         ret_tile = _matrix.multiply_tile(mat1, mat2, t_size)
