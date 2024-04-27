@@ -8,14 +8,14 @@ PYTHON_LIB_FLAGS = $(shell python3-config --includes --ldflags)
 PYTHON_SUF = $(shell python3-config --extension-suffix)
 MKL_INC = /usr/include/mkl
 
-Target = _matrix
+TARGET = _matrix
 SRC = matrix.cpp
-SRC_DIR = ./
+SRC_DIR = .
 
 PERF_SRC = perf_matrix.py
 PERF_OUTPUT = performance.txt
 PYTEST = test_matrix.py
-LIBS = matrix$(PYTHON_SUF)
+LIBS = _matrix$(PYTHON_SUF)
 
 .PHONY: test clean
 
