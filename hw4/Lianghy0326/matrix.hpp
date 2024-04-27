@@ -72,7 +72,7 @@ class CustomAllocator{
             // malloc return (void *) pointer,透過cast to (T *) pointer.
             // use this memory area to stores T type object. 
             // " T *p means p is a pointer to T type object."
-            T *p = static_cast<Type*>(std::malloc(bytes)); // malloc bytes and return the pointer, cast to Type.
+            Type *p = static_cast<Type*>(std::malloc(bytes)); // malloc bytes and return the pointer, cast to Type.
             // if p is nullptr, means memory allocation failed
             if (!p){
                 throw std::bad_alloc();
@@ -106,7 +106,6 @@ class Matrix{
     public:
         // buffer type 
         using buffer_type = std::vector<double,CustomAllocator<double>>;
-
         Matrix(size_t row, size_t col); //constructor
         double operator()(size_t row, size_t col) const; // operator() : get the value of matrix at row, col
         double & operator()(size_t row, size_t col); // operator() : get the value of matrix at row, col
