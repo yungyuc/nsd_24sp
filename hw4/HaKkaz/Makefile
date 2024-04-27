@@ -14,14 +14,6 @@ PERF_OUTPUT = performance.txt
 PYTEST = test_matrix.py
 LIBS = ./_matrix$(PYTHON_SUF)
 
-.PHONY: test clean
-
-test: $(LIBS) $(PYTEST)
-	python3 -m pytest -v
-
-perf: $(LIBS)
-	rm -f $(PERF_OUTPUT)
-	python3 $(PERF_SRC)
 
 $(LIBS): $(SRC)
 	$(CXX) $(CXXFLAGS) -I$(MKL_INC) -o $@ $^ $(LDFLAGS)

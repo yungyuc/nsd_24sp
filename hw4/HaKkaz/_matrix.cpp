@@ -3,16 +3,65 @@
 #include <pybind11/stl.h>
 #include <pybind11/operators.h>
 
+template<typename T> T *CustomAllocator<T>::allocate(size_t n){
+    const size_t bytes = n * sizeof(T);
+    T *ptr = (T *)(malloc(bytes));
+
+    if (ptr == nullptr){
+        throw std::bad_alloc();
+    }
+
+    m_byte += bytes;
+    m_allocated += bytes;
+
+    return ptr; 
+}
+
+template<typename T> void CustomAllocator<T>::deallocate(T *ptr, size_t n){
+    const size_t bytes = n * sizeof(T);
+    m_deallocated += bytes;
+    m_byte -= bytes; 
+    free(ptr);
+}
+
+template<typename T> size_t CustomAllocator<T>::bytes(){
+    return m_byte;
+}
+
+template<typename T> size_t CustomAllocator<T>::allocated(){
+    return m_allocated;
+}
+
+template<typename T> size_t CustomAllocator<T>::deallocated(){
+    return m_deallocated;
+}
+
+
+
+Matrix::Matrix(){
+    this->n_row = 0;
+    this->n_col = 0;
+    this->buf = vector<double, CustomAllocator<double>>();
+}
+
+
 Matrix::Matrix(size_t nrow, size_t ncol){
     n_row = nrow;
     n_col = ncol;
-    buf = (double *) calloc(nrow * ncol, sizeof(double));
+    buf = vector<double, CustomAllocator<double>>(nrow * ncol);
+    for(size_t i = 0; i < nrow * ncol; i++){
+        buf[i] = 0;
+    }
 }
+
 
 Matrix::Matrix(size_t nrow, size_t ncol, std::vector<double> const & numbers){
     n_row = nrow;
     n_col = ncol;
-    buf = new double[nrow * ncol];
+    buf = vector<double, CustomAllocator<double>>(nrow * ncol);
+    if(numbers.size() != n_row * n_col){
+        throw std::invalid_argument("size of vector does not match matrix size");
+    }
     for (size_t i = 0; i < nrow * ncol; i++){
         buf[i] = numbers[i];
     }
@@ -21,14 +70,10 @@ Matrix::Matrix(size_t nrow, size_t ncol, std::vector<double> const & numbers){
 Matrix::Matrix(Matrix const & other){
     n_row = other.n_row;
     n_col = other.n_col;
-    buf = new double[n_row * n_col];
+    buf = vector<double, CustomAllocator<double>>(n_row * n_col);
     for (size_t i = 0; i < n_row * n_col; i++){
         buf[i] = other.buf[i];
     }
-}
-
-Matrix::~Matrix(){
-    delete[] buf;
 }
 
 double Matrix::operator() (size_t row, size_t col) const{
@@ -59,8 +104,12 @@ bool Matrix::operator==(Matrix const & other) const{
     return true;
 }
 
+Matrix::~Matrix() {
+    // Add any cleanup code here if necessary
+}
+
 double * Matrix::buffer() const{
-    return buf;
+    return (double *)buf.data();
 }
 
 size_t Matrix::index(size_t row, size_t col) const{
@@ -133,6 +182,7 @@ Matrix multiply_mkl(const Matrix &m1, const Matrix &m2){
 PYBIND11_MODULE(_matrix, m){
     m.doc() = "Matrix multiplication module";
     pybind11::class_<Matrix>(m, "Matrix")
+        .def(pybind11::init<>())
         .def(pybind11::init<size_t, size_t>())
         .def(pybind11::init<size_t, size_t, std::vector<double> const &>())
         .def(pybind11::init<Matrix const &>())
@@ -148,4 +198,8 @@ PYBIND11_MODULE(_matrix, m){
     m.def("multiply_naive", &multiply_naive);
     m.def("multiply_tile", &multiply_tile);
     m.def("multiply_mkl", &multiply_mkl);
+
+    m.def("bytes", &CustomAllocator<double>::bytes);
+	m.def("allocated", &CustomAllocator<double>::allocated);
+	m.def("deallocated", &CustomAllocator<double>::deallocated);
 }
