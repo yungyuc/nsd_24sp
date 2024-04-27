@@ -165,8 +165,8 @@ PYBIND11_MODULE(_matrix, m)
     m.def("multiply_tile", &multiply_tile);
     m.def("multiply_mkl", &multiply_mkl);
 
-    m.def("allocate", &CustomAllocator<double>::allocated, "Allocate memory");
-    m.def("deallocate", &CustomAllocator<double>::deallocated, "Deallocate memory");
+    m.def("allocated", &CustomAllocator<double>::allocated, "Allocate memory");
+    m.def("deallocated", &CustomAllocator<double>::deallocated, "Deallocate memory");
     m.def("bytes", &CustomAllocator<double>::bytes, "Get bytes");
 
 }
