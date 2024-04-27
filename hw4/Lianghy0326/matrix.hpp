@@ -63,7 +63,7 @@ class CustomAllocator{
         // 
 
         // bytes function
-        static size_t bytes() const
+        static size_t bytes()
         {
             return byte_num;
         }
