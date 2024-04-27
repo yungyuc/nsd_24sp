@@ -3,15 +3,84 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include <atomic>
 #include <cassert>
+#include <limits>
+#include <type_traits>
 #include <utility>
 #include <vector>
+
+/* static class to store counters of allocated/deallocated bytes for type T */
+template <class T>
+class Counter {
+ private:
+  static std::atomic_size_t m_allocated;
+  static std::atomic_size_t m_deallocated;
+
+ public:
+  static void increase(size_t n) { m_allocated += n; }
+  static void decrease(size_t n) { m_deallocated += n; }
+  static size_t allocated() { return m_allocated; }
+  static size_t deallocated() { return m_deallocated; }
+  static size_t bytes() { return m_allocated - m_deallocated; }
+};
+template <class T>
+std::atomic_size_t Counter<T>::m_allocated{0};
+template <class T>
+std::atomic_size_t Counter<T>::m_deallocated{0};
+
+/** Custom allocator tracking allocated & deallocated bytes for all Matrix
+ * Need no member variables since Counter is used for global counts
+ */
+template <class T>
+struct CustomAllocator {
+  using value_type = T;
+  CustomAllocator() noexcept = default;
+  template <class U>
+  CustomAllocator(const CustomAllocator<U> &) noexcept {};
+  T *allocate(std::size_t n) {
+    if (n > std::numeric_limits<std::size_t>::max() / sizeof(T))
+      throw std::bad_alloc();
+    const std::size_t bytes = n * sizeof(T);
+    T *p = static_cast<T *>(std::malloc(bytes));
+    if (p == nullptr) throw std::bad_alloc();
+    Counter<T>::increase(bytes);
+    return p;
+  }
+  void deallocate(T *p, std::size_t n) noexcept {
+    std::free(p);
+    Counter<T>::decrease(n * sizeof(T));
+  }
+};
+
+/* helpers to determine template classes are equal */
+template <typename T, typename U>
+struct is_same : std::false_type {};
+template <typename T>
+struct is_same<T, T> : std::true_type {};
+template <typename T, typename U>
+constexpr bool eqTypes() {
+  return is_same<T, U>::value;
+}
+
+/* traits for CustomAllocator */
+template <class T, class U>
+constexpr bool operator==(const CustomAllocator<T> &,
+                          const CustomAllocator<U> &) noexcept {
+  return eqTypes<T, U>();
+}
+
+template <class T, class U>
+constexpr bool operator!=(const CustomAllocator<T> &,
+                          const CustomAllocator<U> &) noexcept {
+  return !eqTypes<T, U>();
+}
 
 class Matrix {
  public:
   const size_t nrow = 0;
   const size_t ncol = 0;
-  std::vector<double> m_buffer;
+  std::vector<double, CustomAllocator<double>> m_buffer;
 
  public:
   size_t size() const { return nrow * ncol; }
@@ -92,4 +161,8 @@ PYBIND11_MODULE(_matrix, m) {
 
   m.def("multiply_naive", &multiply_naive);
   m.def("multiply_mkl", &multiply_mkl);
+
+  m.def("allocated", &Counter<double>::allocated);
+  m.def("deallocated", &Counter<double>::deallocated);
+  m.def("bytes", &Counter<double>::bytes);
 }
