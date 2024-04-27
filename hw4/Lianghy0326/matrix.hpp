@@ -61,7 +61,7 @@ class CustomAllocator{
             std::free(p);
         }
         // bytes function
-        size_t bytes() const
+        size_t get_bytet() const
         {
             return byte_num;
         }
