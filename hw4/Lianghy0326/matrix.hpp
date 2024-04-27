@@ -25,7 +25,7 @@ class CustomAllocator{
     public:
         using value_type = Type;
         CustomAllocator() noexcept = default;
-        
+
         // Allocate function
         Type * allocate(size_t n)
         { 
@@ -60,11 +60,21 @@ class CustomAllocator{
             // free the memory
             std::free(p);
         }
+        // 
+
         // bytes function
-        size_t get_bytes() const
+        static size_t bytes() const
         {
             return byte_num;
         }
+        static size_t allocated(){
+            return allocated_num;
+        };
+        static size_t deallocated()
+        {
+            return de_allocated_num;
+        };
+        
 };
 // initialize the static member
 template <class Type>
@@ -73,6 +83,7 @@ template <class Type>
 size_t CustomAllocator<Type>::allocated_num = 0;
 template <class Type>
 size_t CustomAllocator<Type>::de_allocated_num = 0;
+
 
 // 3. Matrix
 class Matrix{
