@@ -55,10 +55,15 @@ Follow the format to add your project:
    `Corner Stitching <kevinshlo/README.md>`__:
    https://github.com/kevinshlo/CornerStitching
 
-7. `QuentinDucoulombier <https://github.com/QuentinDucoulombier>`__ for
+7. `Ananaee <https://github.com/Ananaee>`__ for
+   `GameStrategy <Ananaee/README.md>`__:
+   https://github.com/Ananaee/GameStrategy
+
+8. `QuentinDucoulombier <https://github.com/QuentinDucoulombier>`__ for
    `Project subject <QuentinDucoulombier/README.md>`__:
    https://github.com/QuentinDucoulombier/DeliveryOptimizer
 
-8. `zona8815 <https://github.com/zona8815>`__ for
+9. `zona8815 <https://github.com/zona8815>`__ for
    `Hardware Aging Acceleration <zona8815/README.rst>`__:
    https://github.com/zona8815/Hardware-Aging-Acceleration
+
