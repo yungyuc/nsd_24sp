@@ -25,8 +25,8 @@ class GradingTest(unittest.TestCase):
         mat2 = self.make_matrices(nrow, ncol)
         mat3 = self.make_matrices(nrow, ncol)
 
-        assert nrow == mat1.row == mat2.row == mat3.row
-        assert ncol == mat1.col == mat2.col == mat3.col
+        assert nrow == mat1.nrow == mat2.nrow == mat3.nrow
+        assert ncol == mat1.ncol == mat2.ncol == mat3.ncol
 
         for i in range(nrow):
             for j in range(ncol):
@@ -54,6 +54,6 @@ class GradingTest(unittest.TestCase):
         ret_tile = _matrix.multiply_tile(mat1, mat2, t_size)
         ret_mkl = _matrix.multiply_mkl(mat1, mat2)
 
-        assert size1 == ret_naive.row == ret_tile.row == ret_mkl.row
-        assert size3 == ret_naive.col == ret_tile.col == ret_mkl.col
+        assert size1 == ret_naive.nrow == ret_tile.nrow == ret_mkl.nrow
+        assert size3 == ret_naive.ncol == ret_tile.ncol == ret_mkl.ncol
 
