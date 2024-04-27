@@ -15,45 +15,13 @@
 using namespace std;
 // using buffer = std::vector<double,CustomAllocator<double>>;
 
-// 1. Count the byte of the allocated memory
-template <class Type>
-class CountByte{
-    public:
-        // increase function - increase allocated
-        static void increase(size_t inc){
-            allocated_num += inc;
-        };
-        // decrease function - increase for de_allocated
-        static void decrease(size_t dec){
-            de_allocated_num += dec;
-        };
-        // 3 functions
-        static size_t allocated(){
-            return allocated_num;
-        }
-        static size_t deallocated(){
-            return de_allocated_num;
-        }
-        static size_t bytes(){
-            return allocated_num-de_allocated_num;
-        }
-
-    // private member 
-    private:
-        // allocated part
-        static size_t allocated_num;
-        static size_t de_allocated_num;
-};
-// initialize the static member
-template <class Type>
-size_t CountByte<Type>::allocated_num = 0;
-template <class Type>
-size_t CountByte<Type>::de_allocated_num = 0;
-
-
 // 2. CustomAllocator
 template <class Type>
 class CustomAllocator{
+    private:
+        static size_t byte_num;
+        static size_t allocated_num;
+        static size_t de_allocated_num;
     public:
         using value_type = Type;
         CustomAllocator() noexcept = default;
@@ -77,11 +45,8 @@ class CustomAllocator{
             if (!p){
                 throw std::bad_alloc();
             }
-            // if p is not nullptr, increase the allocated memory
-            CountByte<Type>::increase(bytes);
-
-            //CountByte<Type>::increase(n*sizeof(Type));
-            //return static_cast<Type*>(::operator new(n*sizeof(Type)));
+            byte_num += bytes; // increase the allocated memory
+            allocated_num += bytes; // increase the allocated memory
 
             return p; // return the pointer of allocated memory
         }
@@ -90,13 +55,24 @@ class CustomAllocator{
         {
             // calculate the bytes of deallocated memory
             const size_t bytes = n*sizeof(Type);
-            // deallocate memory
+            byte_num -= bytes; // decrease the allocated memory
+            de_allocated_num += bytes; // increase the deallocated memory
+            // free the memory
             std::free(p);
-            // decrease the deallocated memory
-            CountByte<Type>::decrease(bytes);
+        }
+        // bytes function
+        size_t bytes() const
+        {
+            return byte_num;
         }
 };
-
+// initialize the static member
+template <class Type>
+size_t CustomAllocator<Type>::byte_num = 0;
+template <class Type>
+size_t CustomAllocator<Type>::allocated_num = 0;
+template <class Type>
+size_t CustomAllocator<Type>::de_allocated_num = 0;
 
 // 3. Matrix
 class Matrix{
