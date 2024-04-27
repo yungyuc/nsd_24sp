@@ -5,8 +5,6 @@ import os
 import timeit
 import unittest
 
-
-
 class GradingTest(unittest.TestCase):
     def test_basic(self):
         size = 100
