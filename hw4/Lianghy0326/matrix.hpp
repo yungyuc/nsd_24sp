@@ -26,7 +26,7 @@ class CustomAllocator{
         using value_type = Type;
         CustomAllocator() noexcept = default;
 
-        Type *allocate(Type *p,size_t n)
+        Type *allocate(size_t n)
         void deallocate(Type *p, size_t n);
         static size_t bytes();
         static size_t allocated();
