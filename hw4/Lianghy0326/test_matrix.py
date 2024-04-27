@@ -69,5 +69,5 @@ class GradingTest(unittest.TestCase):
                 assert ret_naive[i,j] == ret_tile[i,j] == ret_mkl[i,j]
 
         self.assertEqual(base_bytes + 3 * 8 * size1*size3, _matrix.bytes())
-        self.assertEqual(base_alloc + 3 * 8 * size1*size3, _matrix.allocated())
-        self.assertEqual(base_dealloc, _matrix.deallocated())
+        self.assertEqual(base_alloc + 3 * 8 * size1*size3, _matrix.allocate())
+        self.assertEqual(base_dealloc, _matrix.deallocate())
