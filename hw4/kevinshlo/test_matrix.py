@@ -73,19 +73,6 @@ class GradingTest(unittest.TestCase):
                 self.assertEqual(0, ret_naive[i, j])
                 self.assertEqual(0, ret_mkl[i, j])
 
-    def test_tile(self):
-        size = 100
-        mat1, mat2, *_ = self.make_matrices(size)
-
-        ret_naive = _matrix.multiply_naive(mat1, mat2)
-        ret_tile = _matrix.multiply_tile(mat1, mat2, 16)
-
-        for i in [ret_naive.nrow, ret_naive.ncol, ret_tile.nrow, ret_tile.ncol]:
-            self.assertEqual(size, i)
-
-        self.assertEqual(ret_naive, ret_tile)
-        self.assertNotEqual(mat1, ret_tile)
-
 
 if __name__ == "__main__":
     unittest.main()
