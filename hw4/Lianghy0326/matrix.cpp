@@ -125,6 +125,6 @@ PYBIND11_MODULE(_matrix, m)
 
     m.def("allocate", &CustomAllocator<double>::allocate, "Allocate memory");
     m.def("deallocate", &CustomAllocator<double>::deallocate, "Deallocate memory");
-    m.def("bytes", &CustomAllocator<double>::get_bytes, "Get bytes");
+    m.def("get_bytes", &CustomAllocator<double>::get_bytes, "Get bytes");
 
 }
