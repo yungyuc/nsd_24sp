@@ -107,7 +107,7 @@ Matrix multiply_mkl(const Matrix &m1,const Matrix &m2){
 PYBIND11_MODULE(_matrix, m)
 {
     m.doc() = "Matrix mutiplication module";
-    pybind11::class_<Martix>(m,"Matrix")
+    pybind11::class_<Matrix>(m, "Matrix")
         .def(pybind11::init<size_t, size_t>())
 
         .def("__setitem__", [](Matrix &m, std::pair<size_t, size_t> const & p, double val){
