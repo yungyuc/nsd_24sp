@@ -1,5 +1,5 @@
 CXX             = g++
-SRC             = _matrix.cpp _allocator.cpp
+SRC             = _matrix.cpp _allocator.cpp _pybind.cpp
 FLAGS           = -O3 -Wall -shared -std=c++11 -fPIC
 INCLUDES        = -I$(MKL_INCLUDE_DIR) $(PYINC) $(PYBIND11_INC)
 LDFLAGS         = -lblas -lmkl_rt $(PYLIB)
@@ -9,7 +9,7 @@ PYINC           = $(shell python3-config --includes)
 PYBIND11_INC    = $(shell python3 -m pybind11 --includes)
 PYLIB           = $(shell python3-config --ldflags)
 PYSUFFIX        = $(shell python3-config --extension-suffix)
-PYBIND11_MODULE = _matrix _allocator
+PYBIND11_MODULE = _matrix _allocator _pybind
 PYTAR           = $(PYBIND11_MODULE)$(PYSUFFIX)
 
 all: $(PYTAR)
