@@ -9,11 +9,6 @@
 #include <memory>
 #include <algorithm>
 
-// static size_t allocatedBytes = 0;
-// static size_t deallocatedBytes = 0;
-// static size_t currentlyUsedBytes = 0;
-
-
 // Even tho we know what's going to be stored in the custom allocator, we use templates in case in a future homework we once again have to modify the previous one :)
 template <typename T>
 
@@ -25,9 +20,9 @@ public:
     using const_pointer = const T*;
     using value_type = T;
 
-    static size_t allocatedBytes;
-    static size_t deallocatedBytes;
-    static size_t currentlyUsedBytes;
+    static inline size_t allocatedBytes = 0;
+    static inline size_t deallocatedBytes = 0;
+    static inline size_t currentlyUsedBytes = 0;
 
     template<typename U>
     struct rebind {
@@ -40,51 +35,37 @@ public:
     MyAlloc(const MyAlloc<U>&){
     }
 
+    ~MyAlloc() = default;
+
 
     T* allocate(size_t num, const void* hint = 0){
-        T* ret = std::allocator<T>::allocate(num, hint);
-        allocatedBytes += num * sizeof(T);
-        currentlyUsedBytes += num * sizeof(T);
-        std::cout << "Allocated " << num * sizeof(T) << " bytes\n";
-        return ret;
-        // size_t bytes = num * sizeof(T);
-        // allocatedBytes += bytes;
-        // currentlyUsedBytes += bytes;
-        // return std::allocator<T>::allocate(num, hint);
+
+        size_t bytes = num * sizeof(T);
+        allocatedBytes += bytes;
+        currentlyUsedBytes += bytes;
+        return std::allocator<T>::allocate(num, hint);
     }
 
     void deallocate(T* p, size_t num){
-        deallocatedBytes += num * sizeof(T);
-        currentlyUsedBytes -= num * sizeof(T);
-        std::cout << "Deallocated " << num * sizeof(T) << " bytes\n";
-        std::allocator<T>::deallocate(p,num);
 
-        // size_t bytes = num * sizeof(T);
-        // deallocatedBytes += bytes;
-        // currentlyUsedBytes -= bytes;
-        // std::allocator<T>::deallocate(p, num);
+        size_t bytes = num * sizeof(T);
+        deallocatedBytes += bytes;
+        currentlyUsedBytes -= bytes;
+        std::allocator<T>::deallocate(p, num);
     }
 
 };
 
-template <typename T>
-size_t MyAlloc<T>::currentlyUsedBytes = 0;
+// template <typename T>
+// size_t MyAlloc<T>::currentlyUsedBytes = 0;
 
-template <typename T>
-size_t MyAlloc<T>::allocatedBytes = 0;
+// template <typename T>
+// size_t MyAlloc<T>::allocatedBytes = 0;
 
-template <typename T>
-size_t MyAlloc<T>::deallocatedBytes = 0;
+// template <typename T>
+// size_t MyAlloc<T>::deallocatedBytes = 0;
 
-// size_t bytes(){
-//     return currentlyUsedBytes;
-// }
-// size_t allocated(){
-//     return allocatedBytes;
-// }
-// size_t deallocated(){
-//     return deallocatedBytes;
-// }
+
 
 template <typename T>
 
@@ -151,8 +132,8 @@ public:
         return *this;
     }
 
-    Matrix(Matrix && other)
-      : m_nrow(other.m_nrow), m_ncol(other.m_ncol), m_buffer(other.m_buffer)
+    Matrix(Matrix &&other)
+      : m_nrow(other.m_nrow), m_ncol(other.m_ncol), m_buffer(std::move(other.m_buffer))
     {
         other.m_nrow = 0;
         other.m_ncol = 0;
@@ -241,7 +222,7 @@ private:
     size_t m_nrow = 0;
     size_t m_ncol = 0;
     // double * m_buffer = nullptr;
-    CustomVector<double> m_buffer = CustomVector<double>(0);
+    CustomVector<double> m_buffer ;
 
 };
 
@@ -261,8 +242,8 @@ Matrix operator*(Matrix const & mat1, Matrix const & mat2)
     for (size_t i = 0; i < mat1.nrow(); ++i) {
         for (size_t j = 0; j < mat2.ncol(); ++j) {
             ret(i, j) = 0.0;  // Explicit initialization
+        }
     }
-}
 
     for (size_t i=0; i<ret.nrow(); ++i)
     {
@@ -306,8 +287,33 @@ std::ostream & operator << (std::ostream & ostr, Matrix const & mat)
  * @return Matrix 
  */
 Matrix multiply_naive(Matrix const & mat1, Matrix const & mat2){
-    return mat1 * mat2;
-}
+    if (mat1.ncol() != mat2.nrow())
+    {
+        throw std::out_of_range(
+            "the number of first matrix column "
+            "differs from that of second matrix row");
+    }
+    Matrix ret(mat1.nrow(), mat2.ncol());
+    // for (size_t i = 0; i < mat1.nrow(); ++i) {
+    //     for (size_t j = 0; j < mat2.ncol(); ++j) {
+    //         ret(i, j) = 0.0;  // Explicit initialization
+    //     }
+    // }
+
+    for (size_t i=0; i<ret.nrow(); ++i)
+    {
+        for (size_t k=0; k<ret.ncol(); ++k)
+        {
+            double v = 0;
+            for (size_t j=0; j<mat1.ncol(); ++j)
+            {
+                v += mat1(i,j) * mat2(j,k);
+            }
+            ret(i,k) = v;
+        }
+    }
+
+    return ret;}
 
 /**
  * @author FURGER Achille (furgerachi@cy-tech.fr)

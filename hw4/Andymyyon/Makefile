@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -O3 -Wall -shared -std=c++11 -fPIC -m64 $(PYBIND_INC_FLAGS) $(PYTHON_LIB_FLAGS)
+CXXFLAGS = -O3 -Wall -shared -std=c++17 -fPIC -m64 $(PYBIND_INC_FLAGS) $(PYTHON_LIB_FLAGS)
 LDFLAGS = -lblas -lmkl_rt
 
 PYBIND_INC_FLAGS = $(shell python3 -m pybind11 --includes)
