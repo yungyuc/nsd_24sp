@@ -9,7 +9,7 @@ PYINC           = $(shell python3-config --includes)
 PYBIND11_INC    = $(shell python3 -m pybind11 --includes)
 PYLIB           = $(shell python3-config --ldflags)
 PYSUFFIX        = $(shell python3-config --extension-suffix)
-PYBIND11_MODULE = _matrix
+PYBIND11_MODULE = _matrix _allocator
 PYTAR           = $(PYBIND11_MODULE)$(PYSUFFIX)
 
 all: $(PYTAR)
