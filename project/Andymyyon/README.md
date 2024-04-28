@@ -17,7 +17,7 @@ Dynamic allocation of airspace can offer a solution by adjusting sector sizes
 and responsibilities in real-time to ensure an equitable distribution of
 workload among air traffic controllers.
 - **Physics/Mathematics**: This project will leverage computational geometry,
-specifically Voronoi diagrams, to partition airspace dynamically based on the
+specifically Voronoi diagrams (in 2D), to partition airspace dynamically based on the
 geographic locations of Air Traffic Control (ATC) towers or centers and the
 positions of aircraft in flight.
 - **Algorithm/Numerical Method**: We will use Voronoi diagram generation
@@ -44,8 +44,8 @@ reallocate airspace sectors accordingly.
 distribution reports. Alerts for manual intervention or adjustment by human
 controllers may also be generated.
 - **Interface**: Instead of a web-based dashboard, DAMS will offer a command-line
-interface (CLI) or a simple graphical user interface (GUI) developed using
-Python libraries such as Tkinter or PyQt. This will allow users to interact with
+interface (CLI) as I don't think I will have time to implement a proper GUY
+ This will allow users to interact with
 the system, input data, and view results.
 - **Constraints**: The system assumes the availability and accuracy of real-time
 air traffic data. It also relies on computational efficiency to handle dynamic
@@ -75,6 +75,6 @@ Efforts will be made to integrate Python documentation with Sphinx.
 - Week 4: Integration of C++ and Python components; initial testing.
 - Week 5: Development of workload assessment algorithms.
 - Week 6: User interface development
-- Week 7: Comprehensive testing and bug fixing.
+- Week 7: Final testing and minor bugs fixing (I will test my code continuously through the development for major bugs)
 - Week 8: Final review, documentation completion, and project presentation
 preparation.
