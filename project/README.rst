@@ -43,6 +43,7 @@ Follow the format to add your project:
    `Project subject <github_account_name/README.rst>`__:
    https://github.com/github_account_name/project_name
 
+
 2. `YJack0000 <https://github.com/YJack0000>`__ for
    `Project subject <YJack0000/README.md>`__:
    https://github.com/YJack0000/SimEvo
@@ -67,3 +68,6 @@ Follow the format to add your project:
    `Hardware Aging Acceleration <zona8815/README.rst>`__:
    https://github.com/zona8815/Hardware-Aging-Acceleration
 
+1. `r1407p <https://github.com/r1407p>`__ for
+   `PyMatrixOpt <r1407p/README.rst>`__:
+   https://github.com/r1407p/PyMatrixOpt
