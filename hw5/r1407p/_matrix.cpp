@@ -10,50 +10,17 @@
 
 namespace py=pybind11;
 
-template<typename T> T *CustomAllocator<T>::allocate(size_t n){
-    const size_t bytes = n * sizeof(T);
-    T *ptr = (T *)(malloc(bytes));
-
-    if (ptr == nullptr){
-        throw std::bad_alloc();
-    }
-
-    m_byte += bytes;
-    m_allocated += bytes;
-
-    return ptr;
-}
-
-template<typename T> void CustomAllocator<T>::deallocate(T *ptr, size_t n){
-    const size_t bytes = n * sizeof(T);
-    m_deallocated += bytes;
-    m_byte -= bytes; 
-    free(ptr);
-}
-
-template<typename T> size_t CustomAllocator<T>::bytes(){
-    return m_byte;
-}
-
-template<typename T> size_t CustomAllocator<T>::allocated(){
-    return m_allocated;
-}
-
-template<typename T> size_t CustomAllocator<T>::deallocated(){
-    return m_deallocated;
-}
-
 Matrix::Matrix(){
     this->m_nrow = 0;
     this->m_ncol = 0;
-    this->m_buffer = vector<double, CustomAllocator<double>>();
+    this->m_buffer = nullptr;
 }
 
-Matrix::Matrix(size_t row, size_t col){
-    this->m_nrow = row;
-    this->m_ncol = col;
-    this->m_buffer = vector<double, CustomAllocator<double>>(row * col);
-    for(size_t i = 0; i < row * col; i++){
+Matrix::Matrix(size_t nrow, size_t ncol){
+    this->m_nrow = nrow;
+    this->m_ncol = ncol;
+    this->m_buffer = new double[nrow * ncol];
+    for(size_t i = 0; i < nrow * ncol; i++){
         this->m_buffer[i] = 0;
     }
 }
@@ -61,7 +28,7 @@ Matrix::Matrix(size_t row, size_t col){
 Matrix::Matrix(size_t row, size_t col, double val){
     this->m_nrow = row;
     this->m_ncol = col;
-    this->m_buffer = vector<double, CustomAllocator<double>>(row * col, val);
+    this->m_buffer = new double[row * col];
     for(size_t i = 0; i < row * col; i++){
         this->m_buffer[i] = val;
     }
@@ -70,7 +37,7 @@ Matrix::Matrix(size_t row, size_t col, double val){
 Matrix::Matrix(size_t row, size_t col,const std::vector<double> &v){
     this->m_nrow = row;
     this->m_ncol = col;
-    this->m_buffer = vector<double, CustomAllocator<double>>(row * col);
+    this->m_buffer = new double[row * col];
     if(v.size() != row * col){
         throw std::invalid_argument("size of vector does not match matrix size");
     }
@@ -78,14 +45,14 @@ Matrix::Matrix(size_t row, size_t col,const std::vector<double> &v){
         this->m_buffer[i] = v[i];
     }
 }
-// Matrix::Matrix(const Matrix &m){
-//     this->m_nrow = m.m_nrow;
-//     this->m_ncol = m.m_ncol;
-//     this->m_buffer = vector<double, CustomAllocator<double>>(m.m_nrow * m.m_ncol);
-//     for(size_t i = 0; i < m.m_nrow * m.m_ncol; i++){
-//         this->m_buffer[i] = m.m_buffer[i];
-//     }
-// } 
+Matrix::Matrix(const Matrix &m){
+    this->m_nrow = m.m_nrow;
+    this->m_ncol = m.m_ncol;
+    this->m_buffer = new double[m.m_nrow * m.m_ncol];
+    for(size_t i = 0; i < m.m_nrow * m.m_ncol; i++){
+        this->m_buffer[i] = m.m_buffer[i];
+    }
+} 
 
 size_t Matrix::index(size_t i, size_t j) const{
     return i * m_ncol + j;
@@ -98,12 +65,12 @@ size_t Matrix::ncol() const{
 }
 
 double* Matrix::get_buffer() const{
-    return (double *)m_buffer.data();
+    return m_buffer;
 }
     
-// Matrix::~Matrix() {
-//     m_buffer.clear();
-// }
+Matrix::~Matrix() {
+    delete[] m_buffer;
+}
 
 double Matrix::operator() (size_t row, size_t col) const{
     if (row < 0 || row >= m_nrow || col < 0 || col > m_ncol){
@@ -127,10 +94,6 @@ bool Matrix::operator==(const Matrix &m){
         }
     }
     return true;
-}
-
-bool Matrix::operator!=(const Matrix &m){
-    return !(*this == m);
 }
 
 Matrix multiply_naive(Matrix const &m1, Matrix const &m2){
@@ -182,29 +145,26 @@ Matrix multiply_tile(Matrix const &m1, Matrix const &m2, std::size_t size){
 //     return result;
 // }
 
-PYBIND11_MODULE(_matrix, m) {
-    py::class_<Matrix>(m, "Matrix")
-    .def(py::init<>())
-    .def(py::init<size_t, size_t>())
-    .def(py::init<size_t, size_t, double>())
-    .def(py::init<size_t, size_t, const std::vector<double> &>())
-    // .def(py::init<const Matrix &>())
-    .def("__getitem__", [](Matrix &m, std::vector<std::size_t> idx){ 	 
-        return m(idx[0],idx[1]);       
-    })
-    .def("__setitem__",[](Matrix &m, std::vector<std::size_t> idx, int val){
-        m(idx[0],idx[1]) = val;
-    })
-    .def_property_readonly("nrow", &Matrix::nrow)
-    .def_property_readonly("ncol", &Matrix::ncol)
-    .def("__eq__", &Matrix::operator ==)
-    .def("__ne__", &Matrix::operator !=); 
+// PYBIND11_MODULE(_matrix, m) {
+//     py::class_<Matrix>(m, "Matrix")
+//     .def(py::init<>())
+//     .def(py::init<size_t, size_t>())
+//     .def(py::init<size_t, size_t, double>())
+//     .def(py::init<size_t, size_t, const std::vector<double> &>())
+//     .def(py::init<const Matrix &>())
+//     .def("__getitem__", [](Matrix &m, std::vector<std::size_t> idx){ 	 
+//         return m(idx[0],idx[1]);       
+//     })
+//     .def("__setitem__",[](Matrix &m, std::vector<std::size_t> idx, int val){
+//         m(idx[0],idx[1]) = val;
+//     })
+//     .def_property_readonly("nrow", &Matrix::nrow)
+//     .def_property_readonly("ncol", &Matrix::ncol)
+//     .def("__eq__", &Matrix::operator ==)
+//     .def("__ne__", &Matrix::operator !=); 
 
-    m.def("multiply_naive", &multiply_naive, "");
-    m.def("multiply_tile", &multiply_tile, "");
-    // m.def("multiply_mkl", &multiply_mkl, "");
+//     m.def("multiply_naive", &multiply_naive, "");
+//     m.def("multiply_tile", &multiply_tile, "");
+//     // m.def("multiply_mkl", &multiply_mkl, "");
 
-    m.def("bytes", &CustomAllocator<double>::bytes);
-	m.def("allocated", &CustomAllocator<double>::allocated);
-	m.def("deallocated", &CustomAllocator<double>::deallocated);
-}
+// }
