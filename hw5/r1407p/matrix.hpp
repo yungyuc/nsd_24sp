@@ -13,6 +13,7 @@ public:
     Matrix(size_t nrow, size_t ncol, double val);
     Matrix(size_t nrow, size_t ncol,const vector<double> &v);
     Matrix(const Matrix &m);
+    Matrix & operator=(const Matrix &m);
     ~Matrix();
 
     size_t index(size_t i, size_t j) const;
@@ -23,7 +24,7 @@ public:
     double   operator() (size_t row, size_t col) const;
     double & operator() (size_t row, size_t col);
 
-    bool operator==(const Matrix &m);  
-    bool operator!=(const Matrix &m);
+    bool operator==(const Matrix &m) const;  
+    bool operator!=(const Matrix &m) const;
 
 };

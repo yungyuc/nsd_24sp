@@ -1,8 +1,5 @@
 #include "matrix.hpp"
 #include <stdexcept>
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include <pybind11/operators.h>
 
 #include <mkl/mkl.h>
 #include <mkl/mkl_lapack.h>
@@ -53,6 +50,19 @@ Matrix::Matrix(const Matrix &m){
         this->m_buffer[i] = m.m_buffer[i];
     }
 } 
+Matrix &Matrix::operator=(const Matrix &m){
+    if(this == &m){
+        return *this;
+    }
+    if(this->m_buffer != nullptr){
+        delete[] this->m_buffer;
+    }
+    this->m_nrow = m.nrow();
+    this->m_ncol = m.ncol();
+    this->m_buffer = new double[m.nrow() * m.ncol()];
+    memcpy(this->m_buffer, m.get_buffer(), m.nrow() * m.ncol() * sizeof(double));
+    return *this;
+}
 
 size_t Matrix::index(size_t i, size_t j) const{
     return i * m_ncol + j;

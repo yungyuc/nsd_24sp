@@ -1,4 +1,4 @@
-sources = matrix.cpp ../mod.cpp
+sources =../mod.cpp matrix.cpp 
 CXX = clang++
 CXXFLAGS = -O3 -Wall -shared -std=c++17 -fPIC -lblas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
 LIB_TARGET = _matrix.so
@@ -16,6 +16,7 @@ NUMPY= $(shell python3 -c "import numpy; print(numpy.get_include())")
 all: $(LIB_TARGET)
 
 $(LIB_TARGET): $(sources)
+	pip install pybind11
 	$(CXX)  $(CXXFLAGS) -I./ -I$(numpy) $(shell python3 -m pybind11 --includes) $(sources) -o $@
 
 
