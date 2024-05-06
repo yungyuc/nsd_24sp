@@ -28,3 +28,6 @@ public:
     bool operator!=(const Matrix &m) const;
 
 };
+Matrix multiply_naive(Matrix const &m1, Matrix const &m2);
+Matrix multiply_tile(Matrix const &m1, Matrix const &m2, std::size_t size);
+Matrix multiply_mkl(Matrix const &m1, Matrix const &m2);
