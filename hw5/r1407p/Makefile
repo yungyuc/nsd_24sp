@@ -1,6 +1,6 @@
-sources = _matrix.cpp
+sources = matrix.cpp ../mod.cpp
 CXX = clang++
-CXXFLAGS = -O3 -Wall -shared -std=c++11 -fPIC  `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
+CXXFLAGS = -O3 -Wall -shared -std=c++17 -fPIC -lblas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
 LIB_TARGET = _matrix.so
 MKLROOT=/usr/lib/x86_64-linux-gnu
 LDFLAGS=${MKLROOT}/libmkl_def.so \
@@ -11,10 +11,12 @@ LDFLAGS=${MKLROOT}/libmkl_def.so \
         -lpthread -lm -ldl \
         -lblas -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -L/opt/intel/lib/intel64 -L/opt/intel/mkl/lib/intel64 
 
+NUMPY= $(shell python3 -c "import numpy; print(numpy.get_include())")
+
 all: $(LIB_TARGET)
 
 $(LIB_TARGET): $(sources)
-	$(CXX)  $(CXXFLAGS) $(shell python3 -m pybind11 --includes) $(sources) -o $@
+	$(CXX)  $(CXXFLAGS) -I./ -I$(numpy) $(shell python3 -m pybind11 --includes) $(sources) -o $@
 
 
 .PHONY: test
