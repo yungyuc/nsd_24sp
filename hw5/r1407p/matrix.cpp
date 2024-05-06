@@ -1,11 +1,9 @@
 #include "matrix.hpp"
 #include <stdexcept>
-
+#include <cstring>
 #include <mkl/mkl.h>
 #include <mkl/mkl_lapack.h>
 #include <mkl/mkl_lapacke.h>
-
-namespace py=pybind11;
 
 Matrix::Matrix(){
     this->m_nrow = 0;
@@ -60,7 +58,7 @@ Matrix &Matrix::operator=(const Matrix &m){
     this->m_nrow = m.nrow();
     this->m_ncol = m.ncol();
     this->m_buffer = new double[m.nrow() * m.ncol()];
-    memcpy(this->m_buffer, m.get_buffer(), m.nrow() * m.ncol() * sizeof(double));
+    std::memcpy(this->m_buffer, m.get_buffer(), m.nrow() * m.ncol() * sizeof(double));
     return *this;
 }
 
@@ -94,7 +92,7 @@ double &Matrix::operator() (size_t row, size_t col){
     }
     return m_buffer[index(row, col)];
 }
-bool Matrix::operator==(const Matrix &m){
+bool Matrix::operator==(const Matrix &m) const{
     if(this->m_nrow != m.m_nrow || this->m_ncol != m.m_ncol){
         return false;
     }
