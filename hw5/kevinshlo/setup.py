@@ -10,7 +10,7 @@ module = Extension(
     library_dirs=["${MKLROOT}/lib/intel64"],
     libraries=["mkl_rt", "pthread", "m", "dl"],
     extra_compile_args=["-std=c++17", "-O3", "-m64", "-Wl,--no-as-needed"],
-    define_macros=["MKL"],
+    define_macros=[("MKL", None)],
 )
 
 setup(
