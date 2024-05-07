@@ -1,21 +1,25 @@
-#include <mkl/mkl.h>
-#include <pybind11/operators.h>
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+#pragma once
 
-#include <cassert>
-#include <utility>
+#ifdef MKL
+#include <mkl/mkl.h>
+#else
+#include <cblas.h>
+#endif
+
+#include <vector>
 
 class Matrix {
  public:
-  const size_t nrow = 0;
-  const size_t ncol = 0;
-  std::unique_ptr<double[]> m_buffer;
+  const size_t m_nrow;
+  const size_t m_ncol;
+  std::vector<double> m_buffer;
 
  public:
-  size_t size() const { return nrow * ncol; }
+  size_t nrow() const { return m_nrow; }
+  size_t ncol() const { return m_ncol; }
+  size_t size() const { return m_nrow * m_ncol; }
   double buffer(size_t i) const { return m_buffer[i]; }
-  size_t index(size_t row, size_t col) const { return row * ncol + col; }
+  size_t index(size_t row, size_t col) const { return row * m_ncol + col; }
   double operator[](size_t idx) const { return m_buffer[idx]; }
   double &operator[](size_t idx) { return m_buffer[idx]; }
   double operator()(size_t row, size_t col) const {
@@ -25,18 +29,13 @@ class Matrix {
     return m_buffer[index(row, col)];
   }
   bool operator==(const Matrix &mat) const {
-    return (nrow == mat.nrow) && (ncol == mat.ncol) &&
-           (memcmp(m_buffer.get(), mat.m_buffer.get(),
-                   size() * sizeof(double)) == 0);
+    return (m_nrow == mat.m_nrow) && (m_ncol == mat.m_ncol) &&
+           (m_buffer == mat.m_buffer);
   }
 
  public:
   Matrix(size_t n_row, size_t n_col)
-      : nrow(n_row), ncol(n_col), m_buffer(new double[n_row * n_col]) {}
-  Matrix(const Matrix &m)
-      : nrow(m.nrow), ncol(m.ncol), m_buffer(new double[m.nrow * m.ncol]) {
-    memcpy(m_buffer.get(), m.m_buffer.get(), sizeof(double) * nrow * ncol);
-  }
+      : m_nrow(n_row), m_ncol(n_col), m_buffer(n_row * n_col) {}
 
   /* naive matrix multiplication */
   Matrix multiply_naive(const Matrix &mat) const;
@@ -46,14 +45,8 @@ class Matrix {
   Matrix multiply_tile(const Matrix &mat, const size_t N) const;
 };
 
-Matrix multiply_naive(const Matrix &mat1, const Matrix &mat2) {
-  return mat1.multiply_naive(mat2);
-}
+Matrix multiply_naive(const Matrix &mat1, const Matrix &mat2);
 
-Matrix multiply_mkl(const Matrix &mat1, const Matrix &mat2) {
-  return mat1.multiply_mkl(mat2);
-}
+Matrix multiply_mkl(const Matrix &mat1, const Matrix &mat2);
 
-Matrix multiply_tile(const Matrix &mat1, const Matrix &mat2, size_t tsize) {
-  return mat1.multiply_tile(mat2, tsize);
-}
+Matrix multiply_tile(const Matrix &mat1, const Matrix &mat2, size_t tsize);
