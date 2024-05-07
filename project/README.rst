@@ -43,6 +43,9 @@ Follow the format to add your project:
    `Project subject <github_account_name/README.rst>`__:
    https://github.com/github_account_name/project_name
 
+2. `HaKkaz <https://github.com/HaKkaz>`__ for
+   `PointInPolygon <HaKkaz/README.md>`__:
+   https://github.com/HaKkaz/Point-in-Polygon
 
 2. `YJack0000 <https://github.com/YJack0000>`__ for
    `Project subject <YJack0000/README.md>`__:
