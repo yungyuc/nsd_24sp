@@ -20,11 +20,20 @@ Problem to Solve
 =================
 
 The goal is to develop an intelligent solver capable of automatically selecting 
-the most suitable solving method for DE problems. This involves analyzing problem 
-characteristics such as initial conditions, boundary conditions, and equation forms 
+the most suitable solving method for DE problems. 
+This involves analyzing problem characteristics such as initial conditions, 
+boundary conditions, and equation forms 
 to determine the appropriate integration method and optimization strategies. 
+
 By doing so, we aim to maximize solving speed and accuracy, addressing the 
 challenges of efficiently solving DE problems.
+Use ODE to perform some intesting problems,
+1. 3 body problem
+in some certain cases,
+we can perform 3-body problem with the help of ODE.
+2. Solar system
+RK4 method can be used to solve the solar system problem.
+
 
 Prospective Users
 =================
