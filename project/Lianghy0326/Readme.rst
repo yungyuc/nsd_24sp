@@ -19,17 +19,14 @@ Problem to Solve
 =================
 
 | The goal is to develop an intelligent solver capable of automatically selecting
-    the most suitable solving method for DE problems. 
-
+  the most suitable solving method for DE problems. 
 
 | This involves analyzing problem characteristics such as initial conditions,
-| boundary conditions, and equation forms to determine the appropriate integration 
-| method and optimization strategies. 
-
+  boundary conditions, and equation forms to determine the appropriate 
+  integration method and optimization strategies. 
 
 | By doing so, we aim to maximize solving speed and accuracy, 
-| addressing the challenges of efficiently solving DE problems.
-
+  addressing the challenges of efficiently solving DE problems.
 
 | Use ODE to perform some intesting problems:
 
