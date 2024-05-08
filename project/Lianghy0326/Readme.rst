@@ -20,16 +20,16 @@ Problem to Solve
 
 | The goal is to develop an intelligent solver capable of automatically selecting
 | the most suitable solving method for DE problems. 
-| 
+ <br/>
 
 | This involves analyzing problem characteristics such as initial conditions,
 | boundary conditions, and equation forms to determine the appropriate integration 
 | method and optimization strategies. 
-| 
+ <br/>
 
 | By doing so, we aim to maximize solving speed and accuracy, 
 | addressing the challenges of efficiently solving DE problems.
-| 
+ <br/>
 
 | Use ODE to perform some intesting problems:
 
@@ -51,7 +51,7 @@ System Architecture
 ===================
 
 Solver Module: 
-    Contains the core logic for analyzing problem characteristics 
+    Contains the core logic for analyzing problem characteristics
     and selecting appropriate solving methods.
 
 Integration Methods: 
