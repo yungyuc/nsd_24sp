@@ -36,8 +36,7 @@ Problem to Solve
 ::
 
     1. 3 body problem
-    in some certain cases,
-    we can perform 3-body problem with the help of ODE.
+    in some certain cases,we can perform 3-body problem with the help of ODE.
     2. Solar system
     RK4 method can be used to solve the solar system problem.
 
@@ -58,7 +57,7 @@ Solver Module:
 Integration Methods: 
     Implementations of various integration methods such 
     as Euler's method, Runge-Kutta methods, etc.
-    
+
 Step Size Control: 
     Module responsible for implementing adaptive step size control algorithms.
     
