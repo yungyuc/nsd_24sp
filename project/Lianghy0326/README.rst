@@ -5,7 +5,7 @@ DE
 Automatic Differential Equation Solver Optimizer
 ================================================
 
-Basic Information
+Basic Information 
 =================
 
 Github Repository: `DE <https://github.com/Lianghy0326/DE>`_
