@@ -30,6 +30,7 @@ challenges of efficiently solving DE problems.
 Use ODE to perform some intesting problems:
 
 ::
+    
     1. 3 body problem
     in some certain cases,
     we can perform 3-body problem with the help of ODE.
