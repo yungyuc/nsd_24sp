@@ -10,11 +10,10 @@ Basic Information
 
 Github Repository: `DE <https://github.com/Lianghy0326/DE>`_
 
-Design an intelligent C++ solver that automatically selects the optimal 
-solving method for differential equation (DE) problems. 
-The solver should choose the best integration method and step size based 
-on problem characteristics to 
-maximize solving speed and accuracy.
+| Design an intelligent C++ solver that automatically selects the optimal 
+| solving method for differential equation (DE) problems. 
+| The solver should choose the best integration method and step size based 
+| on problem characteristics to maximize solving speed and accuracy.
 
 Problem to Solve
 =================
