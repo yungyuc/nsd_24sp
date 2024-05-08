@@ -51,13 +51,19 @@ Prospective Users
 System Architecture
 ===================
 
-* Solver Module: Contains the core logic for analyzing problem characteristics 
-and selecting appropriate solving methods.
-* Integration Methods: Implementations of various integration methods such 
-as Euler's method, Runge-Kutta methods, etc.
-* Step Size Control: Module responsible for implementing adaptive step size 
-control algorithms.
-* Testing Module: Includes unit tests and performance evaluation tools.
+Solver Module: 
+    Contains the core logic for analyzing problem characteristics 
+    and selecting appropriate solving methods.
+
+Integration Methods: 
+    Implementations of various integration methods such 
+    as Euler's method, Runge-Kutta methods, etc.
+    
+Step Size Control: 
+    Module responsible for implementing adaptive step size control algorithms.
+    
+Testing Module: 
+    Includes unit tests and performance evaluation tools.
 
 API Description
 ===============
