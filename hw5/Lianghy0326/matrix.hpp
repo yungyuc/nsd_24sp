@@ -33,7 +33,13 @@ public:
     double operator() (size_t row, size_t col) const;
     // Accessor for modifying matrix elements
     double & operator() (size_t row, size_t col);
+
     // Comparison operator for checking equality of matrices
     bool operator==(const Matrix &m);
 
+    Matrix & operator=(const Matrix &m);
+
 };
+Matrix multiply_naive(Matrix const &m1, Matrix const &m2);
+Matrix multiply_tile(Matrix const &m1, Matrix const &m2, std::size_t size);
+Matrix multiply_mkl(Matrix const &m1, Matrix const &m2);

@@ -97,6 +97,20 @@ bool Matrix::operator==(const Matrix &m){
     return true;
 }
 
+Matrix &Matrix::operator=(const Matrix &m){
+    if(this == &m){
+        return *this;
+    }
+    if(this->m_buffer != nullptr){
+        delete[] this->m_buffer;
+    }
+    this->m_nrow = m.nrow();
+    this->m_ncol = m.ncol();
+    this->m_buffer = new double[m.nrow() * m.ncol()];
+    std::memcpy(this->m_buffer, m.get_buffer(), m.nrow() * m.ncol() * sizeof(double));
+    return *this;
+}
+
 Matrix multiply_naive(Matrix const &m1, Matrix const &m2){
     if(m1.ncol() != m2.nrow()){
         throw std::invalid_argument("matrix size does not match");
