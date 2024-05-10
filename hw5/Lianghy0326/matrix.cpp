@@ -85,7 +85,8 @@ double &Matrix::operator() (size_t row, size_t col){
     }
     return m_buffer[index(row, col)];
 }
-bool Matrix::operator==(const Matrix &m){
+
+bool Matrix::operator==(const Matrix &m) const{
     if(this->rows != m.rows || this->cols != m.cols){
         return false;
     }
@@ -104,8 +105,8 @@ Matrix &Matrix::operator=(const Matrix &m){
     if(this->m_buffer != nullptr){
         delete[] this->m_buffer;
     }
-    this->m_nrow = m.nrow();
-    this->m_ncol = m.ncol();
+    this->rows = m.nrow();
+    this->cols = m.ncol();
     this->m_buffer = new double[m.nrow() * m.ncol()];
     std::memcpy(this->m_buffer, m.get_buffer(), m.nrow() * m.ncol() * sizeof(double));
     return *this;
@@ -125,6 +126,7 @@ Matrix multiply_naive(Matrix const &m1, Matrix const &m2){
     }
     return result;
 }
+
 Matrix multiply_tile(Matrix const &m1, Matrix const &m2, std::size_t size){
     if(m1.ncol() != m2.nrow()){
         throw std::invalid_argument("matrix size does not match");
@@ -146,6 +148,7 @@ Matrix multiply_tile(Matrix const &m1, Matrix const &m2, std::size_t size){
     return result;
 
 }
+
 Matrix multiply_mkl(Matrix const &m1, Matrix const &m2){
     if(m1.ncol() != m2.nrow()){
         throw std::invalid_argument("matrix size does not match");
