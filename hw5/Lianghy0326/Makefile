@@ -1,4 +1,4 @@
-SRC = matrix.cpp
+SRC = ..mod.cpp matrix.cpp
 CXX = clang++
 CXXFLAGS = -O3 -Wall -shared -std=c++11 -fPIC -lblas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
 LIB_TARGET = _matrix.so
