@@ -1,7 +1,7 @@
 sources = matrix.cpp
 CXX = clang++
 CXXFLAGS = -O3 -Wall -shared -std=c++11 -fPIC -lblas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
-LIB_TARGET = matrix.so
+LIB_TARGET = _matrix.so
 MKLROOT=/usr/lib/x86_64-linux-gnu
 
 $(LIB_TARGET): $(sources)
