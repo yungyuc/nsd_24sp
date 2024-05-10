@@ -6,7 +6,7 @@ MKLROOT=/usr/lib/x86_64-linux-gnu
 
 $(LIB_TARGET): $(SRC)
 	pip install pybind11
-	$(CXX)  $(CXXFLAGS) $(shell python3 -m pybind11 --includes) $(SRC) -o $@
+	$(CXX)  $(CXXFLAGS) -lopenblas -I./ $(SRC) -o _matrix.so
 
 
 .PHONY: test
