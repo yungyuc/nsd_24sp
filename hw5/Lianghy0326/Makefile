@@ -1,5 +1,5 @@
 SRC = ../mod.cpp ./matrix.cpp
-INC = ./metrix.hpp
+INC = ./matrix.hpp
 
 CXX = clang++
 CXXFLAGS = -O3 -Wall -shared -std=c++11 -fPIC -lblas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
