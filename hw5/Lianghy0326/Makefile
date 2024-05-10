@@ -7,7 +7,7 @@ LIB_TARGET = _matrix.so
 
 $(LIB_TARGET): $(INC) $(SRC)
     pip install pybind11
-    $(CXX) $(CXXFLAGS) -I./ $(SRC) -o $@
+    $(CXX)  $(CXXFLAGS) -I./ $(shell python3 -m pybind11 --includes) $(SRC) -o $@
 
 .PHONY: test
 test: $(LIB_TARGET)
