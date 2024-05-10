@@ -1,15 +1,13 @@
-SRC = ../mod.cpp ./matrix.cpp
-INC = ./matrix.hpp
+SRC = ../mod.cpp Lianghy0326/matrix.cpp
+INC = Lianghy0326/matrix.hpp  
 
 CXX = clang++
 CXXFLAGS = -O3 -Wall -shared -std=c++11 -fPIC -lblas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
 LIB_TARGET = _matrix.so
-MKLROOT=/usr/lib/x86_64-linux-gnu
 
 $(LIB_TARGET): $(INC) $(SRC)
-	pip install pybind11
-	$(CXX)  $(CXXFLAGS) $(shell python3 -m pybind11 --includes) $(SRC) -o $@
-
+    pip install pybind11
+    $(CXX) $(CXXFLAGS) $(SRC) -o $@
 
 .PHONY: test
 test: $(LIB_TARGET)
@@ -17,4 +15,4 @@ test: $(LIB_TARGET)
 
 .PHONY: clean
 clean:
-	rm -rf $(LIB_TARGET) $(executable) __pycache__ .pytest* *.so
+    rm -rf $(LIB_TARGET) __pycache__ .pytest* *.so
