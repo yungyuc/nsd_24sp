@@ -1,15 +1,15 @@
 #include "matrix.hpp"
 #include <stdexcept>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include <pybind11/operators.h>
-
 #include <mkl/mkl.h>
 #include <mkl/mkl_lapack.h>
 #include <mkl/mkl_lapacke.h>
 
-namespace py=pybind11;
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/operators.h>
+
+
 
 Matrix::Matrix(){
     this->rows = 0;
