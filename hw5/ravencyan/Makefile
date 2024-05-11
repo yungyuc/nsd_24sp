@@ -7,11 +7,13 @@ MKL_PATH = /usr/include/mkl
 INCLUDES = -I$(MKL_PATH) $(PYINC) $(PYBIND11_INC)
 
 TARGET = _matrix.so
+INC = matrix.hpp
 SRC = ../mod.cpp matrix.cpp
 
 all: $(TARGET)
 
-$(TARGET): $(SRC)
+$(TARGET): $(INC) $(SRC)
+		pip install pybind11
 		$(CXX) $(CXXFLAGS) $(INCLUDES) $^ -o $@ $(LDFLAGS)
 
 test: $(TARGET)
