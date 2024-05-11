@@ -7,8 +7,8 @@ MKL_PATH = /usr/include/mkl
 INCLUDES = -I$(MKL_PATH) $(PYINC) $(PYBIND11_INC)
 
 TARGET = _matrix.so
-INC = matrix.hpp
-SRC = ../mod.cpp matrix.cpp
+INC = ./matrix.hpp
+SRC = ../mod.cpp ./matrix.cpp
 
 all: $(TARGET)
 
