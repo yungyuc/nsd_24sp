@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -O3 -std=c++11 -Wall -shared -fPIC
+CXXFLAGS = -O3 -std=c++17 -Wall -shared -fPIC
 LDFLAGS = -lblas -lmkl_rt
 PYINC = $(shell python3-config --includes --ldflags)
 PYBIND11_INC = $(shell python3 -m pybind11 --includes)

@@ -22,4 +22,9 @@ private:
     double * m_buffer;
 };
 
+
+Matrix multiply_naive(const Matrix &mat1, const Matrix &mat2);
+Matrix multiply_tile(const Matrix &mat1, const Matrix &mat2, std::size_t tileSize);
+Matrix multiply_mkl(const Matrix &mat1, const Matrix &mat2);
+
 #endif
