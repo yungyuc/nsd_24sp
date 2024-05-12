@@ -8,7 +8,9 @@ C++ Differential Evolution
 Basic Information 
 =================
 
-Github Repository: `DE <https://github.com/Lianghy0326/DE>`_
+| Github Repository: `DE <https://github.com/Lianghy0326/DE>`_
+
+
 | Introduction:
 | 1. Differential Evolution (DE) is a population based stochastic function 
 | optimizer algorithm developed by Kenneth Price and Rainer Storn in the 1990s.
