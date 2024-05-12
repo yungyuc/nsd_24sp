@@ -1,68 +1,119 @@
 =============================
-DE
+DE-Project
 =============================
 
-Automatic Differential Equation Solver Optimizer
-================================================
+C++ Differential Evolution
+==========================
 
 Basic Information 
 =================
 
 Github Repository: `DE <https://github.com/Lianghy0326/DE>`_
+| Introduction:
+| 1. Differential Evolution (DE) is a population based stochastic function 
+| optimizer algorithm developed by Kenneth Price and Rainer Storn in the 1990s.
 
-| Design an intelligent C++ solver that automatically selects the optimal 
-| solving method for differential equation (DE) problems. 
-| The solver should choose the best integration method and step size based 
-| on problem characteristics to maximize solving speed and accuracy.
+| 2. In computer science, differential evolution (DE) is a method that optimizes a 
+| problem by iteratively trying to improve a candidate solution with regard to 
+| a given measure of quality.
+
+| Implementation:
+| 1. The DE algorithm is implemented in C++.
+| 2. The 1st goal of this project is to implement the DE algorithm in C++.
+
+Terminology
+===========
+
+Objective Function: 
+    The function to be optimized.
+Population: 
+    a collection of individuals.the population changes according 
+    to mutation algorithms to attempt to generate the optimium individual.
+Mutation: 
+    perturbing the current population
+Selection:
+    the process of selecting the individuals for the next generation, 
+    of the best individual for the current generation, 
+    and of the best individual for the entire process.
+Generation:
+    a single iteration of the algorithm, which transforms one population 
+    in a new one, by mutating some of its individuals.
+
+
+
+DE Algorithm
+============
+
+1. Initialization:
+    Create an initial population with random variable values within defined 
+    constraints. Evaluate the objective function for each individual.
+2. Mutation and Evaluation:
+    Iterate through the population and apply mutation according to the policy.
+    Enqueue mutated individuals for objective function evaluation.
+    Parallel processors evaluate the objective function for enqueued individuals.
+3. Selection:
+    Choose individuals for the next generation based on a selection policy.
+    Maintain the best individual of the current iteration and overall optimization.
+4. Generation Update:
+    Form the next generation using selected individuals.
+5. Termination:
+    Repeat steps 2-4 until a termination criterion is met.
+
 
 Problem to Solve
 =================
 
-| The goal is to develop an intelligent solver capable of automatically selecting
-| the most suitable solving method for DE problems. 
+1. Algorithm Implementation:
+    Implement the DE algorithm in C++.
+2. Performance Evaluation:
+    Evaluate the performance of the implemented DE algorithm.
+3. Testing:
+    Develop unit tests to validate the correctness of the implementation.
+4. Other real use cases(if i have enough time):
+    - trading system optimization
+    - enhancing algorithmic trading systems by efficiently tuning parameters to 
+    - adapt to market conditions, using differential evolution (DE) to reduce the 
+    - exploration of vast variable spaces and converge quickly towards optimal solutions.
 
-| This involves analyzing problem characteristics such as initial conditions,
-| boundary conditions, and equation forms to determine the appropriate 
-| integration method and optimization strategies. 
-
-| By doing so, we aim to maximize solving speed and accuracy, 
-| addressing the challenges of efficiently solving DE problems.
-
-| Use ODE to perform some intesting problems:
-
-::
-
-    1. 3 body problem
-    in some certain cases,we can perform 3-body problem with the help of ODE.
-    2. Solar system
-    RK4 method can be used to solve the solar system problem.
 
 Prospective Users
 =================
 
-- Researchers and engineers in fields utilizing DEs for modeling and simulation.
-- Academic institutions for teaching and research purposes.
+- Target Audience
+- DE can be useful to many involved in scientific or engineering areas such as: 
+    - chemistry, electronics, physics, agriculture, telecommunications, software engineering etc.
+
 
 
 System Architecture
 ===================
 
-Solver Module: 
-    Contains the core logic for analyzing problem characteristics
-    and selecting appropriate solving methods.
+Objective Function: 
+    Defines the function to be optimized (e.g., "sphere function"). 
+    It inherits from the objective_function class and implements 
+    the operator() method to calculate the function value.
 
-Integration Methods: 
-    Implementations of various integration methods such 
-    as Euler's method, Runge-Kutta methods, etc.
+Processors: 
+    Utilizes multiple parallel processors to evaluate function values, 
+    speeding up the optimization process. Managed using the processors
+    < objective_function_ptr > class.
 
-Step Size Control: 
-    Module responsible for implementing adaptive step size control algorithms.
+DE module: 
+    Implements the differential evolution algorithm to manage the 
+    optimization process.
     
 Testing Module: 
     Includes unit tests and performance evaluation tools.
 
 API Description
 ===============
+
+- objective_function: 
+    - The objective_function class defines the interface for an objective function.
+    - It includes the operator() method to calculate the function value.
+- DE library: 
+    - The DE library provides the implementation of the differential evolution algorithm.
+    - It includes the DE class to manage the optimization process.
 
 Engineering Infrastructure
 ==========================
@@ -85,4 +136,5 @@ Schedule
 
 References
 ==========
+
 None
