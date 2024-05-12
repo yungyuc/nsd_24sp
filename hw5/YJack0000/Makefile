@@ -1,31 +1,25 @@
 CXX             = g++
-SRC             = matrix.cpp mod.cpp
-FLAGS           = -O3 -Wall -shared -std=c++11 -fPIC
-INCLUDES        = -I$(MKL_INCLUDE_DIR) $(PYINC) $(PYBIND11_INC)
-LDFLAGS         = -lblas -lmkl_rt $(PYLIB)
+FLAGS           = -O3 -Wall -shared -std=c++17 -fPIC
+
+NUMPYINCLUDE=$(shell python3 -c 'import numpy; print(numpy.get_include())')
+
+INCLUDES        = -I$(MKL_INCLUDE_DIR) $(PYINC) $(PYBIND11_INC) -I$(NUMPYINCLUDE)
+LDFLAGS         = -lblas
 MKL_INCLUDE_DIR = /usr/include/mkl
 
 PYINC           = $(shell python3-config --includes)
 PYBIND11_INC    = $(shell python3 -m pybind11 --includes)
-PYLIB           = $(shell python3-config --ldflags)
 PYSUFFIX        = $(shell python3-config --extension-suffix)
 PYBIND11_MODULE = _matrix
 PYTAR           = $(PYBIND11_MODULE)$(PYSUFFIX)
 
 all: $(PYTAR)
 
-$(PYTAR): $(SRC)
-	$(CXX) $(FLAGS) $(INCLUDES) $^ -o $@ $(LDFLAGS)
-.PHONY: all
+$(PYTAR): mod.o matrix.o
+	$(CXX) $(FLAGS) -o $(PYTAR) $^ $(LDFLAGS)
 
-test: $(PYTAR)
-	python3 test_matrix.py
-	python3 -m pytest -v -s test_matrix.py
-.PHONY: test
-
-perf: all
-	python3 performance.py
-.PHONY: perf
+%.o: %.cpp
+	$(CXX) $(FLAGS) -c $< $(INCLUDES) -o $@
 
 clean:
 	rm -rf *.o *.out *.so __pycache__/ .pytest_cache/
