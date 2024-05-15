@@ -42,3 +42,7 @@ Follow the format to add your project:
 1. `github_account_name <https://github.com/github_account_name>`__ for
    `Project subject <github_account_name/README.rst>`__:
    https://github.com/github_account_name/project_name
+
+1. `Lianghy0326 <https://github.com/Lianghy0326>`__ for
+   `DE <https://github.com/Lianghy0326/DE/blob/main/README.rst>`__:
+   https://github.com/Lianghy0326/DE
