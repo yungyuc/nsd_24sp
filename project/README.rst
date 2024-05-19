@@ -59,6 +59,10 @@ Follow the format to add your project:
    `Corner Stitching <kevinshlo/README.md>`__:
    https://github.com/kevinshlo/CornerStitching
 
+1. `Andymyyon <https://github.com/Andymyyon>`__ for
+   `DAMS <Andymyyon/README.rst>`__:
+   https://github.com/Andymyyon/DAMS
+
 7. `Ananaee <https://github.com/Ananaee>`__ for
    `GameStrategy <Ananaee/README.md>`__:
    https://github.com/Ananaee/GameStrategy
