@@ -43,42 +43,46 @@ Follow the format to add your project:
    `Project subject <github_account_name/README.rst>`__:
    https://github.com/github_account_name/project_name
 
-1. `Lianghy0326 <https://github.com/Lianghy0326>`__ for
-   `DE <https://github.com/Lianghy0326/DE/blob/main/README.rst>`__:
-   https://github.com/Lianghy0326/DE
- 
-2. `HaKkaz <https://github.com/HaKkaz>`__ for
-   `PointInPolygon <HaKkaz/README.md>`__:
-   https://github.com/HaKkaz/Point-in-Polygon
-
-2. `YJack0000 <https://github.com/YJack0000>`__ for
-   `Project subject <YJack0000/README.md>`__:
-   https://github.com/YJack0000/SimEvo
-   
-3. `bhchen2001 <https://github.com/bhchen2001>`__ for
-   `Searching based on KD-Tree <bhchen2001/README.rst>`__:
-   https://github.com/bhchen2001/Searching-based-on-KD-Tree
-
-6. `kevinshlo <https://github.com/kevinshlo>`__ for
-   `Corner Stitching <kevinshlo/README.md>`__:
-   https://github.com/kevinshlo/CornerStitching
-
-1. `Andymyyon <https://github.com/Andymyyon>`__ for
-   `DAMS <Andymyyon/README.rst>`__:
-   https://github.com/Andymyyon/DAMS
-
-7. `Ananaee <https://github.com/Ananaee>`__ for
+1. `Ananaee <https://github.com/Ananaee>`__ for
    `GameStrategy <Ananaee/README.md>`__:
    https://github.com/Ananaee/GameStrategy
 
-8. `QuentinDucoulombier <https://github.com/QuentinDucoulombier>`__ for
+2. `Andymyyon <https://github.com/Andymyyon>`__ for
+   `DAMS <Andymyyon/README.rst>`__:
+   https://github.com/Andymyyon/DAMS
+
+3. `HaKkaz <https://github.com/HaKkaz>`__ for
+   `PointInPolygon <HaKkaz/README.md>`__:
+   https://github.com/HaKkaz/Point-in-Polygon
+
+4. `Lianghy0326 <https://github.com/Lianghy0326>`__ for
+   `DE <https://github.com/Lianghy0326/DE/blob/main/README.rst>`__:
+   https://github.com/Lianghy0326/DE
+
+5. `QuentinDucoulombier <https://github.com/QuentinDucoulombier>`__ for
    `Project subject <QuentinDucoulombier/README.md>`__:
    https://github.com/QuentinDucoulombier/DeliveryOptimizer
 
-9. `zona8815 <https://github.com/zona8815>`__ for
-   `Hardware Aging Acceleration <zona8815/README.rst>`__:
-   https://github.com/zona8815/Hardware-Aging-Acceleration
+6. `YJack0000 <https://github.com/YJack0000>`__ for
+   `Project subject <YJack0000/README.md>`__:
+   https://github.com/YJack0000/SimEvo
 
-1. `r1407p <https://github.com/r1407p>`__ for
+7. `bhchen2001 <https://github.com/bhchen2001>`__ for
+   `Searching based on KD-Tree <bhchen2001/README.rst>`__:
+   https://github.com/bhchen2001/Searching-based-on-KD-Tree
+
+8. `kevinshlo <https://github.com/kevinshlo>`__ for
+   `Corner Stitching <kevinshlo/README.md>`__:
+   https://github.com/kevinshlo/CornerStitching
+
+9. `r1407p <https://github.com/r1407p>`__ for
    `PyMatrixOpt <r1407p/README.rst>`__:
    https://github.com/r1407p/PyMatrixOpt
+
+10. `ravencyan <https://github.com/ravencyan>`__ for
+   `Root <ravencyan/README.rst>`__:
+   https://github.com/ravencyan/Root-Finding-Algorthms
+
+11. `zona8815 <https://github.com/zona8815>`__ for
+    `Hardware Aging Acceleration <zona8815/README.rst>`__:
+    https://github.com/zona8815/Hardware-Aging-Acceleration
