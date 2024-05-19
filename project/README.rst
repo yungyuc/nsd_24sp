@@ -39,16 +39,12 @@ Follow the format to add your project:
 
 .. The first entry is an example; do not remove.
 
-1. `github_account_name <https://github.com/github_account_name>`__ for
-   `Project subject <github_account_name/README.rst>`__:
-   https://github.com/github_account_name/project_name
-
 1. `Ananaee <https://github.com/Ananaee>`__ for
    `GameStrategy <Ananaee/README.md>`__:
    https://github.com/Ananaee/GameStrategy
 
 2. `Andymyyon <https://github.com/Andymyyon>`__ for
-   `DAMS <Andymyyon/README.rst>`__:
+   `DAMS <Andymyyon/README.md>`__:
    https://github.com/Andymyyon/DAMS
 
 3. `HaKkaz <https://github.com/HaKkaz>`__ for
@@ -60,11 +56,11 @@ Follow the format to add your project:
    https://github.com/Lianghy0326/DE
 
 5. `QuentinDucoulombier <https://github.com/QuentinDucoulombier>`__ for
-   `Project subject <QuentinDucoulombier/README.md>`__:
+   `DeliveryOptimizer <QuentinDucoulombier/README.md>`__:
    https://github.com/QuentinDucoulombier/DeliveryOptimizer
 
 6. `YJack0000 <https://github.com/YJack0000>`__ for
-   `Project subject <YJack0000/README.md>`__:
+   `SimEvo <YJack0000/README.md>`__:
    https://github.com/YJack0000/SimEvo
 
 7. `bhchen2001 <https://github.com/bhchen2001>`__ for
@@ -80,8 +76,8 @@ Follow the format to add your project:
    https://github.com/r1407p/PyMatrixOpt
 
 10. `ravencyan <https://github.com/ravencyan>`__ for
-   `Root <ravencyan/README.rst>`__:
-   https://github.com/ravencyan/Root-Finding-Algorthms
+    `Root <ravencyan/README.rst>`__:
+    https://github.com/ravencyan/Root-Finding-Algorthms
 
 11. `zona8815 <https://github.com/zona8815>`__ for
     `Hardware Aging Acceleration <zona8815/README.rst>`__:
