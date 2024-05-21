@@ -1,45 +1,23 @@
 # ifndef _MATRIX_HPP
 # define _MATRIX_HPP
 
+#include<iostream>
 #include<vector>
 #include<stdexcept>
 #include<mkl/mkl.h>
-using namespace std;
-
-template<typename T> class CustomAllocator
-{
-private:
-  static size_t m_byte;        
-  static size_t m_allocated;
-  static size_t m_deallocated; 
-
-public:
-  using value_type = T;
-  CustomAllocator() = default;
-  
-  T *allocate(size_t n);
-  void deallocate(T *ptr, size_t n);
-  static size_t bytes();
-  static size_t allocated();
-  static size_t deallocated();
-};
-template <class T> std::size_t CustomAllocator<T>::m_byte = 0;
-template <class T> std::size_t CustomAllocator<T>::m_allocated = 0;
-template <class T> std::size_t CustomAllocator<T>::m_deallocated = 0;
 
 class Matrix {
     public:
 
-        Matrix();
         Matrix(size_t nrow, size_t ncol);
         Matrix(size_t nrow, size_t ncol, std::vector<double> const & vec);
         // Matrix & operator=(std::vector<double> const & vec);
-        // Matrix(Matrix const & other);
+        Matrix(Matrix const & other);
         // Matrix & operator=(Matrix const & other);
         // Matrix(Matrix && other);
         // Matrix & operator=(Matrix && other);
 
-        // ~Matrix();
+        ~Matrix();
 
         double   operator() (size_t row, size_t col) const;
         double & operator() (size_t row, size_t col);
@@ -60,7 +38,7 @@ class Matrix {
 
         size_t n_row = 0;
         size_t n_col = 0;
-        vector<double, CustomAllocator<double>> buf;
+        double * buf = nullptr;
 };
 
 Matrix multiply_naive(const Matrix &m1, const Matrix &m2);
