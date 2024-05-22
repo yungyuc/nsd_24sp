@@ -5,6 +5,7 @@
 #include <pybind11/stl.h>
 #include <pybind11/operators.h>
 #include <pybind11/numpy.h>
+
 namespace py=pybind11;
 
 using namespace std;
@@ -19,7 +20,6 @@ public:
     Matrix(size_t nrow, size_t ncol, double val);
     Matrix(size_t nrow, size_t ncol,const vector<double> &v);
     Matrix(const Matrix &m);
-    Matrix & operator=(const Matrix &m);
     ~Matrix();
 
     size_t index(size_t i, size_t j) const;
@@ -29,12 +29,9 @@ public:
 
     double   operator() (size_t row, size_t col) const;
     double & operator() (size_t row, size_t col);
-
-    bool operator==(const Matrix &m) const;  
-    bool operator!=(const Matrix &m) const;
+    bool operator==(const Matrix &m);
 
     py::array_t<double> array() const;
+    
+    
 };
-Matrix multiply_naive(Matrix const &m1, Matrix const &m2);
-Matrix multiply_tile(Matrix const &m1, Matrix const &m2, std::size_t size);
-Matrix multiply_mkl(Matrix const &m1, Matrix const &m2);

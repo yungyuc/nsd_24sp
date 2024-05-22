@@ -1,15 +1,15 @@
-#include "matrix.hpp"
+#include "_matrix.hpp"
 #include <stdexcept>
-#include <cstring>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/operators.h>
 #include <pybind11/numpy.h>
-namespace py=pybind11;
 
 #include <mkl/mkl.h>
 #include <mkl/mkl_lapack.h>
 #include <mkl/mkl_lapacke.h>
+
+namespace py=pybind11;
 
 Matrix::Matrix(){
     this->m_nrow = 0;
@@ -54,19 +54,6 @@ Matrix::Matrix(const Matrix &m){
         this->m_buffer[i] = m.m_buffer[i];
     }
 } 
-Matrix &Matrix::operator=(const Matrix &m){
-    if(this == &m){
-        return *this;
-    }
-    if(this->m_buffer != nullptr){
-        delete[] this->m_buffer;
-    }
-    this->m_nrow = m.nrow();
-    this->m_ncol = m.ncol();
-    this->m_buffer = new double[m.nrow() * m.ncol()];
-    std::memcpy(this->m_buffer, m.get_buffer(), m.nrow() * m.ncol() * sizeof(double));
-    return *this;
-}
 
 size_t Matrix::index(size_t i, size_t j) const{
     return i * m_ncol + j;
@@ -98,7 +85,7 @@ double &Matrix::operator() (size_t row, size_t col){
     }
     return m_buffer[index(row, col)];
 }
-bool Matrix::operator==(const Matrix &m) const{
+bool Matrix::operator==(const Matrix &m){
     if(this->m_nrow != m.m_nrow || this->m_ncol != m.m_ncol){
         return false;
     }
@@ -166,7 +153,6 @@ Matrix multiply_mkl(Matrix const &m1, Matrix const &m2){
     return result;
 }
 
-
 PYBIND11_MODULE(_matrix, m) {
     py::class_<Matrix>(m, "Matrix")
     .def(py::init<>())
@@ -182,11 +168,9 @@ PYBIND11_MODULE(_matrix, m) {
     })
     .def_property_readonly("nrow", &Matrix::nrow)
     .def_property_readonly("ncol", &Matrix::ncol)
-    .def_property_readonly("array", &Matrix::array, "")
-                             
-    .def("__eq__", &Matrix::operator ==)
-    .def("__ne__", &Matrix::operator !=); 
-    
+    .def_property_readonly("array", &Matrix::array)
+    .def("__eq__", &Matrix::operator ==);
+
     m.def("multiply_naive", &multiply_naive, "");
     m.def("multiply_tile", &multiply_tile, "");
     m.def("multiply_mkl", &multiply_mkl, "");
