@@ -1,6 +1,12 @@
 #pragma once
 
 #include <vector>
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/operators.h>
+#include <pybind11/numpy.h>
+namespace py=pybind11;
+
 using namespace std;
 
 class Matrix{
@@ -27,6 +33,7 @@ public:
     bool operator==(const Matrix &m) const;  
     bool operator!=(const Matrix &m) const;
 
+    py::array_t<double> array() const;
 };
 Matrix multiply_naive(Matrix const &m1, Matrix const &m2);
 Matrix multiply_tile(Matrix const &m1, Matrix const &m2, std::size_t size);

@@ -1,6 +1,12 @@
 #include "matrix.hpp"
 #include <stdexcept>
 #include <cstring>
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/operators.h>
+#include <pybind11/numpy.h>
+namespace py=pybind11;
+
 #include <mkl/mkl.h>
 #include <mkl/mkl_lapack.h>
 #include <mkl/mkl_lapacke.h>
@@ -104,6 +110,13 @@ bool Matrix::operator==(const Matrix &m) const{
     return true;
 }
 
+py::array_t<double> Matrix::array() const{
+    return py::array_t<double>({m_nrow, m_ncol},                        
+                               {m_ncol * sizeof(double), sizeof(double)}, 
+                               m_buffer,                                   
+                               py::cast(this));
+}
+
 Matrix multiply_naive(Matrix const &m1, Matrix const &m2){
     if(m1.ncol() != m2.nrow()){
         throw std::invalid_argument("matrix size does not match");
@@ -152,12 +165,7 @@ Matrix multiply_mkl(Matrix const &m1, Matrix const &m2){
 
     return result;
 }
-py::array_t<double> array(Matrix const &m){
-    return py::array_t<double>({m.nrow(), m.ncol()},                        
-                               {m.ncol() * sizeof(double), sizeof(double)}, 
-                               m.get_buffer(),                                  
-                               py::cast(m));
-}
+
 
 PYBIND11_MODULE(_matrix, m) {
     py::class_<Matrix>(m, "Matrix")
@@ -174,7 +182,7 @@ PYBIND11_MODULE(_matrix, m) {
     })
     .def_property_readonly("nrow", &Matrix::nrow)
     .def_property_readonly("ncol", &Matrix::ncol)
-    .def_property_readonly("array", &array, "")
+    .def_property_readonly("array", &Matrix::array, "")
                              
     .def("__eq__", &Matrix::operator ==)
     .def("__ne__", &Matrix::operator !=); 
