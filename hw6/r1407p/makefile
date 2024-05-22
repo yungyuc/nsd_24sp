@@ -1,0 +1,30 @@
+
+sources =../mod.cpp matrix.cpp 
+CXX = clang++
+CXXFLAGS = -O3 -Wall -shared -std=c++17 -fPIC -lblas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
+LIB_TARGET = _matrix.so
+MKLROOT=/usr/lib/x86_64-linux-gnu
+LDFLAGS=${MKLROOT}/libmkl_def.so \
+        ${MKLROOT}/libmkl_avx2.so \
+        ${MKLROOT}/libmkl_core.so \
+        ${MKLROOT}/libmkl_intel_lp64.so \
+        ${MKLROOT}/libmkl_sequential.so \
+        -lpthread -lm -ldl \
+        -lblas -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -L/opt/intel/lib/intel64 -L/opt/intel/mkl/lib/intel64 
+
+NUMPY= $(shell python3 -c "import numpy; print(numpy.get_include())")
+
+all: $(LIB_TARGET)
+
+$(LIB_TARGET): $(sources)
+	pip install pybind11
+	$(CXX)  $(CXXFLAGS) -I./ -I$(NUMPY) $(shell python3 -m pybind11 --includes) $(sources) -o $@
+
+
+.PHONY: test
+test: $(LIB_TARGET)
+    env PYTHONPATH=".:$PYTHONPATH" python3 -m pytest -v
+
+.PHONY: clean
+clean:
+	rm -rf $(LIB_TARGET) $(executable) __pycache__ .pytest* *.so
