@@ -152,27 +152,35 @@ Matrix multiply_mkl(Matrix const &m1, Matrix const &m2){
 
     return result;
 }
+py::array_t<double> array(Matrix const &m){
+    return py::array_t<double>({m.nrow(), m.ncol()},                        
+                               {m.ncol() * sizeof(double), sizeof(double)}, 
+                               m.get_buffer(),                                  
+                               py::cast(m));
+}
 
-// PYBIND11_MODULE(_matrix, m) {
-//     py::class_<Matrix>(m, "Matrix")
-//     .def(py::init<>())
-//     .def(py::init<size_t, size_t>())
-//     .def(py::init<size_t, size_t, double>())
-//     .def(py::init<size_t, size_t, const std::vector<double> &>())
-//     .def(py::init<const Matrix &>())
-//     .def("__getitem__", [](Matrix &m, std::vector<std::size_t> idx){ 	 
-//         return m(idx[0],idx[1]);       
-//     })
-//     .def("__setitem__",[](Matrix &m, std::vector<std::size_t> idx, int val){
-//         m(idx[0],idx[1]) = val;
-//     })
-//     .def_property_readonly("nrow", &Matrix::nrow)
-//     .def_property_readonly("ncol", &Matrix::ncol)
-//     .def("__eq__", &Matrix::operator ==)
-//     .def("__ne__", &Matrix::operator !=); 
+PYBIND11_MODULE(_matrix, m) {
+    py::class_<Matrix>(m, "Matrix")
+    .def(py::init<>())
+    .def(py::init<size_t, size_t>())
+    .def(py::init<size_t, size_t, double>())
+    .def(py::init<size_t, size_t, const std::vector<double> &>())
+    .def(py::init<const Matrix &>())
+    .def("__getitem__", [](Matrix &m, std::vector<std::size_t> idx){ 	 
+        return m(idx[0],idx[1]);       
+    })
+    .def("__setitem__",[](Matrix &m, std::vector<std::size_t> idx, int val){
+        m(idx[0],idx[1]) = val;
+    })
+    .def_property_readonly("nrow", &Matrix::nrow)
+    .def_property_readonly("ncol", &Matrix::ncol)
+    .def_property_readonly("array", &array, "")
+                             
+    .def("__eq__", &Matrix::operator ==)
+    .def("__ne__", &Matrix::operator !=); 
+    
+    m.def("multiply_naive", &multiply_naive, "");
+    m.def("multiply_tile", &multiply_tile, "");
+    m.def("multiply_mkl", &multiply_mkl, "");
 
-//     m.def("multiply_naive", &multiply_naive, "");
-//     m.def("multiply_tile", &multiply_tile, "");
-//     // m.def("multiply_mkl", &multiply_mkl, "");
-
-// }
+}
