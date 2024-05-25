@@ -8,9 +8,9 @@
 
 
 
-Matrix::Matrix(){
-    this->rows = 0;
-    this->cols = 0;
+Matrix::Matrix(size_t nrow, size_t ncol){
+    rows = nrow;
+    cols = ncol;
     m_buffer = (double *) calloc(nrow * ncol, sizeof(double));
 }
 

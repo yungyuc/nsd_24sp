@@ -16,12 +16,10 @@ private:
 
 public:
     // Default constructor
-    Matrix();
+    Matrix(size_t nrow, size_t ncol);
     // Constructor with specified number of rows and columns
-    Matrix(size_t nrow, std::vector<double> const & vec);
-    
-    // Constructor with specified number of rows and columns, and initialization value
-    Matrix(size_t nrow, size_t ncol, double val);
+    Matrix(size_t nrow, size_t ncol, std::vector<double> const & vec);
+
     // Constructor with specified number of rows and columns, and initialization vector
     Matrix(size_t nrow, size_t ncol, const vector<double> &v);
     // Copy constructor
