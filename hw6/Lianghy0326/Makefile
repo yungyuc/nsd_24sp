@@ -1,19 +1,39 @@
+# Source and header files
 SRC = ../mod.cpp ./matrix.cpp
 INC = ./matrix.hpp  
 
+# Compiler and flags
 CXX = clang++
-CXXFLAGS = -O3 -Wall -shared -std=c++17 -fPIC -lblas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
 
-LIB_TARGET = _matrix.so # the so file is the python module
+# Include numpy
+NUMPY_INC_FLAG = $(shell python3 -c 'import numpy; print(numpy.get_include())')
 
-$(LIB_TARGET): $(INC) $(SRC)
-	pip install pybind11
-	$(CXX) $(CXXFLAGS) -I./ $(SRC) -o $@
+# Include MKL (set this to the correct MKL include path on your system)
+MKL_INC = /usr/include/mkl
 
+# Compilation flags
+CXXFLAGS = -O3 -Wall -shared -std=c++17 -fPIC -I. -I$(NUMPY_INC_FLAG) -I$(MKL_INC) `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
+
+# Library target
+LIB_TARGET = _matrix$(shell python3-config --extension-suffix)
+
+# Default target
+all: $(LIB_TARGET)
+
+# Rule to build the shared library
+$(LIB_TARGET): $(SRC) $(INC)
+	$(CXX) $(CXXFLAGS) $(SRC) -o $@
+
+# Install dependencies
+deps:
+	pip install pybind11 numpy
+
+# Testing
 .PHONY: test
 test: $(LIB_TARGET)
-	env PYTHONPATH=".:$PYTHONPATH" python3 -m pytest -v
+	env PYTHONPATH=".:$$PYTHONPATH" python3 -m pytest -v
 
+# Clean build artifacts
 .PHONY: clean
 clean:
-	rm -rf $(LIB_TARGET) __pycache__ .pytest* *.so
+	rm -rf $(LIB_TARGET) __pycache__ .pytest_cache *.so
