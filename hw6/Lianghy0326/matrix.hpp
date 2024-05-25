@@ -18,7 +18,8 @@ public:
     // Default constructor
     Matrix();
     // Constructor with specified number of rows and columns
-    Matrix(size_t nrow, size_t ncol);
+    Matrix(size_t nrow, std::vector<double> const & vec);
+    
     // Constructor with specified number of rows and columns, and initialization value
     Matrix(size_t nrow, size_t ncol, double val);
     // Constructor with specified number of rows and columns, and initialization vector

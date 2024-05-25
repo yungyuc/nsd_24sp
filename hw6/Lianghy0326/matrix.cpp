@@ -1,5 +1,6 @@
 #include "matrix.hpp"
 #include <stdexcept>
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/operators.h>
@@ -10,15 +11,15 @@
 Matrix::Matrix(){
     this->rows = 0;
     this->cols = 0;
-    this->m_buffer = nullptr;
+    m_buffer = (double *) calloc(nrow * ncol, sizeof(double));
 }
 
-Matrix::Matrix(size_t nrow, size_t ncol){
-    this->rows = nrow;
-    this->cols = ncol;
-    this->m_buffer = new double[nrow * ncol];
-    for(size_t i = 0; i < nrow * ncol; i++){
-        this->m_buffer[i] = 0;
+Matrix::Matrix(size_t nrow, size_t ncol, std::vector<double> const & numbers){
+    rows = nrow;
+    cols = ncol;
+    m_buffer = new double[nrow * ncol];
+    for (size_t i = 0; i < nrow * ncol; i++){
+        m_buffer[i] = numbers[i];
     }
 }
 
@@ -43,11 +44,11 @@ Matrix::Matrix(size_t row, size_t col,const std::vector<double> &v){
     }
 }
 Matrix::Matrix(const Matrix &m){
-    this->rows = m.rows;
-    this->cols = m.cols;
-    this->m_buffer = new double[m.rows * m.cols];
-    for(size_t i = 0; i < m.rows * m.cols; i++){
-        this->m_buffer[i] = m.m_buffer[i];
+    rows = m.rows;
+    cols = m.cols;
+    m_buffer = new double[rows * cols];
+    for(size_t i = 0; i < rows * cols; i++){
+        m_buffer[i] = m.m_buffer[i];
     }
 } 
 
@@ -83,11 +84,11 @@ double &Matrix::operator() (size_t row, size_t col){
 }
 
 bool Matrix::operator==(const Matrix &m) const{
-    if(this->rows != m.rows || this->cols != m.cols){
+    if(rows != m.rows || cols != m.cols){
         return false;
     }
-    for(size_t i = 0; i < this->rows * this->cols; i++){
-        if(this->m_buffer[i] != m.m_buffer[i]){
+    for(size_t i = 0; i < rows * cols; i++){
+        if(m_buffer[i] != m.m_buffer[i]){
             return false;
         }
     }
