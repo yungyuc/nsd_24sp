@@ -169,10 +169,10 @@ PYBIND11_MODULE(_matrix, m) {
         .def(pybind11::init<size_t, size_t, std::vector<double> const &>())
         .def(pybind11::init<Matrix const &>())
 
-        .def("array", &Matrix::array)
-        .def("nrow", &Matrix::nrow)
-        .def("ncol", &Matrix::ncol)
-        
+        .def_property_readonly("nrow", &Matrix::nrow)
+        .def_property_readonly("ncol", &Matrix::ncol)
+        .def_property_readonly("array", &Matrix::array)
+
         .def("__getitem__", [](const Matrix &m, std::tuple<size_t, size_t> indices) {
             size_t i = std::get<0>(indices);
             size_t j = std::get<1>(indices);
