@@ -8,6 +8,12 @@
 #include <cstring>
 #include <mkl.h>
 
+namespace py = pybind11;
+
+py::array_t<double> Matrix::array() const {
+    return py::array_t<double>({m_nrow, m_ncol}, {m_ncol * sizeof(double), sizeof(double)}, m_buffer, py::cast(this));
+}
+
 Matrix::Matrix() : m_nrow(0), m_ncol(0), m_buffer(nullptr) {}
 
 Matrix::Matrix(const Matrix& other) :  m_nrow(other.m_nrow), m_ncol(other.m_ncol), m_buffer(new double[other.m_nrow * other.m_ncol]()) {
@@ -95,7 +101,7 @@ Matrix multiply_mkl(const Matrix& mat1, const Matrix& mat2) {
     return result;
 }
 
-namespace py = pybind11;
+
 PYBIND11_MODULE(_matrix, m) {
     py::class_<Matrix>(m, "Matrix")
         .def(py::init<size_t, size_t>())

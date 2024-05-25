@@ -23,7 +23,6 @@ public:
     std::size_t ncol() const { return m_ncol; };
     double* get_buffer() const { return m_buffer; };
 
-    //
     py::array_t<double> array() const;
 
 private:
