@@ -1,6 +1,6 @@
 # Source and header files
-SRC = ../mod.cpp ./matrix.cpp
-INC = ./matrix.hpp  
+SRC = matrix.cpp
+INC = matrix.hpp  
 
 # Compiler and flags
 CXX = clang++
