@@ -1,14 +1,8 @@
 #include "matrix.hpp"
 #include <stdexcept>
-
-#include <mkl/mkl.h>
-#include <mkl/mkl_lapack.h>
-#include <mkl/mkl_lapacke.h>
-
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/operators.h>
-
 #include <pybind11/numpy.h>
 
 
