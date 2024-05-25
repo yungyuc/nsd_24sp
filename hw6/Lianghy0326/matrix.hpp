@@ -1,9 +1,13 @@
 #include <vector>
-using namespace std;
+#include<iostream>
+#include<mkl/mkl.h>
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/operators.h>
 #include <pybind11/numpy.h>
+
+using namespace std;
 
 class Matrix{
 private:
