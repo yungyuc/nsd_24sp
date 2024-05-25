@@ -9,6 +9,8 @@
 #include <pybind11/stl.h>
 #include <pybind11/operators.h>
 
+#include <pybind11/numpy.h>
+
 
 
 Matrix::Matrix(){
@@ -112,6 +114,28 @@ Matrix &Matrix::operator=(const Matrix &m){
     return *this;
 }
 
+// Add pybind11 array
+pybind11::array_t<double> Matrix::array() const {
+
+    // use c_style and forecast to create numpy array
+    return pybind11::array_t<double>(
+        // shape
+        {rows, cols},
+        // stride of the array
+        {cols*sizeof(double), sizeof(double)},
+        // pointer to the m_buffer
+        m_buffer,
+        // cast to python object
+        pybind11::cast(this), // To make sure that the lifetime of the array is bound to the matrix object
+        // flags
+        pybind11::array::c_style | pybind11::array::forcecast // c_style is the default, forcecast is needed to cast the pointer to the object
+        
+
+    );
+}// 接著要將 Matrix 類綁定到 Python Module 的代碼
+
+
+
 Matrix multiply_naive(Matrix const &m1, Matrix const &m2){
     if(m1.ncol() != m2.nrow()){
         throw std::invalid_argument("matrix size does not match");
@@ -161,4 +185,36 @@ Matrix multiply_mkl(Matrix const &m1, Matrix const &m2){
                 0.0, result.get_buffer(), result.ncol());
 
     return result;
+}
+
+// add pybind11 module
+PYBIND11_MODULE(_matrix, m) {
+    m.doc() = "Matrix multiplication module";
+
+    pybind11::class_<Matrix>(m, "Matrix")
+        .def(pybind11::init<>())  // Default constructor
+        .def(pybind11::init<size_t, size_t>())  // Constructor with rows and cols
+        .def(pybind11::init<size_t, size_t, double>())  // Constructor with rows, cols, and initial value
+        .def(pybind11::init<size_t, size_t, const std::vector<double>&>())  // Constructor with rows, cols, and vector
+        .def(pybind11::init<const Matrix&>())  // Copy constructor
+
+        .def("nrow", &Matrix::nrow)  // Number of rows
+        .def("ncol", &Matrix::ncol)  // Number of cols
+        .def("get_buffer", &Matrix::get_buffer)  // Get the buffer
+
+        .def("array", &Matrix::array)  // Convert to numpy array
+
+        .def("__call__", (double (Matrix::*)(size_t, size_t) const) &Matrix::operator())  // Call operator for const objects
+        .def("__call__", (double& (Matrix::*)(size_t, size_t)) &Matrix::operator())  // Call operator for non-const objects
+
+        .def("__eq__", &Matrix::operator==)  // Equality operator
+        .def("__assign__", &Matrix::operator=)  // Assignment operator
+        .def("__repr__",
+             [](const Matrix &m) {
+                 return "<Matrix with " + std::to_string(m.nrow()) + " rows and " + std::to_string(m.ncol()) + " cols>";
+             });
+
+    m.def("multiply_naive", &multiply_naive, "Naive matrix multiplication");
+    m.def("multiply_tile", &multiply_tile, "Tiled matrix multiplication");
+    m.def("multiply_mkl", &multiply_mkl, "Matrix multiplication using MKL");
 }

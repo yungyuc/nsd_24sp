@@ -39,6 +39,9 @@ public:
 
     Matrix & operator=(const Matrix &m);
 
+    // new
+    pybind11::array_t<double> array() const;
+
 };
 
 Matrix multiply_naive(Matrix const &m1, Matrix const &m2);

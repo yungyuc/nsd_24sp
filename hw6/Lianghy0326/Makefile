@@ -3,7 +3,8 @@ INC = ./matrix.hpp
 
 CXX = clang++
 CXXFLAGS = -O3 -Wall -shared -std=c++17 -fPIC -lblas `python3 -m pybind11 --includes` `python3-config --includes --ldflags`
-LIB_TARGET = _matrix.so
+
+LIB_TARGET = _matrix.so # the so file is the python module
 
 $(LIB_TARGET): $(INC) $(SRC)
 	pip install pybind11
