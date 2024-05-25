@@ -6,7 +6,7 @@
 #include <pybind11/operators.h>
 #include <pybind11/numpy.h>
 
-
+namespace py = pybind11;
 
 Matrix::Matrix(size_t nrow, size_t ncol){
     rows = nrow;
@@ -23,26 +23,6 @@ Matrix::Matrix(size_t nrow, size_t ncol, std::vector<double> const & numbers){
     }
 }
 
-Matrix::Matrix(size_t row, size_t col, double val){
-    this->rows = row;
-    this->cols = col;
-    this->m_buffer = new double[row * col];
-    for(size_t i = 0; i < row * col; i++){
-        this->m_buffer[i] = val;
-    }
-}
-
-Matrix::Matrix(size_t row, size_t col,const std::vector<double> &v){
-    this->rows = row;
-    this->cols = col;
-    this->m_buffer = new double[row * col];
-    if(v.size() != row * col){
-        throw std::invalid_argument("size of vector does not match matrix size");
-    }
-    for(size_t i = 0; i < row * col; i++){
-        this->m_buffer[i] = v[i];
-    }
-}
 Matrix::Matrix(const Matrix &m){
     rows = m.rows;
     cols = m.cols;
@@ -183,30 +163,28 @@ Matrix multiply_mkl(Matrix const &m1, Matrix const &m2){
 PYBIND11_MODULE(_matrix, m) {
     m.doc() = "Matrix multiplication module";
 
-    pybind11::class_<Matrix>(m, "Matrix")
-        .def(pybind11::init<>())  // Default constructor
-        .def(pybind11::init<size_t, size_t>())  // Constructor with rows and cols
-        .def(pybind11::init<size_t, size_t, double>())  // Constructor with rows, cols, and initial value
-        .def(pybind11::init<size_t, size_t, const std::vector<double>&>())  // Constructor with rows, cols, and vector
-        .def(pybind11::init<const Matrix&>())  // Copy constructor
+    // Define the Matrix class
+    py::class_<Matrix>(m, "Matrix")
+        .def(py::init<size_t, size_t>(), py::arg("nrow"), py::arg("ncol"))
+        .def(py::init<size_t, size_t, std::vector<double> const &>(), py::arg("nrow"), py::arg("ncol"), py::arg("numbers"))
+        .def("array", &Matrix::array)
+        .def("__getitem__", [](const Matrix &m, std::tuple<size_t, size_t> indices) {
+            size_t i = std::get<0>(indices);
+            size_t j = std::get<1>(indices);
+            return m(i, j);
+        })
+        .def("__setitem__", [](Matrix &m, std::tuple<size_t, size_t> indices, double value) {
+            size_t i = std::get<0>(indices);
+            size_t j = std::get<1>(indices);
+            m(i, j) = value;
+        })
+        .def("__eq__", &Matrix::operator==)
+        .def("__mul__", [](const Matrix &m1, const Matrix &m2) {
+            return multiply_naive(m1, m2);
+        });
 
-        .def("nrow", &Matrix::nrow)  // Number of rows
-        .def("ncol", &Matrix::ncol)  // Number of cols
-        .def("get_buffer", &Matrix::get_buffer)  // Get the buffer
-
-        .def("array", &Matrix::array)  // Convert to numpy array
-
-        .def("__call__", (double (Matrix::*)(size_t, size_t) const) &Matrix::operator())  // Call operator for const objects
-        .def("__call__", (double& (Matrix::*)(size_t, size_t)) &Matrix::operator())  // Call operator for non-const objects
-
-        .def("__eq__", &Matrix::operator==)  // Equality operator
-        .def("__assign__", &Matrix::operator=)  // Assignment operator
-        .def("__repr__",
-             [](const Matrix &m) {
-                 return "<Matrix with " + std::to_string(m.nrow()) + " rows and " + std::to_string(m.ncol()) + " cols>";
-             });
-
-    m.def("multiply_naive", &multiply_naive, "Naive matrix multiplication");
-    m.def("multiply_tile", &multiply_tile, "Tiled matrix multiplication");
-    m.def("multiply_mkl", &multiply_mkl, "Matrix multiplication using MKL");
+    // Bind the multiply functions
+    m.def("multiply_naive", &multiply_naive, py::arg("m1"), py::arg("m2"));
+    m.def("multiply_tile", &multiply_tile, py::arg("m1"), py::arg("m2"), py::arg("size"));
+    m.def("multiply_mkl", &multiply_mkl, py::arg("m1"), py::arg("m2"));
 }

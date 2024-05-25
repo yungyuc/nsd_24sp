@@ -20,8 +20,6 @@ public:
     // Constructor with specified number of rows and columns
     Matrix(size_t nrow, size_t ncol, std::vector<double> const & vec);
 
-    // Constructor with specified number of rows and columns, and initialization vector
-    Matrix(size_t nrow, size_t ncol, const vector<double> &v);
     // Copy constructor
     Matrix(const Matrix &m);
     // Destructor
