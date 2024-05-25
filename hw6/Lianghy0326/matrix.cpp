@@ -165,9 +165,14 @@ PYBIND11_MODULE(_matrix, m) {
 
     // Define the Matrix class
     py::class_<Matrix>(m, "Matrix")
-        .def(py::init<size_t, size_t>(), py::arg("nrow"), py::arg("ncol"))
-        .def(py::init<size_t, size_t, std::vector<double> const &>(), py::arg("nrow"), py::arg("ncol"), py::arg("numbers"))
+        .def(pybind11::init<size_t, size_t>())
+        .def(pybind11::init<size_t, size_t, std::vector<double> const &>())
+        .def(pybind11::init<Matrix const &>())
+
         .def("array", &Matrix::array)
+        .def("nrow", &Matrix::nrow)
+        .def("ncol", &Matrix::ncol)
+        
         .def("__getitem__", [](const Matrix &m, std::tuple<size_t, size_t> indices) {
             size_t i = std::get<0>(indices);
             size_t j = std::get<1>(indices);
