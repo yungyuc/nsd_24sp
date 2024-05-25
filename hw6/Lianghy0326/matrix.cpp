@@ -126,12 +126,9 @@ pybind11::array_t<double> Matrix::array() const {
         // pointer to the m_buffer
         m_buffer,
         // cast to python object
-        pybind11::cast(this), // To make sure that the lifetime of the array is bound to the matrix object
+        pybind11::cast(this)); // To make sure that the lifetime of the array is bound to the matrix object
         // flags
         // pybind11::array::c_style | pybind11::array::forcecast // c_style is the default, forcecast is needed to cast the pointer to the object
-        
-
-    );
 }// 接著要將 Matrix 類綁定到 Python Module 的代碼
 
 
