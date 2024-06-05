@@ -115,7 +115,7 @@ Time Table
   The meeting room for the presentation is EC114, the same room we use for
   lectures.
 
-.. list-table:: 7:00-9:30 (EC114)
+.. list-table:: 3rd June, 2024 (Monday) 7:00-9:30 (EC114)
   :header-rows: 1
 
   * - ID
